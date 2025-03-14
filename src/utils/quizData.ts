@@ -1,3 +1,4 @@
+
 export type QuizQuestion = {
   id: string;
   question: string;
@@ -180,26 +181,27 @@ export const quizQuestions: QuizQuestion[] = [
       {
         id: "cuisine-1",
         text: "Southern / Comfort Food",
-        value: "southern",
-        image: "https://images.unsplash.com/photo-1549648184-0d3e8e5f0f99?q=80&w=500&auto=format&fit=crop"
+        value: "southern"
       },
       {
         id: "cuisine-2",
         text: "Modern American",
-        value: "american",
-        image: "https://images.unsplash.com/photo-1601314002592-b8734bca6604?q=80&w=500&auto=format&fit=crop"
+        value: "american"
       },
       {
         id: "cuisine-3",
         text: "International Flavors",
-        value: "international",
-        image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=500&auto=format&fit=crop"
+        value: "international"
       },
       {
         id: "cuisine-4",
         text: "Farm to Table",
-        value: "farm-to-table",
-        image: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?q=80&w=500&auto=format&fit=crop"
+        value: "farm-to-table"
+      },
+      {
+        id: "cuisine-5",
+        text: "I'm Open to Anything",
+        value: "any"
       }
     ]
   },

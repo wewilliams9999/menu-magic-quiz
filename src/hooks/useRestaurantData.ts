@@ -48,7 +48,8 @@ export function useRestaurantData({
   // Build category string for API
   const buildCategoryParam = (): string => {
     const categories = [];
-    if (cuisine) categories.push(cuisine);
+    // Skip adding cuisine if it's "any"
+    if (cuisine && cuisine !== "any") categories.push(cuisine);
     if (atmosphere) categories.push(atmosphere);
     
     // Add relevant preference-based categories
