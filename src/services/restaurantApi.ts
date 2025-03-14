@@ -115,7 +115,7 @@ export const mapApiRestaurantToQuizResult = (restaurant: ApiRestaurant): QuizRes
     features: features,
     website: restaurant.url,
     priceRange: restaurant.priceRange || priceMap[restaurant.price] || "$$",
-    neighborhood: restaurant.neighborhood || neighborhood,
+    neighborhood: neighborhood,
     cuisine: restaurant.cuisine || cuisine
   };
 };
