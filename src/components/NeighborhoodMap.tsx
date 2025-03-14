@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { MapPin } from "lucide-react";
 import { motion } from "framer-motion";
@@ -47,16 +46,16 @@ const NeighborhoodMap = ({
 }: NeighborhoodMapProps) => {
   const [hoveredBubble, setHoveredBubble] = useState<string | null>(null);
   
-  // Enhanced color palette for a more chic look
+  // Refined color palette for a more chic look
   const bubbleColors = [
-    "bg-[#F2FCE2] text-emerald-900", 
-    "bg-[#FEF7CD] text-amber-900", 
-    "bg-[#FEC6A1] text-orange-900", 
-    "bg-[#E5DEFF] text-indigo-900", 
-    "bg-[#FFDEE2] text-rose-900", 
-    "bg-[#FDE1D3] text-orange-900", 
-    "bg-[#D3E4FD] text-blue-900", 
-    "bg-[#F1F0FB] text-violet-900"
+    "bg-white/80 text-gray-800", 
+    "bg-white/80 text-gray-800", 
+    "bg-white/80 text-gray-800", 
+    "bg-white/80 text-gray-800", 
+    "bg-white/80 text-gray-800", 
+    "bg-white/80 text-gray-800", 
+    "bg-white/80 text-gray-800", 
+    "bg-white/80 text-gray-800"
   ];
 
   const getBubbleColor = (index: number) => {
@@ -65,83 +64,40 @@ const NeighborhoodMap = ({
   
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-nashville-600 dark:text-nashville-400 bg-nashville-100/50 dark:bg-nashville-800/50 rounded-lg">
-        <MapPin size={14} className="flex-shrink-0 text-nashville-accent" />
-        <p>Click on a neighborhood bubble to select areas of Nashville you're interested in visiting.</p>
+      <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-gray-600 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+        <MapPin size={14} className="flex-shrink-0 text-gray-500" />
+        <p>Select neighborhoods you're interested in exploring.</p>
       </div>
       
-      <div className="relative h-[500px] w-full rounded-xl shadow-lg overflow-hidden border border-nashville-200 dark:border-nashville-700">
-        {/* Nashville-inspired map background with more organic, visual design */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#f9f7f2] to-[#e8edf0] dark:from-[#1e2a38] dark:to-[#162232]">
-          {/* Cumberland River - more natural, curved shape */}
-          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path 
-              d="M45,0 Q48,25 52,40 Q55,55 49,75 Q47,85 50,100" 
-              fill="none" 
-              stroke="#a3ceed" 
-              strokeWidth="6"
-              className="dark:stroke-[#2a4a70] opacity-80"
-            />
-          </svg>
+      <div className="relative h-[500px] w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+        {/* Minimalist map background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+          {/* Cumberland River - elegant, simplified */}
+          <div className="absolute h-full w-full overflow-hidden">
+            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path 
+                d="M45,0 Q48,25 52,40 Q55,55 49,75 Q47,85 50,100" 
+                fill="none" 
+                stroke="#e0f2fe" 
+                strokeWidth="4"
+                className="dark:stroke-[#1e3a5f] opacity-70"
+              />
+            </svg>
+          </div>
           
-          {/* Main highways with more natural curves */}
-          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-            {/* I-40 */}
-            <path 
-              d="M5,50 Q25,48 50,50 Q75,52 95,50" 
-              fill="none" 
-              stroke="#e0e0e0" 
-              strokeWidth="1.5"
-              className="dark:stroke-[#555555]"
-            />
-            
-            {/* I-65 */}
-            <path 
-              d="M50,5 Q48,25 50,50 Q52,75 50,95" 
-              fill="none" 
-              stroke="#e0e0e0" 
-              strokeWidth="1.5"
-              className="dark:stroke-[#555555]"
-            />
-            
-            {/* I-24 */}
-            <path 
-              d="M30,30 Q40,40 50,45 Q65,53 75,65" 
-              fill="none" 
-              stroke="#e0e0e0" 
-              strokeWidth="1.5"
-              className="dark:stroke-[#555555]"
-            />
-            
-            {/* Secondary roads - more organic */}
-            <path d="M20,35 Q30,40 40,35 Q50,30 65,35" fill="none" stroke="#e0e0e0" strokeWidth="0.75" className="dark:stroke-[#444444] opacity-30" />
-            <path d="M35,60 Q45,65 55,60 Q65,55 75,60" fill="none" stroke="#e0e0e0" strokeWidth="0.75" className="dark:stroke-[#444444] opacity-30" />
-            <path d="M40,20 Q45,30 50,25 Q55,20 60,30" fill="none" stroke="#e0e0e0" strokeWidth="0.75" className="dark:stroke-[#444444] opacity-30" />
-            <path d="M25,70 Q35,75 45,70 Q55,65 65,70" fill="none" stroke="#e0e0e0" strokeWidth="0.75" className="dark:stroke-[#444444] opacity-30" />
-          </svg>
+          {/* Minimalist grid lines */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="w-full h-full" style={{
+              backgroundImage: `
+                linear-gradient(to right, #9ca3af 1px, transparent 1px),
+                linear-gradient(to bottom, #9ca3af 1px, transparent 1px)
+              `,
+              backgroundSize: '50px 50px'
+            }}></div>
+          </div>
           
-          {/* Downtown area highlight - warmer, more organic */}
-          <div className="absolute w-[12%] h-[12%] rounded-lg bg-[#fcf8e3] dark:bg-[#45462f] opacity-40 left-[46%] top-[47%]"></div>
-          <div className="absolute w-[8%] h-[8%] rounded-lg bg-[#fcf8e3] dark:bg-[#45462f] opacity-30 left-[49%] top-[45%]"></div>
-          
-          {/* Parks and green areas - more organic shapes */}
-          <div className="absolute w-[15%] h-[11%] rounded-[40%_60%_60%_40%/40%_50%_50%_60%] bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[25%] top-[25%]"></div>
-          <div className="absolute w-[12%] h-[9%] rounded-[60%_40%_40%_60%/50%_50%_50%_50%] bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[70%] top-[60%]"></div>
-          <div className="absolute w-[10%] h-[8%] rounded-[40%_60%_30%_70%/30%_30%_70%_70%] bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[35%] top-[75%]"></div>
-          <div className="absolute w-[14%] h-[10%] rounded-[70%_30%_50%_50%/50%_50%_50%_50%] bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[60%] top-[25%]"></div>
-          
-          {/* Percy Priest Lake */}
-          <div className="absolute w-[18%] h-[20%] rounded-[60%_40%_50%_50%/40%_60%_60%_40%] bg-[#b8d9eb] dark:bg-[#2a4c6a] opacity-30 left-[75%] top-[35%]"></div>
-          
-          {/* Land contours/elevation indicators */}
-          <div className="absolute w-[25%] h-[15%] rounded-full bg-[#f0e9de] dark:bg-[#3c362e] opacity-20 left-[20%] top-[45%]"></div>
-          <div className="absolute w-[20%] h-[15%] rounded-full bg-[#f0e9de] dark:bg-[#3c362e] opacity-20 left-[65%] top-[70%]"></div>
-          
-          {/* Light texture overlay */}
-          <div className="absolute inset-0 opacity-5 dark:opacity-10" style={{ 
-            backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDVMNSAwWk02IDRMNCA2Wk0tMSAxTDEgLTFaIiBzdHJva2U9IiM4ODgiIHN0cm9rZS13aWR0aD0iMSI+PC9wYXRoPgo8L3N2Zz4=')",
-            backgroundRepeat: 'repeat'
-          }}></div>
+          {/* Downtown area highlight - subtle */}
+          <div className="absolute w-[12%] h-[12%] rounded-full bg-white dark:bg-gray-700 opacity-20 left-[46%] top-[47%] blur-sm"></div>
         </div>
         
         {/* Neighborhood bubbles */}
@@ -157,11 +113,12 @@ const NeighborhoodMap = ({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <motion.button
-                    className={`absolute z-10 transform -translate-x-1/2 -translate-y-1/2 rounded-full px-3 py-1.5
+                    className={`absolute z-10 transform -translate-x-1/2 -translate-y-1/2 
                       ${getBubbleColor(index)}
+                      px-2.5 py-1 rounded-full border backdrop-blur-sm
                       ${isSelected 
-                        ? 'ring-2 ring-nashville-accent shadow-md font-medium scale-110' 
-                        : 'hover:shadow-md'} 
+                        ? 'border-gray-500 shadow-md' 
+                        : 'border-gray-300 dark:border-gray-600'}
                       transition-all duration-200`}
                     style={{
                       left: position.left,
@@ -170,18 +127,20 @@ const NeighborhoodMap = ({
                     onClick={() => onSelect(option.value)}
                     onMouseEnter={() => setHoveredBubble(option.value)}
                     onMouseLeave={() => setHoveredBubble(null)}
-                    whileHover={{ scale: 1.1 }}
+                    whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
                     <div className="flex items-center gap-1.5">
-                      <MapPin size={14} className="text-nashville-accent flex-shrink-0" />
-                      <span className="text-sm font-medium whitespace-nowrap">
+                      {isSelected && (
+                        <div className="w-1.5 h-1.5 rounded-full bg-gray-800 dark:bg-white"></div>
+                      )}
+                      <span className={`text-xs font-medium whitespace-nowrap ${isSelected ? 'font-semibold' : ''}`}>
                         {option.text.length > 12 ? option.text.substring(0, 10) + "..." : option.text}
                       </span>
                     </div>
                   </motion.button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent className="bg-white/90 backdrop-blur-sm border-gray-200 text-gray-700">
                   <p>{option.text}</p>
                 </TooltipContent>
               </Tooltip>
