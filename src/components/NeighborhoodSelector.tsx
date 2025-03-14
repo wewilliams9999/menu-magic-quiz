@@ -4,7 +4,6 @@ import { QuizOption } from "@/utils/quizData";
 import NeighborhoodSearch from "./NeighborhoodSearch";
 import NeighborhoodSelectionTags from "./NeighborhoodSelectionTags";
 import NeighborhoodMap from "./NeighborhoodMap";
-import NeighborhoodList from "./NeighborhoodList";
 
 interface NeighborhoodSelectorProps {
   options: QuizOption[];
@@ -61,17 +60,9 @@ const NeighborhoodSelector = ({
       />
 
       <NeighborhoodMap 
-        options={options}
+        options={filteredOptions.length > 0 || !searchQuery ? filteredOptions : options}
         selectedValues={selectedValues}
         onSelectionChange={handleSelectionChange}
-      />
-
-      <NeighborhoodList 
-        options={options}
-        filteredOptions={filteredOptions}
-        selectedValues={selectedValues}
-        onSelectionChange={handleSelectionChange}
-        searchQuery={searchQuery}
       />
     </div>
   );

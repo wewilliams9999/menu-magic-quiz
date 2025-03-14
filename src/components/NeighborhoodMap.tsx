@@ -1,7 +1,7 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { QuizOption } from "@/utils/quizData";
-import { Info } from "lucide-react";
+import { Info, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import { 
   Tooltip,
@@ -45,6 +45,16 @@ const NeighborhoodMap = ({
 }: NeighborhoodMapProps) => {
   const [hoveredBubble, setHoveredBubble] = useState<string | null>(null);
   
+  const bubbleColors = [
+    "bg-[#F2FCE2]", "bg-[#FEF7CD]", "bg-[#FEC6A1]", 
+    "bg-[#E5DEFF]", "bg-[#FFDEE2]", "bg-[#FDE1D3]", 
+    "bg-[#D3E4FD]", "bg-[#F1F0FB]"
+  ];
+
+  const getBubbleColor = (index: number) => {
+    return bubbleColors[index % bubbleColors.length];
+  };
+  
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-nashville-600 dark:text-nashville-400 bg-nashville-100/50 dark:bg-nashville-800/50 rounded-lg">
@@ -52,7 +62,7 @@ const NeighborhoodMap = ({
         <p>Click on a neighborhood bubble to select areas of Nashville you're interested in visiting.</p>
       </div>
       
-      <div className="relative h-[300px] w-full rounded-lg shadow-md overflow-hidden border border-nashville-200 dark:border-nashville-700">
+      <div className="relative h-[400px] w-full rounded-lg shadow-md overflow-hidden border border-nashville-200 dark:border-nashville-700">
         {/* Static map background */}
         <div className="absolute inset-0 bg-[#e9eef2] dark:bg-[#2a3035]">
           {/* Simple map styling - river */}
@@ -69,8 +79,8 @@ const NeighborhoodMap = ({
           </div>
         </div>
         
-        {/* Neighborhood bubbles with labels directly on map */}
-        {options.map((option) => {
+        {/* Colorful neighborhood bubbles */}
+        {options.map((option, index) => {
           const position = neighborhoodPositions[option.value];
           if (!position) return null;
           
@@ -82,24 +92,28 @@ const NeighborhoodMap = ({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <motion.button
-                    className={`absolute z-10 transform -translate-x-1/2 -translate-y-1/2 rounded-full
+                    className={`absolute z-10 transform -translate-x-1/2 -translate-y-1/2 rounded-full px-3 py-1.5
+                      ${getBubbleColor(index)} dark:text-nashville-900
                       ${isSelected 
-                        ? 'bg-nashville-accent text-white' 
-                        : 'bg-white dark:bg-nashville-800 text-nashville-900 dark:text-nashville-100'} 
-                      shadow-md transition-all duration-200`}
+                        ? 'ring-2 ring-nashville-accent shadow-md font-medium' 
+                        : 'hover:shadow-md'} 
+                      transition-all duration-200`}
                     style={{
                       left: position.left,
                       top: position.top,
-                      padding: isHovered || isSelected ? '0.75rem' : '0.6rem',
+                      transform: `translate(-50%, -50%) scale(${isHovered || isSelected ? 1.1 : 1})`,
                     }}
                     onClick={() => onSelectionChange(option.value)}
                     onMouseEnter={() => setHoveredBubble(option.value)}
                     onMouseLeave={() => setHoveredBubble(null)}
-                    whileHover={{ scale: 1.2 }}
+                    whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <div className="relative text-xs font-medium">
-                      {option.text.length > 10 ? option.text.substring(0, 8) + "..." : option.text}
+                    <div className="flex items-center gap-1.5">
+                      <MapPin size={14} className="text-nashville-accent flex-shrink-0" />
+                      <span className="text-sm font-medium whitespace-nowrap">
+                        {option.text.length > 10 ? option.text.substring(0, 8) + "..." : option.text}
+                      </span>
                     </div>
                   </motion.button>
                 </TooltipTrigger>
