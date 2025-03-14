@@ -1,34 +1,29 @@
 
-import { useEffect, useRef } from "react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import { useEffect, useState } from "react";
 import { QuizOption } from "@/utils/quizData";
-import { Info } from "lucide-react";
+import { Info, MapPin } from "lucide-react";
+import { motion } from "framer-motion";
 
-// Mapbox token - normally this would be in an environment variable
-// This is a temporary public token for demonstration
-const MAPBOX_TOKEN = "pk.eyJ1IjoiYXNoaXphbmFkaW0iLCJhIjoiY2xiMmZmOGl2MThzOTN1cGVwc2M2ZDZ6YiJ9.A_CX66QqpzNIPRm64-FVOA";
-
-// Nashville neighborhoods with their coordinates
-const neighborhoodCoordinates: Record<string, [number, number]> = {
-  "downtown": [-86.7816, 36.1627],
-  "germantown": [-86.7896, 36.1757],
-  "gulch": [-86.7943, 36.1522],
-  "music-row": [-86.7923, 36.1509],
-  "north-nashville": [-86.8081, 36.1719],
-  "east": [-86.7488, 36.1824],
-  "west-end": [-86.8088, 36.1495],
-  "belle-meade": [-86.8514, 36.1073],
-  "bellevue": [-86.9336, 36.0759],
-  "bordeaux": [-86.8538, 36.1949],
-  "whites-creek": [-86.8269, 36.2309],
-  "12south": [-86.7889, 36.1260],
-  "berry-hill": [-86.7673, 36.1130],
-  "green-hills": [-86.8135, 36.1032],
-  "franklin": [-86.8689, 35.9250],
-  "brentwood": [-86.7822, 36.0331],
-  "opryland": [-86.6922, 36.2143],
-  "madison": [-86.7175, 36.2647]
+// Nashville neighborhoods with their relative positions on the static map
+const neighborhoodPositions: Record<string, { left: string, top: string }> = {
+  "downtown": { left: "50%", top: "50%" },
+  "germantown": { left: "48%", top: "45%" },
+  "gulch": { left: "47%", top: "53%" },
+  "music-row": { left: "45%", top: "55%" },
+  "north-nashville": { left: "45%", top: "40%" },
+  "east": { left: "58%", top: "48%" },
+  "west-end": { left: "42%", top: "52%" },
+  "belle-meade": { left: "35%", top: "58%" },
+  "bellevue": { left: "25%", top: "65%" },
+  "bordeaux": { left: "40%", top: "35%" },
+  "whites-creek": { left: "45%", top: "25%" },
+  "12south": { left: "48%", top: "60%" },
+  "berry-hill": { left: "52%", top: "65%" },
+  "green-hills": { left: "42%", top: "65%" },
+  "franklin": { left: "48%", top: "85%" },
+  "brentwood": { left: "52%", top: "75%" },
+  "opryland": { left: "65%", top: "35%" },
+  "madison": { left: "55%", top: "30%" }
 };
 
 interface NeighborhoodMapProps {
@@ -42,163 +37,79 @@ const NeighborhoodMap = ({
   selectedValues, 
   onSelectionChange 
 }: NeighborhoodMapProps) => {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const [hoveredBubble, setHoveredBubble] = useState<string | null>(null);
   
-  // Initialize map
-  useEffect(() => {
-    if (!mapContainer.current) return;
-    
-    mapboxgl.accessToken = MAPBOX_TOKEN;
-    
-    const initialMap = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: [-86.7816, 36.1627], // Downtown Nashville
-      zoom: 10.5,
-      attributionControl: false
-    });
-    
-    map.current = initialMap;
-    
-    initialMap.on('load', () => {
-      // Add markers for all neighborhoods
-      options.forEach(option => {
-        const coordinates = neighborhoodCoordinates[option.value];
-        if (coordinates) {
-          addMarker(option.value, coordinates, option.text);
-        }
-      });
-      
-      // Update marker styles for selected values
-      updateMarkers();
-    });
-    
-    return () => {
-      initialMap.remove();
-    };
-  }, [options]);
-  
-  // Update markers when selections change
-  useEffect(() => {
-    updateMarkers();
-  }, [selectedValues]);
-  
-  const addMarker = (id: string, coordinates: [number, number], text: string) => {
-    if (!map.current) return;
-    
-    // Create a custom element for the marker
-    const el = document.createElement('div');
-    el.className = 'neighborhood-marker';
-    el.id = `marker-${id}`;
-    el.innerHTML = `<div class="marker-pin"></div><span class="marker-text">${text}</span>`;
-    
-    // Add marker to the map
-    const marker = new mapboxgl.Marker(el)
-      .setLngLat(coordinates)
-      .addTo(map.current);
-    
-    // Store the marker reference
-    markersRef.current.push(marker);
-    
-    // Add click event to toggle selection
-    el.addEventListener('click', () => {
-      onSelectionChange(id);
-    });
-  };
-  
-  const updateMarkers = () => {
-    // Update all marker styles based on selection state
-    options.forEach(option => {
-      const markerEl = document.getElementById(`marker-${option.value}`);
-      if (markerEl) {
-        if (selectedValues.includes(option.value)) {
-          markerEl.classList.add('selected');
-        } else {
-          markerEl.classList.remove('selected');
-        }
-      }
-    });
-  };
-
-  // Method to fly to a specific neighborhood
-  const flyToNeighborhood = (value: string) => {
-    if (!map.current) return;
-    
-    const coordinates = neighborhoodCoordinates[value];
-    if (coordinates) {
-      map.current.flyTo({
-        center: coordinates,
-        zoom: 12,
-        duration: 1000
-      });
-    }
-  };
-
-  // If a new neighborhood is selected, fly to it
-  useEffect(() => {
-    const newSelection = selectedValues[selectedValues.length - 1];
-    if (newSelection) {
-      flyToNeighborhood(newSelection);
-    }
-  }, [selectedValues]);
-
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-nashville-600 dark:text-nashville-400 bg-nashville-100/50 dark:bg-nashville-800/50 rounded-lg">
         <Info size={14} className="flex-shrink-0" />
-        <p>Click on the map markers to select neighborhoods or use the bubbles below. The map will zoom to your selected areas.</p>
+        <p>Click on the neighborhood bubbles to select areas of Nashville you're interested in visiting.</p>
       </div>
-      <div 
-        ref={mapContainer} 
-        className="h-[300px] w-full rounded-lg shadow-md overflow-hidden border border-nashville-200 dark:border-nashville-700"
-      >
-        <style>
-          {`
-            .neighborhood-marker {
-              position: relative;
-              cursor: pointer;
-            }
-            
-            .marker-pin {
-              width: 20px;
-              height: 20px;
-              border-radius: 50%;
-              background-color: white;
-              border: 2px solid #ccc;
-              transition: all 0.2s ease;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-            
-            .marker-text {
-              position: absolute;
-              white-space: nowrap;
-              bottom: 100%;
-              left: 50%;
-              transform: translateX(-50%);
-              background-color: rgba(255, 255, 255, 0.9);
-              padding: 2px 6px;
-              border-radius: 4px;
-              font-size: 12px;
-              opacity: 0;
-              transition: opacity 0.2s ease;
-              pointer-events: none;
-            }
-            
-            .neighborhood-marker:hover .marker-text {
-              opacity: 1;
-            }
-            
-            .neighborhood-marker.selected .marker-pin {
-              background-color: var(--nashville-accent, #f4b400);
-              border-color: var(--nashville-accent, #f4b400);
-              transform: scale(1.2);
-            }
-          `}
-        </style>
+      
+      <div className="relative h-[300px] w-full rounded-lg shadow-md overflow-hidden border border-nashville-200 dark:border-nashville-700">
+        {/* Static map background */}
+        <div className="absolute inset-0 bg-[#e9eef2] dark:bg-[#2a3035]">
+          {/* Simple map styling - river */}
+          <div className="absolute w-[15%] h-full left-[45%] top-0 bg-[#b8d0e6] dark:bg-[#3a4c5d] transform -rotate-12"></div>
+          
+          {/* Map grid lines */}
+          <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 opacity-10">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={`col-${i}`} className="border-r border-black dark:border-white h-full"></div>
+            ))}
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={`row-${i}`} className="border-b border-black dark:border-white w-full"></div>
+            ))}
+          </div>
+          
+          {/* Map center point - downtown label */}
+          <div className="absolute left-[50%] top-[50%] transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-500 dark:text-gray-400">
+            Downtown
+          </div>
+        </div>
+        
+        {/* Neighborhood bubbles */}
+        {options.map((option) => {
+          const position = neighborhoodPositions[option.value];
+          if (!position) return null;
+          
+          const isSelected = selectedValues.includes(option.value);
+          const isHovered = hoveredBubble === option.value;
+          
+          return (
+            <motion.button
+              key={option.id}
+              className={`absolute z-10 transform -translate-x-1/2 -translate-y-1/2 rounded-full
+                ${isSelected 
+                  ? 'bg-nashville-accent text-white' 
+                  : 'bg-white dark:bg-nashville-800 text-nashville-900 dark:text-nashville-100'} 
+                shadow-md transition-all duration-200`}
+              style={{
+                left: position.left,
+                top: position.top,
+                padding: isHovered || isSelected ? '0.5rem' : '0.35rem',
+                scale: isHovered || isSelected ? 1.2 : 1
+              }}
+              onClick={() => onSelectionChange(option.value)}
+              onMouseEnter={() => setHoveredBubble(option.value)}
+              onMouseLeave={() => setHoveredBubble(null)}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <div className="relative">
+                <MapPin size={isSelected || isHovered ? 16 : 14} className={isSelected ? "text-white" : "text-nashville-accent"} />
+                
+                {/* Neighborhood name tooltip */}
+                <div className={`absolute whitespace-nowrap rounded-md bg-black/80 text-white px-2 py-1 text-xs
+                  ${isHovered || isSelected ? 'opacity-100' : 'opacity-0'} 
+                  transition-opacity duration-200 pointer-events-none
+                  bottom-full left-1/2 transform -translate-x-1/2 mb-1`}>
+                  {option.text}
+                </div>
+              </div>
+            </motion.button>
+          );
+        })}
       </div>
     </div>
   );
