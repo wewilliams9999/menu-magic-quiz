@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { MapPin, Navigation, NavigationOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -19,7 +20,7 @@ const neighborhoodPositions: Record<string, { left: string, top: string }> = {
   "north-nashville": { left: "35%", top: "25%" },
   "east": { left: "68%", top: "40%" },
   "west-end": { left: "30%", top: "52%" },
-  "belle-meade": { left: "20%", top: "60%" },
+  "belle-meade": { left: "20%", top: "48%" }, // Adjusted position to make Belle Meade more visible
   "bellevue": { left: "12%", top: "70%" },
   "bordeaux": { left: "25%", top: "20%" },
   "whites-creek": { left: "38%", top: "8%" },
