@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { MapPin, Navigation, NavigationOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -20,7 +19,7 @@ const neighborhoodPositions: Record<string, { left: string, top: string }> = {
   "north-nashville": { left: "35%", top: "25%" },
   "east": { left: "68%", top: "40%" },
   "west-end": { left: "30%", top: "52%" },
-  "belle-meade": { left: "20%", top: "48%" }, // Adjusted position to make Belle Meade more visible
+  "belle-meade": { left: "20%", top: "48%" },
   "bellevue": { left: "12%", top: "70%" },
   "bordeaux": { left: "25%", top: "20%" },
   "whites-creek": { left: "38%", top: "8%" },
@@ -190,14 +189,14 @@ const NeighborhoodMap = ({
             <TooltipProvider key={option.id}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <motion.button
+                  <button
                     className={`absolute z-10 transform -translate-x-1/2 -translate-y-1/2 
                       ${getBubbleColor(index)}
                       px-2.5 py-1 rounded-full border backdrop-blur-sm
                       ${isSelected 
                         ? 'border-nashville-accent shadow-md' 
                         : 'border-gray-300 dark:border-gray-600'}
-                      transition-all duration-200 hover:scale-110`}
+                      transition-colors duration-200`}
                     style={{
                       left: position.left,
                       top: position.top,
@@ -205,8 +204,6 @@ const NeighborhoodMap = ({
                     onClick={() => onSelect(option.value)}
                     onMouseEnter={() => setHoveredBubble(option.value)}
                     onMouseLeave={() => setHoveredBubble(null)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                   >
                     <div className="flex items-center gap-1.5">
                       {isSelected && (
@@ -216,7 +213,7 @@ const NeighborhoodMap = ({
                         {option.text}
                       </span>
                     </div>
-                  </motion.button>
+                  </button>
                 </TooltipTrigger>
                 <TooltipContent className="bg-white/90 backdrop-blur-sm border-gray-200 text-gray-700">
                   <p>{option.text}</p>
