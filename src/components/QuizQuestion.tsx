@@ -6,7 +6,7 @@ import { QuizQuestion as QuizQuestionType, QuizOption } from "@/utils/quizData";
 import { ChevronLeft, ChevronRight, CheckCircle, Check } from "lucide-react";
 import NeighborhoodSelector from "./NeighborhoodSelector";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Form, FormControl, FormItem, FormLabel } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -114,12 +114,12 @@ const QuizQuestion = ({
                   className="mt-1 data-[state=checked]:bg-nashville-accent data-[state=checked]:border-nashville-accent"
                 />
                 <div className="space-y-1">
-                  <FormLabel
+                  <Label
                     htmlFor={option.id}
                     className="text-base font-medium cursor-pointer"
                   >
                     {option.text}
-                  </FormLabel>
+                  </Label>
                 </div>
               </div>
             ))}
