@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { MapPin, Navigation, NavigationOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -12,28 +11,27 @@ import { Button } from "@/components/ui/button";
 import { QuizOption } from "@/utils/quizData";
 import { toast } from "sonner";
 
-// Updated Nashville neighborhoods with better spread positions to prevent overlapping
 const neighborhoodPositions: Record<string, { left: string, top: string }> = {
   "downtown": { left: "50%", top: "50%" },
   "germantown": { left: "48%", top: "35%" },
-  "gulch": { left: "45%", top: "56%" },
+  "gulch": { left: "45%", top: "55%" },
   "music-row": { left: "40%", top: "63%" },
-  "north-nashville": { left: "38%", top: "27%" },
-  "east": { left: "68%", top: "45%" },
+  "north-nashville": { left: "35%", top: "25%" },
+  "east": { left: "68%", top: "40%" },
   "west-end": { left: "30%", top: "52%" },
-  "belle-meade": { left: "22%", top: "60%" },
+  "belle-meade": { left: "20%", top: "60%" },
   "bellevue": { left: "12%", top: "70%" },
-  "bordeaux": { left: "25%", top: "30%" },
-  "whites-creek": { left: "38%", top: "10%" },
+  "bordeaux": { left: "25%", top: "20%" },
+  "whites-creek": { left: "38%", top: "8%" },
   "12south": { left: "42%", top: "72%" },
   "berry-hill": { left: "52%", top: "77%" },
-  "green-hills": { left: "34%", top: "77%" },
+  "green-hills": { left: "34%", top: "78%" },
   "franklin": { left: "38%", top: "95%" },
-  "brentwood": { left: "50%", top: "88%" },
-  "opryland": { left: "76%", top: "27%" },
-  "madison": { left: "58%", top: "15%" },
-  "crieve-hall": { left: "45%", top: "83%" },
-  "woodbine": { left: "58%", top: "63%" }
+  "brentwood": { left: "50%", top: "90%" },
+  "opryland": { left: "80%", top: "25%" },
+  "madison": { left: "62%", top: "15%" },
+  "crieve-hall": { left: "45%", top: "85%" },
+  "woodbine": { left: "60%", top: "65%" }
 };
 
 interface NeighborhoodMapProps {
@@ -46,8 +44,6 @@ interface NeighborhoodMapProps {
 interface UserLocation {
   latitude: number;
   longitude: number;
-  // These values are rough approximations for the map's coordinate system
-  // and will be used to position the "You are here" pin
   mapX: string;
   mapY: string;
 }
@@ -63,7 +59,6 @@ const NeighborhoodMap = ({
   const [isLocating, setIsLocating] = useState(false);
   const [locationEnabled, setLocationEnabled] = useState(false);
   
-  // Get user location
   const getUserLocation = () => {
     if (!navigator.geolocation) {
       toast.error("Geolocation is not supported by your browser");
@@ -74,17 +69,11 @@ const NeighborhoodMap = ({
     
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        // Nashville coordinates for reference
         const nashvilleCenter = { lat: 36.1627, lng: -86.7816 };
         
-        // Calculate relative position (very rough approximation)
-        // In a real app, you'd use proper map projection math
         const latDiff = position.coords.latitude - nashvilleCenter.lat;
         const lngDiff = position.coords.longitude - nashvilleCenter.lng;
         
-        // Assuming the map is roughly centered on Nashville
-        // and that 0.1 degree is about 20% of the map width/height
-        // This is just a rough mapping to place the pin somewhat accurately
         const mapX = `${50 + (lngDiff * 200)}%`;
         const mapY = `${50 - (latDiff * 200)}%`;
         
@@ -106,23 +95,21 @@ const NeighborhoodMap = ({
     );
   };
   
-  // Disable location tracking
   const disableLocation = () => {
     setUserLocation(null);
     setLocationEnabled(false);
     toast.info("Location services disabled");
   };
   
-  // Refined color palette for a more chic look
   const bubbleColors = [
-    "bg-white/80 text-gray-800", 
-    "bg-white/80 text-gray-800", 
-    "bg-white/80 text-gray-800", 
-    "bg-white/80 text-gray-800", 
-    "bg-white/80 text-gray-800", 
-    "bg-white/80 text-gray-800", 
-    "bg-white/80 text-gray-800", 
-    "bg-white/80 text-gray-800"
+    "bg-white/90 text-gray-800", 
+    "bg-white/90 text-gray-800", 
+    "bg-white/90 text-gray-800", 
+    "bg-white/90 text-gray-800", 
+    "bg-white/90 text-gray-800", 
+    "bg-white/90 text-gray-800", 
+    "bg-white/90 text-gray-800", 
+    "bg-white/90 text-gray-800"
   ];
 
   const getBubbleColor = (index: number) => {
@@ -166,22 +153,19 @@ const NeighborhoodMap = ({
       </div>
       
       <div className="relative h-[500px] w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-        {/* Minimalist map background */}
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
-          {/* Cumberland River - elegant, simplified */}
           <div className="absolute h-full w-full overflow-hidden">
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
               <path 
                 d="M45,0 Q48,25 52,40 Q55,55 49,75 Q47,85 50,100" 
                 fill="none" 
                 stroke="#e0f2fe" 
-                strokeWidth="4"
+                strokeWidth="3"
                 className="dark:stroke-[#1e3a5f] opacity-70"
               />
             </svg>
           </div>
           
-          {/* Minimalist grid lines */}
           <div className="absolute inset-0 opacity-10">
             <div className="w-full h-full" style={{
               backgroundImage: `
@@ -192,17 +176,14 @@ const NeighborhoodMap = ({
             }}></div>
           </div>
           
-          {/* Downtown area highlight - subtle */}
           <div className="absolute w-[12%] h-[12%] rounded-full bg-white dark:bg-gray-700 opacity-20 left-[46%] top-[47%] blur-sm"></div>
         </div>
         
-        {/* Neighborhood bubbles */}
         {options.map((option, index) => {
           const position = neighborhoodPositions[option.value];
           if (!position) return null;
           
           const isSelected = selectedNeighborhoods.includes(option.value);
-          const isHovered = hoveredBubble === option.value;
           
           return (
             <TooltipProvider key={option.id}>
@@ -213,9 +194,9 @@ const NeighborhoodMap = ({
                       ${getBubbleColor(index)}
                       px-2.5 py-1 rounded-full border backdrop-blur-sm
                       ${isSelected 
-                        ? 'border-gray-500 shadow-md' 
+                        ? 'border-nashville-accent shadow-md' 
                         : 'border-gray-300 dark:border-gray-600'}
-                      transition-all duration-200`}
+                      transition-all duration-200 hover:scale-110`}
                     style={{
                       left: position.left,
                       top: position.top,
@@ -228,10 +209,10 @@ const NeighborhoodMap = ({
                   >
                     <div className="flex items-center gap-1.5">
                       {isSelected && (
-                        <div className="w-1.5 h-1.5 rounded-full bg-gray-800 dark:bg-white"></div>
+                        <div className="w-2 h-2 rounded-full bg-nashville-accent"></div>
                       )}
                       <span className={`text-xs font-medium whitespace-nowrap ${isSelected ? 'font-semibold' : ''}`}>
-                        {option.text.length > 12 ? option.text.substring(0, 10) + "..." : option.text}
+                        {option.text}
                       </span>
                     </div>
                   </motion.button>
@@ -244,7 +225,6 @@ const NeighborhoodMap = ({
           );
         })}
         
-        {/* User location pin */}
         {userLocation && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
