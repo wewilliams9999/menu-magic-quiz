@@ -27,6 +27,22 @@ export function useRestaurantData({
     return priceMap[quizPrice] || "";
   };
 
+  // Map neighborhood to location for API search
+  const mapNeighborhoodToLocation = (neighborhood?: string): string => {
+    if (!neighborhood) return "Nashville, TN";
+    
+    // For suburbs that should use their own city name
+    if (neighborhood === "franklin") return "Franklin, TN";
+    if (neighborhood === "brentwood") return "Brentwood, TN";
+    
+    // For Nashville neighborhoods, include neighborhood name
+    const neighborhoodDisplay = neighborhood.split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+    
+    return `Nashville, TN ${neighborhoodDisplay}`;
+  };
+
   // Build category string for API
   const buildCategoryParam = (): string => {
     const categories = [];
@@ -40,9 +56,10 @@ export function useRestaurantData({
     queryFn: async () => {
       const apiPrice = price ? mapPriceToApi(price) : undefined;
       const categoryParam = buildCategoryParam();
+      const locationParam = mapNeighborhoodToLocation(neighborhood);
       
       const restaurants = await searchRestaurants(
-        `Nashville, TN${neighborhood ? ` ${neighborhood}` : ''}`,
+        locationParam,
         categoryParam,
         apiPrice
       );

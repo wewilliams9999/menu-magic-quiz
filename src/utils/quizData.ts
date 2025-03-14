@@ -89,6 +89,36 @@ export const quizQuestions: QuizQuestion[] = [
         id: "neighborhood-12",
         text: "Madison",
         value: "madison"
+      },
+      {
+        id: "neighborhood-13",
+        text: "North Nashville",
+        value: "north-nashville"
+      },
+      {
+        id: "neighborhood-14",
+        text: "Bordeaux",
+        value: "bordeaux"
+      },
+      {
+        id: "neighborhood-15",
+        text: "Whites Creek",
+        value: "whites-creek"
+      },
+      {
+        id: "neighborhood-16",
+        text: "Franklin",
+        value: "franklin"
+      },
+      {
+        id: "neighborhood-17",
+        text: "Brentwood",
+        value: "brentwood"
+      },
+      {
+        id: "neighborhood-18",
+        text: "Green Hills",
+        value: "green-hills"
       }
     ]
   },
@@ -310,3 +340,4 @@ export const getRecommendations = (answers: Record<string, string>): QuizResult[
     .slice(0, 3)
     .map(item => item.result);
 };
+

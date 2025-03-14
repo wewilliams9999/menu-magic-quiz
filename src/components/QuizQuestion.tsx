@@ -117,18 +117,29 @@ const QuizQuestion = ({
           {/* Neighborhood Markers */}
           <div className="absolute inset-0">
             {[
-              { id: "east", name: "East Nashville", position: { top: '30%', left: '65%' }, color: "from-[#F97316] to-[#FBBF24]", rotate: "-5deg" },
-              { id: "gulch", name: "The Gulch", position: { top: '58%', left: '42%' }, color: "from-[#8B5CF6] to-[#D946EF]", rotate: "3deg" },
-              { id: "downtown", name: "Downtown", position: { top: '48%', left: '52%' }, color: "from-[#0EA5E9] to-[#22D3EE]", rotate: "0deg" },
-              { id: "12south", name: "12 South", position: { top: '65%', left: '45%' }, color: "from-[#10B981] to-[#34D399]", rotate: "-2deg" },
+              // Core Nashville neighborhoods - rearranged for better spacing
+              { id: "east", name: "East Nashville", position: { top: '32%', left: '70%' }, color: "from-[#F97316] to-[#FBBF24]", rotate: "-5deg" },
+              { id: "gulch", name: "The Gulch", position: { top: '58%', left: '47%' }, color: "from-[#8B5CF6] to-[#D946EF]", rotate: "3deg" },
+              { id: "downtown", name: "Downtown", position: { top: '48%', left: '54%' }, color: "from-[#0EA5E9] to-[#22D3EE]", rotate: "0deg" },
+              { id: "12south", name: "12 South", position: { top: '68%', left: '45%' }, color: "from-[#10B981] to-[#34D399]", rotate: "-2deg" },
               { id: "germantown", name: "Germantown", position: { top: '38%', left: '52%' }, color: "from-[#EC4899] to-[#F472B6]", rotate: "2deg" },
-              { id: "music-row", name: "Music Row", position: { top: '55%', left: '30%' }, color: "from-[#EF4444] to-[#F87171]", rotate: "-3deg" },
-              { id: "berry-hill", name: "Berry Hill", position: { top: '75%', left: '35%' }, color: "from-[#6366F1] to-[#A78BFA]", rotate: "4deg" },
-              { id: "west-end", name: "West End", position: { top: '40%', left: '30%' }, color: "from-[#F59E0B] to-[#FBBF24]", rotate: "-1deg" },
+              { id: "music-row", name: "Music Row", position: { top: '62%', left: '35%' }, color: "from-[#EF4444] to-[#F87171]", rotate: "-3deg" },
+              { id: "berry-hill", name: "Berry Hill", position: { top: '80%', left: '35%' }, color: "from-[#6366F1] to-[#A78BFA]", rotate: "4deg" },
+              { id: "west-end", name: "West End", position: { top: '43%', left: '33%' }, color: "from-[#F59E0B] to-[#FBBF24]", rotate: "-1deg" },
               { id: "belle-meade", name: "Belle Meade", position: { top: '30%', left: '15%' }, color: "from-[#4F46E5] to-[#6366F1]", rotate: "2deg" },
               { id: "bellevue", name: "Bellevue", position: { top: '15%', left: '10%' }, color: "from-[#059669] to-[#10B981]", rotate: "-4deg" },
-              { id: "opryland", name: "Opryland", position: { top: '15%', left: '90%' }, color: "from-[#DC2626] to-[#EF4444]", rotate: "3deg" },
-              { id: "madison", name: "Madison", position: { top: '10%', left: '65%' }, color: "from-[#7C3AED] to-[#8B5CF6]", rotate: "-2deg" }
+              { id: "opryland", name: "Opryland", position: { top: '15%', left: '85%' }, color: "from-[#DC2626] to-[#EF4444]", rotate: "3deg" },
+              { id: "madison", name: "Madison", position: { top: '10%', left: '60%' }, color: "from-[#7C3AED] to-[#8B5CF6]", rotate: "-2deg" },
+              
+              // New North Nashville neighborhoods
+              { id: "north-nashville", name: "North Nashville", position: { top: '25%', left: '48%' }, color: "from-[#0369A1] to-[#0EA5E9]", rotate: "2deg" },
+              { id: "bordeaux", name: "Bordeaux", position: { top: '18%', left: '35%' }, color: "from-[#A16207] to-[#CA8A04]", rotate: "-3deg" },
+              { id: "whites-creek", name: "Whites Creek", position: { top: '5%', left: '45%' }, color: "from-[#15803D] to-[#22C55E]", rotate: "1deg" },
+              
+              // Franklin & Brentwood (south of Nashville)
+              { id: "franklin", name: "Franklin", position: { top: '95%', left: '45%' }, color: "from-[#9D174D] to-[#EC4899]", rotate: "-2deg" },
+              { id: "brentwood", name: "Brentwood", position: { top: '88%', left: '58%' }, color: "from-[#5B21B6] to-[#7C3AED]", rotate: "3deg" },
+              { id: "green-hills", name: "Green Hills", position: { top: '75%', left: '25%' }, color: "from-[#065F46] to-[#10B981]", rotate: "-1deg" },
             ].map((neighborhood) => {
               const isActive = selectedAnswer === neighborhood.id;
               
@@ -170,7 +181,7 @@ const QuizQuestion = ({
                   >
                     <div 
                       className={`
-                        w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden 
+                        w-14 h-14 md:w-18 md:h-18 rounded-full overflow-hidden 
                         flex items-center justify-center
                         bg-gradient-to-br ${neighborhood.color}
                         shadow-lg
@@ -178,7 +189,7 @@ const QuizQuestion = ({
                       `}
                       style={{ transform: `rotate(${neighborhood.rotate})` }}
                     >
-                      <div className="text-center text-white font-bold p-1 text-xs md:text-sm drop-shadow-md">
+                      <div className="text-center text-white font-bold p-1 text-[10px] md:text-xs leading-tight drop-shadow-md">
                         {neighborhood.name}
                       </div>
                     </div>
