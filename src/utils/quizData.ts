@@ -1,3 +1,4 @@
+
 import { CasualIcon, ElegantIcon, TrendyIcon, UniqueIcon } from "@/utils/atmosphere-icons";
 
 export interface QuizOption {
@@ -73,6 +74,7 @@ export const priceOptions: QuizOption[] = [
 ];
 
 export const dietaryOptions: QuizOption[] = [
+  { id: "dietary-0", text: "No Specific Preferences", value: "none" },
   { id: "dietary-1", text: "Vegetarian", value: "vegetarian" },
   { id: "dietary-2", text: "Vegan", value: "vegan" },
   { id: "dietary-3", text: "Gluten-Free", value: "gluten-free" },
@@ -137,6 +139,7 @@ export const quizQuestions: QuizQuestion[] = [
     id: "preferences",
     questionText: "Any specific dietary preferences?",
     question: "Any specific dietary preferences?",
+    description: "Select all that apply or choose 'No Specific Preferences'",
     type: "multipleChoice",
     options: dietaryOptions,
     multiSelect: true,
