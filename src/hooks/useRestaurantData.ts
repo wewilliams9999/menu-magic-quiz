@@ -1,6 +1,6 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { fetchRestaurants } from "@/services/restaurantApi";
+import { searchRestaurants } from "@/services/restaurantApi";
 import { QuizResult } from "@/utils/quizData";
 
 // Fallback data in case the API fails
@@ -25,7 +25,7 @@ const fallbackResults: QuizResult[] = [
     neighborhood: "Germantown",
     priceRange: "$$$",
     description: "Rustic-modern spot with pasta dishes & innovative small plates in a converted factory space.",
-    imageUrl: "https://images.unsplash.com/photo-1514537193632-6078d53ac++f?q=80&w=500&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1514537193632-6078d53acfe4?q=80&w=500&auto=format&fit=crop",
     features: ["House-made pasta", "Craft cocktails", "Industrial chic"],
     website: "https://www.rolfanddaughters.com",
     resyLink: "https://resy.com/cities/bna/venues/rolf-and-daughters"
@@ -72,7 +72,7 @@ export const useRestaurantData = (params: RestaurantQueryParams) => {
     queryFn: async () => {
       try {
         // In a real app, this would call the actual API
-        const response = await fetchRestaurants(params);
+        const response = await searchRestaurants(params);
         
         // If we got results, return them
         if (response && response.length > 0) {

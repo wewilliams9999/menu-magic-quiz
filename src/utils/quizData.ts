@@ -1,10 +1,11 @@
+
 import { CasualIcon, ElegantIcon, TrendyIcon, UniqueIcon } from "@/utils/atmosphere-icons";
 
 export interface QuizOption {
   id: string;
   text: string;
   value: string;
-  icon?: string;
+  icon?: React.ElementType | string;
 }
 
 export interface QuizQuestion {
@@ -88,25 +89,25 @@ export const quizQuestions: QuizQuestion[] = [
         id: "atmosphere-1",
         text: "Casual & Relaxed",
         value: "casual",
-        icon: "CasualIcon"
+        icon: CasualIcon
       },
       {
         id: "atmosphere-2",
         text: "Trendy & Energetic",
         value: "trendy",
-        icon: "TrendyIcon"
+        icon: TrendyIcon
       },
       {
         id: "atmosphere-3",
         text: "Elegant & Refined",
         value: "elegant",
-        icon: "ElegantIcon"
+        icon: ElegantIcon
       },
       {
         id: "atmosphere-4",
         text: "Unique & Memorable",
         value: "unique",
-        icon: "UniqueIcon"
+        icon: UniqueIcon
       }
     ]
   },
