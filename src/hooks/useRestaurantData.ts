@@ -52,11 +52,14 @@ export function useRestaurantData({
     if (cuisine && cuisine !== "any") categories.push(cuisine);
     if (atmosphere) categories.push(atmosphere);
     
-    // Add relevant preference-based categories
-    if (preferences.includes('music')) categories.push('live-music');
-    if (preferences.includes('outdoor')) categories.push('outdoor-seating');
-    if (preferences.includes('family')) categories.push('family-friendly');
-    if (preferences.includes('quiet')) categories.push('quiet');
+    // Skip adding preference-based categories if 'none' is selected
+    if (!preferences.includes('none')) {
+      // Add relevant preference-based categories
+      if (preferences.includes('music')) categories.push('live-music');
+      if (preferences.includes('outdoor')) categories.push('outdoor-seating');
+      if (preferences.includes('family')) categories.push('family-friendly');
+      if (preferences.includes('quiet')) categories.push('quiet');
+    }
     
     return categories.join(',');
   };
@@ -64,6 +67,11 @@ export function useRestaurantData({
   // Build additional filters for API based on preferences
   const buildPreferenceFilters = (): Record<string, any> => {
     const filters: Record<string, any> = {};
+    
+    // Skip adding filters if 'none' is selected
+    if (preferences.includes('none')) {
+      return filters;
+    }
     
     if (preferences.includes('parking')) {
       filters.attributes = [...(filters.attributes || []), 'garage_parking', 'validated_parking', 'lot_parking'];

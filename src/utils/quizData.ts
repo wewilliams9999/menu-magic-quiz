@@ -1,4 +1,3 @@
-
 export type QuizQuestion = {
   id: string;
   question: string;
@@ -132,6 +131,11 @@ export const quizQuestions: QuizQuestion[] = [
     multiSelect: true,
     options: [
       {
+        id: "pref-0",
+        text: "Nothing in particular",
+        value: "none"
+      },
+      {
         id: "pref-1",
         text: "Quiet Atmosphere",
         value: "quiet"
@@ -185,7 +189,7 @@ export const quizQuestions: QuizQuestion[] = [
       },
       {
         id: "cuisine-2",
-        text: "Modern American",
+        text: "Modern American (New-style dishes with fresh ingredients)",
         value: "american"
       },
       {
@@ -392,3 +396,4 @@ export const getRecommendations = (answers: Record<string, string>): QuizResult[
     .slice(0, 3)
     .map(item => item.result);
 };
+

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -27,32 +26,30 @@ const QuizQuestion = ({
   currentIndex,
   totalQuestions,
 }: QuizQuestionProps) => {
-  // Determine if this is the neighborhood question
   const isNeighborhoodQuestion = question.id === "neighborhood";
-  
-  // Determine if this is the preferences question
   const isPreferencesQuestion = question.id === "preferences";
-  
-  // Determine if this is the cuisine question
   const isCuisineQuestion = question.id === "cuisine";
-  
-  // For multi-select questions we need to handle array values
   const isMultiSelect = question.multiSelect || false;
-  
-  // Handle multi-select changes
+
   const handleMultiSelectChange = (id: string, checked: boolean) => {
     const currentSelected = Array.isArray(selectedAnswer) ? [...selectedAnswer] : [];
     
+    if (id === 'none' && checked) {
+      onAnswer(question.id, ['none']);
+      return;
+    } else if (checked && currentSelected.includes('none')) {
+      const newSelection = currentSelected.filter(item => item !== 'none');
+      onAnswer(question.id, [...newSelection, id]);
+      return;
+    }
+    
     if (checked) {
-      // Add to selection
       onAnswer(question.id, [...currentSelected, id]);
     } else {
-      // Remove from selection
       onAnswer(question.id, currentSelected.filter(item => item !== id));
     }
   };
 
-  // Cast to array for multi-select questions, string otherwise
   const getSelectedArray = () => {
     if (isMultiSelect) {
       return Array.isArray(selectedAnswer) ? selectedAnswer : [];
