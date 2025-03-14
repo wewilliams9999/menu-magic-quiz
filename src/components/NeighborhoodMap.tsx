@@ -1,8 +1,14 @@
 
 import { useEffect, useState } from "react";
 import { QuizOption } from "@/utils/quizData";
-import { Info, MapPin } from "lucide-react";
+import { Info } from "lucide-react";
 import { motion } from "framer-motion";
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "@/components/ui/tooltip";
 
 // Nashville neighborhoods with their relative positions on the static map
 const neighborhoodPositions: Record<string, { left: string, top: string }> = {
@@ -43,7 +49,7 @@ const NeighborhoodMap = ({
     <div className="space-y-2">
       <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-nashville-600 dark:text-nashville-400 bg-nashville-100/50 dark:bg-nashville-800/50 rounded-lg">
         <Info size={14} className="flex-shrink-0" />
-        <p>Click on the neighborhood bubbles to select areas of Nashville you're interested in visiting.</p>
+        <p>Click on a neighborhood bubble to select areas of Nashville you're interested in visiting.</p>
       </div>
       
       <div className="relative h-[300px] w-full rounded-lg shadow-md overflow-hidden border border-nashville-200 dark:border-nashville-700">
@@ -61,14 +67,9 @@ const NeighborhoodMap = ({
               <div key={`row-${i}`} className="border-b border-black dark:border-white w-full"></div>
             ))}
           </div>
-          
-          {/* Map center point - downtown label */}
-          <div className="absolute left-[50%] top-[50%] transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-500 dark:text-gray-400">
-            Downtown
-          </div>
         </div>
         
-        {/* Neighborhood bubbles */}
+        {/* Neighborhood bubbles with labels directly on map */}
         {options.map((option) => {
           const position = neighborhoodPositions[option.value];
           if (!position) return null;
@@ -77,37 +78,36 @@ const NeighborhoodMap = ({
           const isHovered = hoveredBubble === option.value;
           
           return (
-            <motion.button
-              key={option.id}
-              className={`absolute z-10 transform -translate-x-1/2 -translate-y-1/2 rounded-full
-                ${isSelected 
-                  ? 'bg-nashville-accent text-white' 
-                  : 'bg-white dark:bg-nashville-800 text-nashville-900 dark:text-nashville-100'} 
-                shadow-md transition-all duration-200`}
-              style={{
-                left: position.left,
-                top: position.top,
-                padding: isHovered || isSelected ? '0.5rem' : '0.35rem',
-                scale: isHovered || isSelected ? 1.2 : 1
-              }}
-              onClick={() => onSelectionChange(option.value)}
-              onMouseEnter={() => setHoveredBubble(option.value)}
-              onMouseLeave={() => setHoveredBubble(null)}
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <div className="relative">
-                <MapPin size={isSelected || isHovered ? 16 : 14} className={isSelected ? "text-white" : "text-nashville-accent"} />
-                
-                {/* Neighborhood name tooltip */}
-                <div className={`absolute whitespace-nowrap rounded-md bg-black/80 text-white px-2 py-1 text-xs
-                  ${isHovered || isSelected ? 'opacity-100' : 'opacity-0'} 
-                  transition-opacity duration-200 pointer-events-none
-                  bottom-full left-1/2 transform -translate-x-1/2 mb-1`}>
-                  {option.text}
-                </div>
-              </div>
-            </motion.button>
+            <TooltipProvider key={option.id}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <motion.button
+                    className={`absolute z-10 transform -translate-x-1/2 -translate-y-1/2 rounded-full
+                      ${isSelected 
+                        ? 'bg-nashville-accent text-white' 
+                        : 'bg-white dark:bg-nashville-800 text-nashville-900 dark:text-nashville-100'} 
+                      shadow-md transition-all duration-200`}
+                    style={{
+                      left: position.left,
+                      top: position.top,
+                      padding: isHovered || isSelected ? '0.75rem' : '0.6rem',
+                    }}
+                    onClick={() => onSelectionChange(option.value)}
+                    onMouseEnter={() => setHoveredBubble(option.value)}
+                    onMouseLeave={() => setHoveredBubble(null)}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <div className="relative text-xs font-medium">
+                      {option.text.length > 10 ? option.text.substring(0, 8) + "..." : option.text}
+                    </div>
+                  </motion.button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{option.text}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           );
         })}
       </div>
