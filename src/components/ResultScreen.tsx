@@ -2,9 +2,10 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ExternalLink, MapPin, RefreshCw } from "lucide-react";
+import { ExternalLink, MapPin, RefreshCw, AlertCircle } from "lucide-react";
 import { QuizResult } from "@/utils/quizData";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface ResultScreenProps {
   results: QuizResult[];
@@ -13,6 +14,9 @@ interface ResultScreenProps {
 }
 
 const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps) => {
+  // Check if all results are alternatives
+  const allAlternatives = results.length > 0 && results.every(result => result.isAlternative);
+  
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -29,6 +33,16 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
           Based on your preferences, we think you'll enjoy these Nashville gems.
         </p>
       </div>
+
+      {allAlternatives && results.length > 0 && (
+        <Alert className="mb-6 border-amber-300 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-800">
+          <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-500" />
+          <AlertTitle className="text-amber-800 dark:text-amber-400">No exact matches found</AlertTitle>
+          <AlertDescription className="text-amber-700 dark:text-amber-300">
+            We couldn't find restaurants that match all your criteria, but we found these alternatives you might enjoy!
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="space-y-6 mb-10">
         {isLoading ? (
@@ -53,11 +67,10 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
             </Card>
           ))
         ) : results.length === 0 ? (
-          // No results state
           <div className="text-center py-8">
-            <h3 className="text-xl font-semibold mb-2">No restaurants found</h3>
+            <h3 className="text-xl font-semibold mb-2">Hmm, no results found</h3>
             <p className="text-nashville-600 dark:text-nashville-400 mb-4">
-              We couldn't find any matches for your criteria. Try adjusting your preferences.
+              We're having trouble finding perfect matches. Try adjusting your preferences for more options.
             </p>
             <Button onClick={onReset} variant="default" className="bg-nashville-accent hover:bg-nashville-accent/90">
               Start Over
@@ -72,7 +85,11 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.2, duration: 0.5 }}
             >
-              <Card className="overflow-hidden border border-nashville-200 dark:border-nashville-800 hover:shadow-lg transition-all duration-300">
+              <Card className={`overflow-hidden border ${
+                result.isAlternative
+                  ? "border-amber-200 dark:border-amber-800"
+                  : "border-nashville-200 dark:border-nashville-800"
+              } hover:shadow-lg transition-all duration-300`}>
                 <div className="flex flex-col md:flex-row">
                   <div className="md:w-1/3 h-48 md:h-auto relative overflow-hidden">
                     <img

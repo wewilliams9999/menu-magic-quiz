@@ -2,7 +2,22 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { QuizQuestion as QuizQuestionType, QuizOption } from "@/utils/quizData";
-import { ChevronLeft, ChevronRight, CheckCircle, Check, Utensils } from "lucide-react";
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  CheckCircle, 
+  Check, 
+  Utensils,
+  VolumeX,
+  ParkingSquare,
+  DollarSign,
+  TreeDeciduous,
+  Baby,
+  Sparkles,
+  Clock,
+  Music,
+  XCircle
+} from "lucide-react";
 import NeighborhoodSelector from "./NeighborhoodSelector";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -55,6 +70,31 @@ const QuizQuestion = ({
       return Array.isArray(selectedAnswer) ? selectedAnswer : [];
     }
     return [];
+  };
+
+  const getPreferenceIcon = (value: string) => {
+    switch (value) {
+      case 'none':
+        return <XCircle className="w-5 h-5" />;
+      case 'quiet':
+        return <VolumeX className="w-5 h-5" />;
+      case 'parking':
+        return <ParkingSquare className="w-5 h-5" />;
+      case 'budget':
+        return <DollarSign className="w-5 h-5" />;
+      case 'outdoor':
+        return <TreeDeciduous className="w-5 h-5" />;
+      case 'family':
+        return <Baby className="w-5 h-5" />;
+      case 'unique':
+        return <Sparkles className="w-5 h-5" />;
+      case 'late-night':
+        return <Clock className="w-5 h-5" />;
+      case 'music':
+        return <Music className="w-5 h-5" />;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -113,13 +153,18 @@ const QuizQuestion = ({
                   }}
                   className="mt-1 data-[state=checked]:bg-nashville-accent data-[state=checked]:border-nashville-accent"
                 />
-                <div className="space-y-1">
-                  <Label
-                    htmlFor={option.id}
-                    className="text-base font-medium cursor-pointer"
-                  >
-                    {option.text}
-                  </Label>
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center space-x-2">
+                    <div className={`text-nashville-accent ${getSelectedArray().includes(option.value) ? 'opacity-100' : 'opacity-70'}`}>
+                      {getPreferenceIcon(option.value)}
+                    </div>
+                    <Label
+                      htmlFor={option.id}
+                      className="text-base font-medium cursor-pointer"
+                    >
+                      {option.text}
+                    </Label>
+                  </div>
                 </div>
               </div>
             ))}

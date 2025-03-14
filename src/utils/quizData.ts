@@ -23,6 +23,7 @@ export type QuizResult = {
   website?: string;
   priceRange: string;
   neighborhood?: string;
+  isAlternative?: boolean;
 };
 
 export const quizQuestions: QuizQuestion[] = [
@@ -396,4 +397,3 @@ export const getRecommendations = (answers: Record<string, string>): QuizResult[
     .slice(0, 3)
     .map(item => item.result);
 };
-

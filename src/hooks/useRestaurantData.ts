@@ -110,7 +110,7 @@ export function useRestaurantData({
       }
       
       // Search for each neighborhood and combine results
-      const allResults: QuizResult[] = [];
+      let allResults: QuizResult[] = [];
       
       // We'll search one neighborhood at a time and combine results
       for (const neighborhood of neighborhoods) {
@@ -138,9 +138,63 @@ export function useRestaurantData({
       }
       
       // Remove duplicates (by ID)
-      const uniqueResults = allResults.filter((result, index, self) =>
+      let uniqueResults = allResults.filter((result, index, self) =>
         index === self.findIndex((r) => r.id === result.id)
       );
+      
+      // If no results found with our exact filters, try a broader search
+      if (uniqueResults.length === 0) {
+        // Try with fewer filters to find alternatives
+        let alternativeResults: QuizResult[] = [];
+        
+        // Try searching just by location and cuisine
+        for (const neighborhood of neighborhoods || ['']) {
+          const locationParam = neighborhood ? mapNeighborhoodToLocation(neighborhood) : "Nashville, TN";
+          
+          // Simplified search without some preferences
+          const restaurants = await searchRestaurants(
+            locationParam,
+            cuisine && cuisine !== "any" ? cuisine : "",
+            undefined, // Skip price filter
+            {}, // Skip preference filters
+            10 // Set explicit limit
+          );
+          
+          const mappedResults = restaurants.map(restaurant => {
+            const result = mapApiRestaurantToQuizResult(restaurant);
+            // Mark these as alternatives
+            result.isAlternative = true;
+            if (neighborhood && !result.neighborhood) {
+              result.neighborhood = neighborhood;
+            }
+            return result;
+          });
+          
+          alternativeResults.push(...mappedResults);
+        }
+        
+        // If still no results, try an even broader search
+        if (alternativeResults.length === 0) {
+          const restaurants = await searchRestaurants(
+            "Nashville, TN",
+            "",
+            undefined,
+            {},
+            10
+          );
+          
+          alternativeResults = restaurants.map(restaurant => {
+            const result = mapApiRestaurantToQuizResult(restaurant);
+            result.isAlternative = true;
+            return result;
+          });
+        }
+        
+        // Remove duplicates
+        uniqueResults = alternativeResults.filter((result, index, self) =>
+          index === self.findIndex((r) => r.id === result.id)
+        );
+      }
       
       return uniqueResults;
     },
