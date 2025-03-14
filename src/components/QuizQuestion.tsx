@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -97,6 +98,14 @@ const QuizQuestion = ({
     }
   };
 
+  // Convert QuizOption array to the format expected by NeighborhoodSelector
+  const convertToNeighborhoodFormat = (options: QuizOption[]) => {
+    return options.map(option => ({
+      id: option.value,
+      name: option.text
+    }));
+  };
+
   return (
     <motion.div
       key={question.id}
@@ -132,9 +141,9 @@ const QuizQuestion = ({
       {isNeighborhoodQuestion ? (
         <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-nashville-200 dark:border-nashville-800 shadow-lg">
           <NeighborhoodSelector 
-            options={question.options} 
-            selectedValues={getSelectedArray()}
-            onChange={(values: string[]) => onAnswer(question.id, values)}
+            neighborhoods={convertToNeighborhoodFormat(question.options)} 
+            selectedNeighborhoods={getSelectedArray()}
+            onSelect={(values: string[]) => onAnswer(question.id, values)}
           />
         </div>
       ) : isPreferencesQuestion ? (

@@ -31,6 +31,13 @@ const NeighborhoodSelector = ({
     neighborhood.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Convert neighborhoods to the format expected by NeighborhoodMap
+  const neighborhoodOptions = neighborhoods.map(neighborhood => ({
+    id: neighborhood.id,
+    text: neighborhood.name,
+    value: neighborhood.id
+  }));
+
   const toggleNeighborhood = (neighborhoodId: string) => {
     if (selectedNeighborhoods.includes(neighborhoodId)) {
       onSelect(selectedNeighborhoods.filter((id) => id !== neighborhoodId));
@@ -53,6 +60,7 @@ const NeighborhoodSelector = ({
               <NeighborhoodMap 
                 selectedNeighborhoods={selectedNeighborhoods} 
                 onSelect={toggleNeighborhood}
+                options={neighborhoodOptions}
               />
             </div>
           </div>

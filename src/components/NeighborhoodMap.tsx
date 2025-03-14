@@ -1,6 +1,5 @@
 
 import { useState } from "react";
-import { QuizOption } from "@/utils/quizData";
 import { MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import { 
@@ -9,6 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "@/components/ui/tooltip";
+import { QuizOption } from "@/utils/quizData";
 
 // Updated Nashville neighborhoods with better spread positions to prevent overlapping
 const neighborhoodPositions: Record<string, { left: string, top: string }> = {
@@ -35,15 +35,15 @@ const neighborhoodPositions: Record<string, { left: string, top: string }> = {
 };
 
 interface NeighborhoodMapProps {
-  options: QuizOption[];
-  selectedValues: string[];
-  onSelectionChange: (value: string) => void;
+  selectedNeighborhoods: string[];
+  onSelect: (neighborhoodId: string) => void;
+  options?: QuizOption[];
 }
 
 const NeighborhoodMap = ({ 
-  options, 
-  selectedValues, 
-  onSelectionChange 
+  selectedNeighborhoods, 
+  onSelect,
+  options = []
 }: NeighborhoodMapProps) => {
   const [hoveredBubble, setHoveredBubble] = useState<string | null>(null);
   
@@ -149,7 +149,7 @@ const NeighborhoodMap = ({
           const position = neighborhoodPositions[option.value];
           if (!position) return null;
           
-          const isSelected = selectedValues.includes(option.value);
+          const isSelected = selectedNeighborhoods.includes(option.value);
           const isHovered = hoveredBubble === option.value;
           
           return (
@@ -167,7 +167,7 @@ const NeighborhoodMap = ({
                       left: position.left,
                       top: position.top,
                     }}
-                    onClick={() => onSelectionChange(option.value)}
+                    onClick={() => onSelect(option.value)}
                     onMouseEnter={() => setHoveredBubble(option.value)}
                     onMouseLeave={() => setHoveredBubble(null)}
                     whileHover={{ scale: 1.1 }}
