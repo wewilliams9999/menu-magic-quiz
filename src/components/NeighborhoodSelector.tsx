@@ -309,7 +309,8 @@ const NeighborhoodSelector = ({
         </div>
       </ScrollArea>
 
-      <style jsx global>{`
+      <style>
+      {`
         .neighborhood-marker {
           position: relative;
           cursor: pointer;
@@ -355,7 +356,8 @@ const NeighborhoodSelector = ({
         .mapboxgl-ctrl-attrib-inner {
           display: none;
         }
-      `}</style>
+      `}
+      </style>
     </div>
   );
 };
