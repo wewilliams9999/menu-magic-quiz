@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { MapPin } from "lucide-react";
+
+import { useState, useEffect } from "react";
+import { MapPin, Navigation, NavigationOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { 
   Tooltip,
@@ -7,7 +8,9 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 import { QuizOption } from "@/utils/quizData";
+import { toast } from "sonner";
 
 // Updated Nashville neighborhoods with better spread positions to prevent overlapping
 const neighborhoodPositions: Record<string, { left: string, top: string }> = {
@@ -37,14 +40,78 @@ interface NeighborhoodMapProps {
   selectedNeighborhoods: string[];
   onSelect: (neighborhoodId: string) => void;
   options?: QuizOption[];
+  useUserLocation?: boolean;
+}
+
+interface UserLocation {
+  latitude: number;
+  longitude: number;
+  // These values are rough approximations for the map's coordinate system
+  // and will be used to position the "You are here" pin
+  mapX: string;
+  mapY: string;
 }
 
 const NeighborhoodMap = ({ 
   selectedNeighborhoods, 
   onSelect,
-  options = []
+  options = [],
+  useUserLocation = false
 }: NeighborhoodMapProps) => {
   const [hoveredBubble, setHoveredBubble] = useState<string | null>(null);
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
+  const [isLocating, setIsLocating] = useState(false);
+  const [locationEnabled, setLocationEnabled] = useState(false);
+  
+  // Get user location
+  const getUserLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error("Geolocation is not supported by your browser");
+      return;
+    }
+    
+    setIsLocating(true);
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        // Nashville coordinates for reference
+        const nashvilleCenter = { lat: 36.1627, lng: -86.7816 };
+        
+        // Calculate relative position (very rough approximation)
+        // In a real app, you'd use proper map projection math
+        const latDiff = position.coords.latitude - nashvilleCenter.lat;
+        const lngDiff = position.coords.longitude - nashvilleCenter.lng;
+        
+        // Assuming the map is roughly centered on Nashville
+        // and that 0.1 degree is about 20% of the map width/height
+        // This is just a rough mapping to place the pin somewhat accurately
+        const mapX = `${50 + (lngDiff * 200)}%`;
+        const mapY = `${50 - (latDiff * 200)}%`;
+        
+        setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          mapX,
+          mapY
+        });
+        
+        setLocationEnabled(true);
+        setIsLocating(false);
+        toast.success("Your location has been found");
+      },
+      (error) => {
+        setIsLocating(false);
+        toast.error(`Unable to retrieve your location: ${error.message}`);
+      }
+    );
+  };
+  
+  // Disable location tracking
+  const disableLocation = () => {
+    setUserLocation(null);
+    setLocationEnabled(false);
+    toast.info("Location services disabled");
+  };
   
   // Refined color palette for a more chic look
   const bubbleColors = [
@@ -64,9 +131,38 @@ const NeighborhoodMap = ({
   
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-gray-600 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-        <MapPin size={14} className="flex-shrink-0 text-gray-500" />
-        <p>Select neighborhoods you're interested in exploring.</p>
+      <div className="flex items-center justify-between gap-2 px-3 py-2 text-sm text-gray-600 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-2">
+          <MapPin size={14} className="flex-shrink-0 text-gray-500" />
+          <p>Select neighborhoods you're interested in exploring.</p>
+        </div>
+        
+        {useUserLocation && (
+          <div>
+            {locationEnabled ? (
+              <Button 
+                size="sm" 
+                variant="ghost" 
+                onClick={disableLocation}
+                className="h-8 px-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+              >
+                <NavigationOff size={14} className="mr-1" />
+                <span className="text-xs">Hide Location</span>
+              </Button>
+            ) : (
+              <Button 
+                size="sm" 
+                variant="ghost" 
+                onClick={getUserLocation}
+                disabled={isLocating}
+                className="h-8 px-2 text-nashville-accent hover:bg-nashville-accent/10"
+              >
+                <Navigation size={14} className="mr-1" />
+                <span className="text-xs">{isLocating ? "Locating..." : "Show My Location"}</span>
+              </Button>
+            )}
+          </div>
+        )}
       </div>
       
       <div className="relative h-[500px] w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
@@ -147,6 +243,39 @@ const NeighborhoodMap = ({
             </TooltipProvider>
           );
         })}
+        
+        {/* User location pin */}
+        {userLocation && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="absolute z-20 transform -translate-x-1/2 -translate-y-1/2"
+            style={{
+              left: userLocation.mapX,
+              top: userLocation.mapY,
+            }}
+          >
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="relative">
+                    <div className="absolute -inset-1 rounded-full bg-nashville-accent/30 animate-pulse"></div>
+                    <div className="relative bg-nashville-accent text-white p-1.5 rounded-full shadow-lg">
+                      <Navigation size={14} />
+                    </div>
+                    <div className="absolute h-20 w-1 bg-nashville-accent/20 -bottom-20 left-1/2 transform -translate-x-1/2 z-[-1]"></div>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  <p className="text-sm font-medium">You are here</p>
+                  <p className="text-xs text-gray-500">
+                    {userLocation.latitude.toFixed(4)}, {userLocation.longitude.toFixed(4)}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </motion.div>
+        )}
       </div>
     </div>
   );
