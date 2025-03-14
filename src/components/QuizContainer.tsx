@@ -1,16 +1,24 @@
 
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 import WelcomeScreen from "./WelcomeScreen";
 import QuizQuestion from "./QuizQuestion";
 import ResultScreen from "./ResultScreen";
-import { quizQuestions, getRecommendations, QuizResult } from "@/utils/quizData";
+import { quizQuestions, QuizResult } from "@/utils/quizData";
+import { useRestaurantData } from "@/hooks/useRestaurantData";
 
 const QuizContainer = () => {
   const [currentScreen, setCurrentScreen] = useState<"welcome" | "quiz" | "result">("welcome");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [results, setResults] = useState<QuizResult[]>([]);
+  
+  const { data: apiResults, isLoading, error } = useRestaurantData({
+    neighborhood: answers["neighborhood"],
+    cuisine: answers["cuisine"],
+    price: answers["price"],
+    atmosphere: answers["atmosphere"],
+  });
 
   const handleStart = () => {
     setCurrentScreen("quiz");
@@ -25,10 +33,13 @@ const QuizContainer = () => {
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex === quizQuestions.length - 1) {
-      // Generate results
-      const recommendations = getRecommendations(answers);
-      setResults(recommendations);
+      // Move to results screen
       setCurrentScreen("result");
+      
+      // Show notification if there was an API error
+      if (error) {
+        toast.error("Could not fetch restaurant data. Showing fallback recommendations instead.");
+      }
     } else {
       setCurrentQuestionIndex((prev) => prev + 1);
     }
@@ -44,7 +55,6 @@ const QuizContainer = () => {
     setCurrentScreen("welcome");
     setCurrentQuestionIndex(0);
     setAnswers({});
-    setResults([]);
   };
 
   return (
@@ -68,7 +78,12 @@ const QuizContainer = () => {
         )}
 
         {currentScreen === "result" && (
-          <ResultScreen key="result" results={results} onReset={handleReset} />
+          <ResultScreen 
+            key="result" 
+            results={apiResults || []} 
+            onReset={handleReset}
+            isLoading={isLoading} 
+          />
         )}
       </AnimatePresence>
     </div>
