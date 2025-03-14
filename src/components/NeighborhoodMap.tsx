@@ -10,27 +10,27 @@ import {
   TooltipTrigger
 } from "@/components/ui/tooltip";
 
-// Updated Nashville neighborhoods with better spread positions
+// Updated Nashville neighborhoods with better spread positions to prevent overlapping
 const neighborhoodPositions: Record<string, { left: string, top: string }> = {
   "downtown": { left: "50%", top: "50%" },
-  "germantown": { left: "48%", top: "38%" },
-  "gulch": { left: "45%", top: "53%" },
-  "music-row": { left: "40%", top: "58%" },
-  "north-nashville": { left: "38%", top: "32%" },
-  "east": { left: "65%", top: "45%" },
-  "west-end": { left: "35%", top: "52%" },
-  "belle-meade": { left: "28%", top: "60%" },
-  "bellevue": { left: "18%", top: "70%" },
-  "bordeaux": { left: "30%", top: "25%" },
-  "whites-creek": { left: "42%", top: "15%" },
-  "12south": { left: "48%", top: "68%" },
-  "berry-hill": { left: "55%", top: "72%" },
-  "green-hills": { left: "38%", top: "72%" },
-  "franklin": { left: "48%", top: "90%" },
-  "brentwood": { left: "60%", top: "82%" },
-  "opryland": { left: "72%", top: "32%" },
-  "madison": { left: "60%", top: "20%" },
-  "crieve-hall": { left: "52%", top: "78%" },
+  "germantown": { left: "48%", top: "35%" },
+  "gulch": { left: "45%", top: "56%" },
+  "music-row": { left: "40%", top: "63%" },
+  "north-nashville": { left: "38%", top: "27%" },
+  "east": { left: "68%", top: "45%" },
+  "west-end": { left: "30%", top: "52%" },
+  "belle-meade": { left: "22%", top: "60%" },
+  "bellevue": { left: "12%", top: "70%" },
+  "bordeaux": { left: "25%", top: "30%" },
+  "whites-creek": { left: "38%", top: "10%" },
+  "12south": { left: "42%", top: "72%" },
+  "berry-hill": { left: "52%", top: "77%" },
+  "green-hills": { left: "34%", top: "77%" },
+  "franklin": { left: "38%", top: "95%" },
+  "brentwood": { left: "50%", top: "88%" },
+  "opryland": { left: "76%", top: "27%" },
+  "madison": { left: "58%", top: "15%" },
+  "crieve-hall": { left: "45%", top: "83%" },
   "woodbine": { left: "58%", top: "63%" }
 };
 
