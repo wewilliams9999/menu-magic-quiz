@@ -69,27 +69,42 @@ const NeighborhoodMap = ({
       </div>
       
       <div className="relative h-[500px] w-full rounded-xl shadow-lg overflow-hidden border border-nashville-200 dark:border-nashville-700">
-        {/* Stylized map background with gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#e3f2fd] to-[#bbdefb] dark:from-[#263238] dark:to-[#102027]">
-          {/* River styling */}
-          <div className="absolute h-full w-[12%] left-[48%] top-0 bg-gradient-to-b from-[#bbdefb] to-[#90caf9] dark:from-[#0d47a1] dark:to-[#1976d2] transform -rotate-12 opacity-80"></div>
+        {/* Nashville-inspired map background with accurate geographic features */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f6f8fa] to-[#e9eef2] dark:from-[#1a2a3a] dark:to-[#0d1824]">
+          {/* Cumberland River */}
+          <div className="absolute top-0 h-full w-[10%] left-[48%] bg-[#c2d7e8] dark:bg-[#2a4a70] opacity-80 transform rotate-[15deg]"></div>
           
-          {/* Interstate highways */}
-          <div className="absolute h-[2px] w-[80%] left-[10%] top-[50%] bg-[#eceff1] dark:bg-[#cfd8dc] opacity-60"></div>
-          <div className="absolute h-[80%] w-[2px] left-[50%] top-[10%] bg-[#eceff1] dark:bg-[#cfd8dc] opacity-60"></div>
+          {/* I-40 East-West */}
+          <div className="absolute top-[50%] h-[3px] w-[90%] left-[5%] bg-[#e0e0e0] dark:bg-[#555555]"></div>
           
-          {/* Subtle grid pattern */}
-          <div className="absolute inset-0 grid grid-cols-12 grid-rows-12 opacity-10">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div key={`col-${i}`} className="border-r border-black dark:border-white h-full"></div>
+          {/* I-65 North-South */}
+          <div className="absolute left-[50%] h-[90%] w-[3px] top-[5%] bg-[#e0e0e0] dark:bg-[#555555]"></div>
+          
+          {/* I-24 */}
+          <div className="absolute top-[40%] left-[30%] h-[3px] w-[40%] bg-[#e0e0e0] dark:bg-[#555555] transform rotate-[30deg]"></div>
+          
+          {/* Secondary roads - grid pattern */}
+          <div className="absolute inset-0 grid grid-cols-8 opacity-30">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={`col-${i}`} className="border-r border-[#d0d0d0] dark:border-[#444444] h-full"></div>
             ))}
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div key={`row-${i}`} className="border-b border-black dark:border-white w-full"></div>
+          </div>
+          <div className="absolute inset-0 grid grid-rows-8 opacity-30">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={`row-${i}`} className="border-b border-[#d0d0d0] dark:border-[#444444] w-full"></div>
             ))}
           </div>
           
-          {/* City center subtle glow */}
-          <div className="absolute w-[20%] h-[20%] rounded-full bg-white dark:bg-nashville-accent/20 blur-xl opacity-30 left-[45%] top-[45%]"></div>
+          {/* Downtown area highlight */}
+          <div className="absolute w-[15%] h-[15%] rounded-lg bg-[#fcf8e3] dark:bg-[#45462f] opacity-40 left-[45%] top-[45%]"></div>
+          
+          {/* Parks and green areas */}
+          <div className="absolute w-[18%] h-[12%] rounded-full bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[25%] top-[25%]"></div>
+          <div className="absolute w-[15%] h-[10%] rounded-full bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[70%] top-[60%]"></div>
+          <div className="absolute w-[10%] h-[8%] rounded-full bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[35%] top-[75%]"></div>
+          
+          {/* Subtle topography effect */}
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSgzMCkiPjxyZWN0IGlkPSJwYXR0ZXJuLWJhY2tncm91bmQiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InRyYW5zcGFyZW50Ij48L3JlY3Q+IDxwYXRoIGQ9Ik0tMTAgMTAgSDUwIE0tMTAgMjAgSDUwIE0tMTAgMzAgSDUwIE0tMTAgMCBINTAiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLW9wYWNpdHk9IjAuMDUiIHN0cm9rZS13aWR0aD0iMXB4Ij48L3BhdGg+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI3BhdHRlcm4pIiBoZWlnaHQ9IjEwMCUiIHdpZHRoPSIxMDAlIj48L3JlY3Q+PC9zdmc+')] opacity-10"></div>
         </div>
         
         {/* Neighborhood bubbles */}
