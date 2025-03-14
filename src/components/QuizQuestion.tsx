@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { QuizQuestion as QuizQuestionType, QuizOption } from "@/utils/quizData";
-import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle, MapPin } from "lucide-react";
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -24,6 +24,9 @@ const QuizQuestion = ({
   currentIndex,
   totalQuestions,
 }: QuizQuestionProps) => {
+  // Determine if this is the neighborhood question
+  const isNeighborhoodQuestion = question.id === "neighborhood";
+
   return (
     <motion.div
       key={question.id}
@@ -48,13 +51,16 @@ const QuizQuestion = ({
       </div>
 
       <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-nashville-900 to-nashville-accent dark:from-white dark:to-nashville-accent">{question.question}</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-nashville-900 to-nashville-accent dark:from-white dark:to-nashville-accent">
+          {isNeighborhoodQuestion && <MapPin className="inline-block mr-2 mb-1" />}
+          {question.question}
+        </h2>
         {question.description && (
           <p className="text-nashville-600 dark:text-nashville-400">{question.description}</p>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
+      <div className={`grid grid-cols-1 ${isNeighborhoodQuestion ? 'md:grid-cols-2' : 'md:grid-cols-2'} gap-5 mb-12`}>
         {question.options.map((option, index) => (
           <motion.div
             key={option.id}
@@ -74,17 +80,25 @@ const QuizQuestion = ({
               }`}
             >
               {option.image && (
-                <div className="mb-3 rounded-md overflow-hidden h-40 shadow-sm">
+                <div className={`${isNeighborhoodQuestion ? 'h-48' : 'h-40'} mb-3 rounded-md overflow-hidden shadow-sm`}>
                   <img 
                     src={option.image} 
                     alt={option.text} 
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                   />
+                  {isNeighborhoodQuestion && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
+                      <div className="absolute bottom-3 left-3 text-white font-bold text-xl drop-shadow-md">
+                        {option.text}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
               <div className="flex items-center p-4">
                 <div className="flex-1">
-                  <h3 className="font-medium text-lg">{option.text}</h3>
+                  {!isNeighborhoodQuestion && <h3 className="font-medium text-lg">{option.text}</h3>}
+                  {isNeighborhoodQuestion && <h3 className="font-medium text-lg opacity-0">{option.text}</h3>}
                 </div>
                 <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                   selectedAnswer === option.value

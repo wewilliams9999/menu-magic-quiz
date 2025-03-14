@@ -22,9 +22,41 @@ export type QuizResult = {
   address: string;
   website?: string;
   priceRange: string;
+  neighborhood?: string;
 };
 
 export const quizQuestions: QuizQuestion[] = [
+  {
+    id: "neighborhood",
+    question: "What Nashville neighborhood would you like to go to?",
+    description: "Select the area of Nashville you're interested in exploring.",
+    options: [
+      {
+        id: "neighborhood-1",
+        text: "East Nashville",
+        value: "east",
+        image: "https://images.unsplash.com/photo-1631191751048-5f5d808694a3?q=80&w=500&auto=format&fit=crop"
+      },
+      {
+        id: "neighborhood-2",
+        text: "The Gulch",
+        value: "gulch",
+        image: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?q=80&w=500&auto=format&fit=crop"
+      },
+      {
+        id: "neighborhood-3",
+        text: "Downtown",
+        value: "downtown",
+        image: "https://images.unsplash.com/photo-1578744422254-965a916d945b?q=80&w=500&auto=format&fit=crop"
+      },
+      {
+        id: "neighborhood-4",
+        text: "12 South",
+        value: "12south",
+        image: "https://images.unsplash.com/photo-1605276373954-0c4a0dac5b12?q=80&w=500&auto=format&fit=crop"
+      }
+    ]
+  },
   {
     id: "cuisine",
     question: "What type of cuisine are you in the mood for?",
@@ -125,7 +157,8 @@ export const quizResults: QuizResult[] = [
     tags: ["southern", "highend", "elegant"],
     address: "37 Rutledge St, Nashville, TN 37210",
     website: "https://husknashville.com",
-    priceRange: "$$$"
+    priceRange: "$$$",
+    neighborhood: "downtown"
   },
   {
     id: "butcher-and-bee",
@@ -135,7 +168,8 @@ export const quizResults: QuizResult[] = [
     tags: ["farm-to-table", "moderate", "trendy"],
     address: "902 Main St, Nashville, TN 37206",
     website: "https://butcherandbee.com/nashville",
-    priceRange: "$$"
+    priceRange: "$$",
+    neighborhood: "east"
   },
   {
     id: "folk",
@@ -145,7 +179,8 @@ export const quizResults: QuizResult[] = [
     tags: ["american", "moderate", "trendy"],
     address: "823 Meridian St, Nashville, TN 37207",
     website: "https://www.folkrestaurant.com",
-    priceRange: "$$"
+    priceRange: "$$",
+    neighborhood: "east"
   },
   {
     id: "henrietta-red",
@@ -155,7 +190,8 @@ export const quizResults: QuizResult[] = [
     tags: ["american", "highend", "elegant"],
     address: "1200 4th Ave N, Nashville, TN 37208",
     website: "https://www.henriettared.com",
-    priceRange: "$$$"
+    priceRange: "$$$",
+    neighborhood: "downtown"
   },
   {
     id: "lockeland-table",
@@ -165,7 +201,8 @@ export const quizResults: QuizResult[] = [
     tags: ["american", "moderate", "casual"],
     address: "1520 Woodland St, Nashville, TN 37206",
     website: "https://www.lockelandtable.com",
-    priceRange: "$$"
+    priceRange: "$$",
+    neighborhood: "east"
   },
   {
     id: "arnold",
@@ -174,19 +211,71 @@ export const quizResults: QuizResult[] = [
     image: "https://images.unsplash.com/photo-1562565652-a0d8f0c59eb8?q=80&w=500&auto=format&fit=crop",
     tags: ["southern", "budget", "casual"],
     address: "605 8th Ave S, Nashville, TN 37203",
-    priceRange: "$"
+    priceRange: "$",
+    neighborhood: "downtown"
+  },
+  {
+    id: "bartaco",
+    name: "Bartaco",
+    description: "Upscale street food with a coastal vibe, specializing in tacos and rice bowls.",
+    image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?q=80&w=500&auto=format&fit=crop",
+    tags: ["international", "moderate", "trendy"],
+    address: "2526 12th Ave S, Nashville, TN 37204",
+    website: "https://bartaco.com",
+    priceRange: "$$",
+    neighborhood: "12south"
+  },
+  {
+    id: "five-daughters",
+    name: "Five Daughters Bakery",
+    description: "Artisanal bakery famous for their 100-layer donuts and pastries.",
+    image: "https://images.unsplash.com/photo-1556745753-b2904692b3cd?q=80&w=500&auto=format&fit=crop",
+    tags: ["american", "budget", "casual"],
+    address: "1110 Caruthers Ave, Nashville, TN 37204",
+    website: "https://fivedaughtersbakery.com",
+    priceRange: "$",
+    neighborhood: "12south"
+  },
+  {
+    id: "kayne-prime",
+    name: "Kayne Prime",
+    description: "Upscale steakhouse offering modern interpretations of classic American cuisine.",
+    image: "https://images.unsplash.com/photo-1579312624347-ef08db393114?q=80&w=500&auto=format&fit=crop",
+    tags: ["american", "luxury", "elegant"],
+    address: "1103 McGavock St, Nashville, TN 37203",
+    website: "https://www.mstreetnashville.com/kayne-prime",
+    priceRange: "$$$$",
+    neighborhood: "gulch"
   }
 ];
 
 export const getRecommendations = (answers: Record<string, string>): QuizResult[] => {
-  // Convert answers object to array of values
-  const selectedValues = Object.values(answers);
+  // First filter by neighborhood if selected
+  let filteredResults = quizResults;
+  if (answers.neighborhood) {
+    filteredResults = filteredResults.filter(result => 
+      result.neighborhood === answers.neighborhood || !result.neighborhood
+    );
+  }
+  
+  // If we have fewer than 3 restaurants for the selected neighborhood,
+  // don't filter by neighborhood to ensure we show enough options
+  if (filteredResults.length < 3) {
+    filteredResults = quizResults;
+  }
+  
+  // Convert answers object to array of values, excluding neighborhood
+  const selectedValues = Object.entries(answers)
+    .filter(([key]) => key !== 'neighborhood')
+    .map(([_, value]) => value);
   
   // Sort restaurants by how many matching tags they have with the selected answers
-  return quizResults
+  return filteredResults
     .map(result => {
       const matchScore = result.tags.filter(tag => selectedValues.includes(tag)).length;
-      return { result, matchScore };
+      // Give extra weight to matching neighborhood
+      const neighborhoodBonus = result.neighborhood === answers.neighborhood ? 2 : 0;
+      return { result, matchScore: matchScore + neighborhoodBonus };
     })
     .sort((a, b) => b.matchScore - a.matchScore)
     .slice(0, 3) // Get top 3 matches
