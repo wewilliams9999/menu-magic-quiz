@@ -4,14 +4,14 @@ import { searchRestaurants, mapApiRestaurantToQuizResult } from "@/services/rest
 import { QuizResult } from "@/utils/quizData";
 
 interface UseRestaurantDataProps {
-  neighborhood?: string;
+  neighborhoods?: string[];
   cuisine?: string;
   price?: string;
   atmosphere?: string;
 }
 
 export function useRestaurantData({
-  neighborhood,
+  neighborhoods,
   cuisine,
   price,
   atmosphere
@@ -28,7 +28,7 @@ export function useRestaurantData({
   };
 
   // Map neighborhood to location for API search
-  const mapNeighborhoodToLocation = (neighborhood?: string): string => {
+  const mapNeighborhoodToLocation = (neighborhood: string): string => {
     if (!neighborhood) return "Nashville, TN";
     
     // For suburbs that should use their own city name
@@ -52,22 +52,56 @@ export function useRestaurantData({
   };
 
   return useQuery({
-    queryKey: ['restaurants', neighborhood, cuisine, price, atmosphere],
+    queryKey: ['restaurants', neighborhoods, cuisine, price, atmosphere],
     queryFn: async () => {
       const apiPrice = price ? mapPriceToApi(price) : undefined;
       const categoryParam = buildCategoryParam();
-      const locationParam = mapNeighborhoodToLocation(neighborhood);
       
-      const restaurants = await searchRestaurants(
-        locationParam,
-        categoryParam,
-        apiPrice
+      // Handle multiple neighborhoods
+      if (!neighborhoods || neighborhoods.length === 0) {
+        // If no neighborhoods specified, search all of Nashville
+        const restaurants = await searchRestaurants(
+          "Nashville, TN",
+          categoryParam,
+          apiPrice
+        );
+        return restaurants.map(mapApiRestaurantToQuizResult);
+      }
+      
+      // Search for each neighborhood and combine results
+      const allResults: QuizResult[] = [];
+      
+      // We'll search one neighborhood at a time and combine results
+      for (const neighborhood of neighborhoods) {
+        const locationParam = mapNeighborhoodToLocation(neighborhood);
+        
+        const restaurants = await searchRestaurants(
+          locationParam,
+          categoryParam,
+          apiPrice
+        );
+        
+        // Map API response to our app's format and add to results
+        const mappedResults = restaurants.map(restaurant => {
+          const result = mapApiRestaurantToQuizResult(restaurant);
+          // Add neighborhood to the result if not already there
+          if (!result.neighborhood) {
+            result.neighborhood = neighborhood;
+          }
+          return result;
+        });
+        
+        allResults.push(...mappedResults);
+      }
+      
+      // Remove duplicates (by ID)
+      const uniqueResults = allResults.filter((result, index, self) =>
+        index === self.findIndex((r) => r.id === result.id)
       );
       
-      // Map API response to our app's format
-      return restaurants.map(mapApiRestaurantToQuizResult);
+      return uniqueResults;
     },
-    enabled: !!(neighborhood || cuisine || price || atmosphere), // Only run if at least one parameter is provided
+    enabled: !!(neighborhoods?.length || cuisine || price || atmosphere), // Only run if at least one parameter is provided
     staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
   });
 }

@@ -8,23 +8,30 @@ import ResultScreen from "./ResultScreen";
 import { quizQuestions, QuizResult } from "@/utils/quizData";
 import { useRestaurantData } from "@/hooks/useRestaurantData";
 
+type AnswerValue = string | string[];
+
 const QuizContainer = () => {
   const [currentScreen, setCurrentScreen] = useState<"welcome" | "quiz" | "result">("welcome");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
+  
+  // Get neighborhoods as string array for the API
+  const neighborhoods = answers.neighborhood && Array.isArray(answers.neighborhood) 
+    ? answers.neighborhood 
+    : (answers.neighborhood ? [answers.neighborhood as string] : []);
   
   const { data: apiResults, isLoading, error } = useRestaurantData({
-    neighborhood: answers["neighborhood"],
-    cuisine: answers["cuisine"],
-    price: answers["price"],
-    atmosphere: answers["atmosphere"],
+    neighborhoods: neighborhoods,
+    cuisine: answers.cuisine as string,
+    price: answers.price as string,
+    atmosphere: answers.atmosphere as string,
   });
 
   const handleStart = () => {
     setCurrentScreen("quiz");
   };
 
-  const handleAnswer = (questionId: string, answerId: string) => {
+  const handleAnswer = (questionId: string, answerId: AnswerValue) => {
     setAnswers((prev) => ({
       ...prev,
       [questionId]: answerId,
