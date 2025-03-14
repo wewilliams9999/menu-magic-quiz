@@ -51,7 +51,9 @@ export const neighborhoodOptions: QuizOption[] = [
   { id: "neighborhood-15", text: "Franklin", value: "franklin" },
   { id: "neighborhood-16", text: "Brentwood", value: "brentwood" },
   { id: "neighborhood-17", text: "Opryland", value: "opryland" },
-  { id: "neighborhood-18", text: "Madison", value: "madison" }
+  { id: "neighborhood-18", text: "Madison", value: "madison" },
+  { id: "neighborhood-19", text: "Crieve Hall", value: "crieve-hall" },
+  { id: "neighborhood-20", text: "Woodbine", value: "woodbine" }
 ];
 
 export const cuisineOptions: QuizOption[] = [

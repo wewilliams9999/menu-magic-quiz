@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { QuizOption } from "@/utils/quizData";
 import { MapPin } from "lucide-react";
@@ -29,7 +28,9 @@ const neighborhoodPositions: Record<string, { left: string, top: string }> = {
   "franklin": { left: "48%", top: "90%" },
   "brentwood": { left: "60%", top: "82%" },
   "opryland": { left: "72%", top: "32%" },
-  "madison": { left: "60%", top: "20%" }
+  "madison": { left: "60%", top: "20%" },
+  "crieve-hall": { left: "52%", top: "78%" },
+  "woodbine": { left: "58%", top: "63%" }
 };
 
 interface NeighborhoodMapProps {
