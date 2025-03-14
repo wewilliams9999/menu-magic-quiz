@@ -3,8 +3,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { QuizQuestion as QuizQuestionType, QuizOption } from "@/utils/quizData";
-import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle, Check } from "lucide-react";
 import NeighborhoodSelector from "./NeighborhoodSelector";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Form, FormControl, FormItem, FormLabel } from "@/components/ui/form";
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -28,14 +30,28 @@ const QuizQuestion = ({
   // Determine if this is the neighborhood question
   const isNeighborhoodQuestion = question.id === "neighborhood";
   
-  // For neighborhood question we need to handle multi-select
-  const handleNeighborhoodChange = (selectedValues: string[]) => {
-    onAnswer(question.id, selectedValues);
+  // Determine if this is the preferences question
+  const isPreferencesQuestion = question.id === "preferences";
+  
+  // For multi-select questions we need to handle array values
+  const isMultiSelect = question.multiSelect || false;
+  
+  // Handle multi-select changes
+  const handleMultiSelectChange = (id: string, checked: boolean) => {
+    const currentSelected = Array.isArray(selectedAnswer) ? [...selectedAnswer] : [];
+    
+    if (checked) {
+      // Add to selection
+      onAnswer(question.id, [...currentSelected, id]);
+    } else {
+      // Remove from selection
+      onAnswer(question.id, currentSelected.filter(item => item !== id));
+    }
   };
 
-  // Cast to array for neighborhood question, string otherwise
+  // Cast to array for multi-select questions, string otherwise
   const getSelectedArray = () => {
-    if (isNeighborhoodQuestion) {
+    if (isMultiSelect) {
       return Array.isArray(selectedAnswer) ? selectedAnswer : [];
     }
     return [];
@@ -78,8 +94,36 @@ const QuizQuestion = ({
           <NeighborhoodSelector 
             options={question.options} 
             selectedValues={getSelectedArray()}
-            onChange={handleNeighborhoodChange}
+            onChange={(values: string[]) => onAnswer(question.id, values)}
           />
+        </div>
+      ) : isPreferencesQuestion ? (
+        <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-nashville-200 dark:border-nashville-800 shadow-lg">
+          <div className="grid grid-cols-2 gap-4">
+            {question.options.map((option) => (
+              <div 
+                key={option.id}
+                className="flex items-start space-x-3 p-3 rounded-lg hover:bg-nashville-100/50 dark:hover:bg-nashville-800/50 transition-colors"
+              >
+                <Checkbox 
+                  id={option.id}
+                  checked={getSelectedArray().includes(option.value)}
+                  onCheckedChange={(checked) => {
+                    handleMultiSelectChange(option.value, checked === true);
+                  }}
+                  className="mt-1 data-[state=checked]:bg-nashville-accent data-[state=checked]:border-nashville-accent"
+                />
+                <div className="space-y-1">
+                  <FormLabel
+                    htmlFor={option.id}
+                    className="text-base font-medium cursor-pointer"
+                  >
+                    {option.text}
+                  </FormLabel>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         <div className={`grid grid-cols-1 md:grid-cols-2 gap-5 mb-12`}>
@@ -159,7 +203,9 @@ const QuizQuestion = ({
         >
           <Button 
             onClick={onNext}
-            disabled={isNeighborhoodQuestion ? getSelectedArray().length === 0 : !selectedAnswer}
+            disabled={
+              (isMultiSelect ? getSelectedArray().length === 0 : !selectedAnswer)
+            }
             className="bg-gradient-to-r from-nashville-accent to-nashville-accent/80 hover:from-nashville-accent/90 hover:to-nashville-accent/70 text-nashville-900 transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none"
           >
             {currentIndex === totalQuestions - 1 ? (

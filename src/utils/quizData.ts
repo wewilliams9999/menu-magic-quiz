@@ -3,6 +3,7 @@ export type QuizQuestion = {
   question: string;
   description?: string;
   options: QuizOption[];
+  multiSelect?: boolean;
 };
 
 export type QuizOption = {
@@ -29,6 +30,7 @@ export const quizQuestions: QuizQuestion[] = [
     id: "neighborhood",
     question: "What Nashville neighborhood would you like to go to?",
     description: "Select the area of Nashville you're interested in exploring.",
+    multiSelect: true,
     options: [
       {
         id: "neighborhood-1",
@@ -119,6 +121,54 @@ export const quizQuestions: QuizQuestion[] = [
         id: "neighborhood-18",
         text: "Green Hills",
         value: "green-hills"
+      }
+    ]
+  },
+  {
+    id: "preferences",
+    question: "What's important to you?",
+    description: "Select all the factors that matter for your dining experience.",
+    multiSelect: true,
+    options: [
+      {
+        id: "pref-1",
+        text: "Quiet Atmosphere",
+        value: "quiet"
+      },
+      {
+        id: "pref-2",
+        text: "Easy Parking",
+        value: "parking"
+      },
+      {
+        id: "pref-3",
+        text: "Budget-Friendly",
+        value: "budget"
+      },
+      {
+        id: "pref-4",
+        text: "Outdoor Seating",
+        value: "outdoor"
+      },
+      {
+        id: "pref-5",
+        text: "Child-Friendly",
+        value: "family"
+      },
+      {
+        id: "pref-6",
+        text: "Unique Experience",
+        value: "unique"
+      },
+      {
+        id: "pref-7",
+        text: "Late-Night Options",
+        value: "late-night"
+      },
+      {
+        id: "pref-8",
+        text: "Live Music",
+        value: "music"
       }
     ]
   },
@@ -340,4 +390,3 @@ export const getRecommendations = (answers: Record<string, string>): QuizResult[
     .slice(0, 3)
     .map(item => item.result);
 };
-

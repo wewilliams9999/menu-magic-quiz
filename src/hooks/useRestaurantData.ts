@@ -8,13 +8,15 @@ interface UseRestaurantDataProps {
   cuisine?: string;
   price?: string;
   atmosphere?: string;
+  preferences?: string[];
 }
 
 export function useRestaurantData({
   neighborhoods,
   cuisine,
   price,
-  atmosphere
+  atmosphere,
+  preferences = []
 }: UseRestaurantDataProps) {
   // Map quiz answers to API parameters
   const mapPriceToApi = (quizPrice: string): string => {
@@ -48,14 +50,42 @@ export function useRestaurantData({
     const categories = [];
     if (cuisine) categories.push(cuisine);
     if (atmosphere) categories.push(atmosphere);
+    
+    // Add relevant preference-based categories
+    if (preferences.includes('music')) categories.push('live-music');
+    if (preferences.includes('outdoor')) categories.push('outdoor-seating');
+    if (preferences.includes('family')) categories.push('family-friendly');
+    if (preferences.includes('quiet')) categories.push('quiet');
+    
     return categories.join(',');
   };
 
+  // Build additional filters for API based on preferences
+  const buildPreferenceFilters = (): Record<string, any> => {
+    const filters: Record<string, any> = {};
+    
+    if (preferences.includes('parking')) {
+      filters.attributes = [...(filters.attributes || []), 'garage_parking', 'validated_parking', 'lot_parking'];
+    }
+    
+    if (preferences.includes('budget')) {
+      // Override price if budget is a preference
+      filters.price = '$,$$';
+    }
+    
+    if (preferences.includes('late-night')) {
+      filters.open_at = '22:00';
+    }
+    
+    return filters;
+  };
+
   return useQuery({
-    queryKey: ['restaurants', neighborhoods, cuisine, price, atmosphere],
+    queryKey: ['restaurants', neighborhoods, cuisine, price, atmosphere, preferences],
     queryFn: async () => {
       const apiPrice = price ? mapPriceToApi(price) : undefined;
       const categoryParam = buildCategoryParam();
+      const preferenceFilters = buildPreferenceFilters();
       
       // Handle multiple neighborhoods
       if (!neighborhoods || neighborhoods.length === 0) {
@@ -63,7 +93,8 @@ export function useRestaurantData({
         const restaurants = await searchRestaurants(
           "Nashville, TN",
           categoryParam,
-          apiPrice
+          apiPrice,
+          preferenceFilters
         );
         return restaurants.map(mapApiRestaurantToQuizResult);
       }
@@ -78,7 +109,8 @@ export function useRestaurantData({
         const restaurants = await searchRestaurants(
           locationParam,
           categoryParam,
-          apiPrice
+          apiPrice,
+          preferenceFilters
         );
         
         // Map API response to our app's format and add to results
@@ -101,7 +133,7 @@ export function useRestaurantData({
       
       return uniqueResults;
     },
-    enabled: !!(neighborhoods?.length || cuisine || price || atmosphere), // Only run if at least one parameter is provided
+    enabled: !!(neighborhoods?.length || cuisine || price || atmosphere || preferences.length), // Only run if at least one parameter is provided
     staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
   });
 }

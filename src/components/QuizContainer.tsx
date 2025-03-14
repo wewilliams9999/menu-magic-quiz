@@ -20,11 +20,17 @@ const QuizContainer = () => {
     ? answers.neighborhood 
     : (answers.neighborhood ? [answers.neighborhood as string] : []);
   
+  // Get preferences as string array for the API
+  const preferences = answers.preferences && Array.isArray(answers.preferences)
+    ? answers.preferences
+    : (answers.preferences ? [answers.preferences as string] : []);
+  
   const { data: apiResults, isLoading, error } = useRestaurantData({
     neighborhoods: neighborhoods,
     cuisine: answers.cuisine as string,
     price: answers.price as string,
     atmosphere: answers.atmosphere as string,
+    preferences: preferences,
   });
 
   const handleStart = () => {
