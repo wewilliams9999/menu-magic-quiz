@@ -67,7 +67,7 @@ const NeighborhoodSelector = ({
       />
 
       <NeighborhoodList 
-        options={options}
+        options={filteredOptions}
         filteredOptions={filteredOptions}
         selectedValues={selectedValues}
         onSelectionChange={handleSelectionChange}

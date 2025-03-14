@@ -27,7 +27,7 @@ const NeighborhoodSelectionTags = ({
             key={`selected-${value}`}
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="inline-flex items-center px-3 py-1 rounded-full bg-nashville-accent/20 text-sm"
+            className="inline-flex items-center px-3 py-1 rounded-full bg-nashville-accent/20 text-sm shadow-sm"
           >
             <MapPin size={14} className="mr-1 text-nashville-accent" />
             <span className="mr-1">{option.text}</span>
@@ -40,12 +40,14 @@ const NeighborhoodSelectionTags = ({
           </motion.div>
         ) : null;
       })}
-      <button
-        onClick={onClearAll}
-        className="inline-flex items-center px-3 py-1 rounded-full bg-nashville-200/50 dark:bg-nashville-700/50 text-sm hover:bg-nashville-200 dark:hover:bg-nashville-700 transition-colors"
-      >
-        Clear all
-      </button>
+      {selectedValues.length > 0 && (
+        <button
+          onClick={onClearAll}
+          className="inline-flex items-center px-3 py-1 rounded-full bg-nashville-200/50 dark:bg-nashville-700/50 text-sm hover:bg-nashville-200 dark:hover:bg-nashville-700 transition-colors shadow-sm"
+        >
+          Clear all
+        </button>
+      )}
     </div>
   );
 };
