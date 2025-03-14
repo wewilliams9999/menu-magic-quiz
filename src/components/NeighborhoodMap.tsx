@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { QuizOption } from "@/utils/quizData";
+import { Info } from "lucide-react";
 
 // Mapbox token - normally this would be in an environment variable
 // This is a temporary public token for demonstration
@@ -144,59 +145,61 @@ const NeighborhoodMap = ({
   }, [selectedValues]);
 
   return (
-    <div 
-      ref={mapContainer} 
-      className="h-[300px] w-full rounded-lg shadow-md mb-4 overflow-hidden border border-nashville-200 dark:border-nashville-700"
-    >
-      <style>
-      {`
-        .neighborhood-marker {
-          position: relative;
-          cursor: pointer;
-        }
-        
-        .marker-pin {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background-color: white;
-          border: 2px solid #ccc;
-          transition: all 0.2s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        
-        .marker-text {
-          position: absolute;
-          white-space: nowrap;
-          bottom: 100%;
-          left: 50%;
-          transform: translateX(-50%);
-          background-color: rgba(255, 255, 255, 0.9);
-          padding: 2px 6px;
-          border-radius: 4px;
-          font-size: 12px;
-          opacity: 0;
-          transition: opacity 0.2s ease;
-          pointer-events: none;
-        }
-        
-        .neighborhood-marker:hover .marker-text {
-          opacity: 1;
-        }
-        
-        .neighborhood-marker.selected .marker-pin {
-          background-color: var(--nashville-accent, #f4b400);
-          border-color: var(--nashville-accent, #f4b400);
-          transform: scale(1.2);
-        }
-        
-        .mapboxgl-ctrl-attrib-inner {
-          display: none;
-        }
-      `}
-      </style>
+    <div className="space-y-2">
+      <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-nashville-600 dark:text-nashville-400 bg-nashville-100/50 dark:bg-nashville-800/50 rounded-lg">
+        <Info size={14} className="flex-shrink-0" />
+        <p>Click on the map markers to select neighborhoods or use the bubbles below. The map will zoom to your selected areas.</p>
+      </div>
+      <div 
+        ref={mapContainer} 
+        className="h-[300px] w-full rounded-lg shadow-md overflow-hidden border border-nashville-200 dark:border-nashville-700"
+      >
+        <style>
+          {`
+            .neighborhood-marker {
+              position: relative;
+              cursor: pointer;
+            }
+            
+            .marker-pin {
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              background-color: white;
+              border: 2px solid #ccc;
+              transition: all 0.2s ease;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            
+            .marker-text {
+              position: absolute;
+              white-space: nowrap;
+              bottom: 100%;
+              left: 50%;
+              transform: translateX(-50%);
+              background-color: rgba(255, 255, 255, 0.9);
+              padding: 2px 6px;
+              border-radius: 4px;
+              font-size: 12px;
+              opacity: 0;
+              transition: opacity 0.2s ease;
+              pointer-events: none;
+            }
+            
+            .neighborhood-marker:hover .marker-text {
+              opacity: 1;
+            }
+            
+            .neighborhood-marker.selected .marker-pin {
+              background-color: var(--nashville-accent, #f4b400);
+              border-color: var(--nashville-accent, #f4b400);
+              transform: scale(1.2);
+            }
+          `}
+        </style>
+      </div>
     </div>
   );
 };
