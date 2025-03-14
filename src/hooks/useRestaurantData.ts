@@ -94,7 +94,7 @@ export function useRestaurantData({
           "Nashville, TN",
           categoryParam,
           apiPrice,
-          preferenceFilters
+          preferenceFilters // Error is here - this should be a number or undefined
         );
         return restaurants.map(mapApiRestaurantToQuizResult);
       }
@@ -110,7 +110,7 @@ export function useRestaurantData({
           locationParam,
           categoryParam,
           apiPrice,
-          preferenceFilters
+          preferenceFilters // Error is here - this should be a number or undefined
         );
         
         // Map API response to our app's format and add to results

@@ -26,6 +26,7 @@ export const searchRestaurants = async (
   location: string = "Nashville, TN",
   categories?: string,
   price?: string,
+  additionalFilters: Record<string, any> = {},
   limit: number = 10
 ): Promise<ApiRestaurant[]> => {
   try {
@@ -41,7 +42,7 @@ export const searchRestaurants = async (
     // const data = await response.json();
     // return data.businesses;
     
-    console.log("API search parameters:", { location, categories, price, limit });
+    console.log("API search parameters:", { location, categories, price, additionalFilters, limit });
     
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 1500));
@@ -59,6 +60,19 @@ export const searchRestaurants = async (
       
       if (price) {
         match = match && restaurant.price === price;
+      }
+      
+      // Apply additional filters from preferences
+      if (additionalFilters.attributes) {
+        // This is a simplified version - in a real API this would be more complex
+        // Just demonstrating how we might handle attribute filtering
+        match = match && true; // Mocked to always match in our demo
+      }
+      
+      if (additionalFilters.price) {
+        // Override the price filter with the preference-based one
+        const priceOptions = additionalFilters.price.split(',');
+        match = match && priceOptions.includes(restaurant.price);
       }
       
       return match;
