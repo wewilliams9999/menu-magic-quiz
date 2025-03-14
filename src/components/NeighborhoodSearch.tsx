@@ -1,34 +1,23 @@
 
-import { useState } from "react";
-import { Search, X } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 interface NeighborhoodSearchProps {
   searchQuery: string;
-  onSearchChange: (query: string) => void;
+  setSearchQuery: (query: string) => void;
 }
 
-const NeighborhoodSearch = ({ searchQuery, onSearchChange }: NeighborhoodSearchProps) => {
+const NeighborhoodSearch = ({ searchQuery, setSearchQuery }: NeighborhoodSearchProps) => {
   return (
-    <div className="relative">
-      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
-        <Search size={18} />
-      </div>
+    <div className="relative group">
       <Input
         type="text"
         placeholder="Search neighborhoods..."
         value={searchQuery}
-        onChange={(e) => onSearchChange(e.target.value)}
-        className="pl-10 bg-white/5 dark:bg-black/5 backdrop-blur-sm border-nashville-200 dark:border-nashville-700"
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="pl-10 py-2 bg-purple-50/50 dark:bg-purple-900/10 border-purple-100 dark:border-purple-800/30 rounded-xl focus-visible:ring-purple-200 dark:focus-visible:ring-purple-700 placeholder:text-gray-400 dark:placeholder:text-gray-600 transition-all"
       />
-      {searchQuery && (
-        <button 
-          onClick={() => onSearchChange("")}
-          className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500"
-        >
-          <X size={18} />
-        </button>
-      )}
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-600 group-focus-within:text-purple-500 dark:group-focus-within:text-purple-400 transition-colors" />
     </div>
   );
 };

@@ -1,53 +1,62 @@
 
-import { motion } from "framer-motion";
-import { MapPin, X } from "lucide-react";
-import { QuizOption } from "@/utils/quizData";
+import { X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
 
 interface NeighborhoodSelectionTagsProps {
-  selectedValues: string[];
-  options: QuizOption[];
-  onSelectionChange: (value: string) => void;
-  onClearAll: () => void;
+  selectedNeighborhoods: string[];
+  neighborhoods: { id: string; name: string }[];
+  onRemove: (id: string) => void;
 }
 
-const NeighborhoodSelectionTags = ({ 
-  selectedValues, 
-  options, 
-  onSelectionChange, 
-  onClearAll 
+const NeighborhoodSelectionTags = ({
+  selectedNeighborhoods,
+  neighborhoods,
+  onRemove,
 }: NeighborhoodSelectionTagsProps) => {
-  if (selectedValues.length === 0) return null;
-  
+  if (selectedNeighborhoods.length === 0) {
+    return (
+      <div className="min-h-[32px] flex items-center">
+        <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+          Select neighborhoods from the map or list
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-wrap gap-2 mb-4">
-      {selectedValues.map((value) => {
-        const option = options.find(opt => opt.value === value);
-        return option ? (
-          <motion.div
-            key={`selected-${value}`}
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="inline-flex items-center px-3 py-1 rounded-full bg-nashville-accent/20 text-sm shadow-sm"
-          >
-            <MapPin size={14} className="mr-1 text-nashville-accent" />
-            <span className="mr-1">{option.text}</span>
-            <button
-              onClick={() => onSelectionChange(value)}
-              className="ml-1 rounded-full p-0.5 hover:bg-nashville-accent/30"
+    <div className="flex flex-wrap gap-2 min-h-[32px]">
+      <AnimatePresence>
+        {selectedNeighborhoods.map((id) => {
+          const neighborhood = neighborhoods.find((n) => n.id === id);
+          if (!neighborhood) return null;
+
+          return (
+            <motion.div
+              key={id}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
             >
-              <X size={14} />
-            </button>
-          </motion.div>
-        ) : null;
-      })}
-      {selectedValues.length > 0 && (
-        <button
-          onClick={onClearAll}
-          className="inline-flex items-center px-3 py-1 rounded-full bg-nashville-200/50 dark:bg-nashville-700/50 text-sm hover:bg-nashville-200 dark:hover:bg-nashville-700 transition-colors shadow-sm"
-        >
-          Clear all
-        </button>
-      )}
+              <Badge
+                className="px-3 py-1 gap-1 bg-gradient-to-r from-purple-200 to-purple-100 hover:from-purple-300 hover:to-purple-200 text-purple-800 dark:from-purple-800/60 dark:to-purple-700/60 dark:hover:from-purple-700 dark:hover:to-purple-600 dark:text-purple-100 border-0 font-medium"
+                variant="secondary"
+              >
+                {neighborhood.name}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove(id);
+                  }}
+                  className="ml-1 h-4 w-4 rounded-full inline-flex items-center justify-center bg-purple-400/30 dark:bg-purple-700/30 hover:bg-purple-500/40 dark:hover:bg-purple-600/40 text-purple-700 dark:text-purple-200 transition-colors"
+                >
+                  <X className="h-2.5 w-2.5" />
+                </button>
+              </Badge>
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
     </div>
   );
 };

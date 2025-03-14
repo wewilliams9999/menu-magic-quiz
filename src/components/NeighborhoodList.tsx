@@ -1,57 +1,63 @@
 
-import { MapPin } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { QuizOption } from "@/utils/quizData";
+import { Check } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface NeighborhoodListProps {
-  options: QuizOption[];
-  filteredOptions: QuizOption[];
-  selectedValues: string[];
-  onSelectionChange: (value: string) => void;
-  searchQuery: string;
+  neighborhoods: { id: string; name: string }[];
+  selectedNeighborhoods: string[];
+  onToggle: (id: string) => void;
 }
 
 const NeighborhoodList = ({
-  options,
-  filteredOptions,
-  selectedValues,
-  onSelectionChange,
-  searchQuery
+  neighborhoods,
+  selectedNeighborhoods,
+  onToggle,
 }: NeighborhoodListProps) => {
-  const bubbleColors = [
-    "bg-[#F2FCE2]", "bg-[#FEF7CD]", "bg-[#FEC6A1]", 
-    "bg-[#E5DEFF]", "bg-[#FFDEE2]", "bg-[#FDE1D3]", 
-    "bg-[#D3E4FD]", "bg-[#F1F0FB]"
-  ];
-
-  const getBubbleColor = (index: number) => {
-    return bubbleColors[index % bubbleColors.length];
-  };
-
-  const displayOptions = searchQuery ? filteredOptions : options;
+  if (neighborhoods.length === 0) {
+    return (
+      <div className="py-8 text-center">
+        <p className="text-sm text-gray-500 dark:text-gray-400">No neighborhoods found</p>
+      </div>
+    );
+  }
 
   return (
-    <ScrollArea className="h-[250px] pr-4 rounded-lg">
-      <div className="flex flex-wrap gap-3">
-        {displayOptions.map((option, index) => (
-          <motion.button
-            key={option.id}
-            onClick={() => onSelectionChange(option.value)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className={`rounded-full px-4 py-2 flex items-center gap-2 transition-all 
-              ${getBubbleColor(index)} dark:text-nashville-900
-              ${selectedValues.includes(option.value) 
-                ? "ring-2 ring-nashville-accent/50 shadow-md font-medium" 
-                : "hover:shadow-md"}`}
+    <ul className="space-y-1.5">
+      {neighborhoods.map((neighborhood) => {
+        const isSelected = selectedNeighborhoods.includes(neighborhood.id);
+        
+        return (
+          <motion.li
+            key={neighborhood.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            layout
+            onClick={() => onToggle(neighborhood.id)}
+            className={`relative flex items-center px-4 py-2.5 rounded-xl cursor-pointer transition-all duration-200 group
+              ${
+                isSelected
+                  ? "bg-gradient-to-r from-purple-100/80 to-purple-50/80 dark:from-purple-900/30 dark:to-purple-900/10 text-purple-800 dark:text-purple-300 shadow-sm"
+                  : "hover:bg-gray-50 dark:hover:bg-gray-800/60 text-gray-700 dark:text-gray-300"
+              }
+            `}
           >
-            <MapPin size={14} className="text-nashville-accent" />
-            {option.text}
-          </motion.button>
-        ))}
-      </div>
-    </ScrollArea>
+            <div className="flex-1">{neighborhood.name}</div>
+            <div 
+              className={`h-5 w-5 rounded-full flex items-center justify-center transition-all duration-200
+                ${
+                  isSelected 
+                    ? "bg-purple-500 text-white" 
+                    : "border-2 border-gray-300 dark:border-gray-600 group-hover:border-purple-300 dark:group-hover:border-purple-500"
+                }
+              `}
+            >
+              {isSelected && <Check className="h-3 w-3" />}
+            </div>
+          </motion.li>
+        );
+      })}
+    </ul>
   );
 };
 
