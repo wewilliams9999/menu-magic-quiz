@@ -245,26 +245,22 @@ export const quizQuestions: QuizQuestion[] = [
       {
         id: "atmosphere-1",
         text: "Casual & Relaxed",
-        value: "casual",
-        image: "https://images.unsplash.com/photo-1555992336-fb0d29498b13?q=80&w=500&auto=format&fit=crop"
+        value: "casual"
       },
       {
         id: "atmosphere-2",
         text: "Trendy & Energetic",
-        value: "trendy",
-        image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=500&auto=format&fit=crop"
+        value: "trendy"
       },
       {
         id: "atmosphere-3",
         text: "Elegant & Refined",
-        value: "elegant",
-        image: "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?q=80&w=500&auto=format&fit=crop"
+        value: "elegant"
       },
       {
         id: "atmosphere-4",
         text: "Unique & Memorable",
-        value: "unique",
-        image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=500&auto=format&fit=crop"
+        value: "unique"
       }
     ]
   }

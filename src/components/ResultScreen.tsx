@@ -16,6 +16,7 @@ interface ResultScreenProps {
 const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps) => {
   // Check if all results are alternatives
   const allAlternatives = results.length > 0 && results.every(result => result.isAlternative);
+  const isSingleResult = results.length === 1;
   
   return (
     <motion.div
@@ -28,9 +29,15 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
         <div className="inline-flex items-center justify-center p-2 bg-nashville-accent/20 rounded-full mb-5">
           <span className="text-nashville-accent text-2xl">✦</span>
         </div>
-        <h2 className="text-3xl md:text-4xl font-bold mb-3">Your Nashville Restaurant Matches</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-3">
+          {isSingleResult 
+            ? "Your Nashville Restaurant Match" 
+            : "Your Nashville Restaurant Matches"}
+        </h2>
         <p className="text-nashville-600 dark:text-nashville-400 max-w-md mx-auto">
-          Based on your preferences, we think you'll enjoy these Nashville gems.
+          {isSingleResult
+            ? "Based on your preferences, we think you'll enjoy this Nashville gem."
+            : "Based on your preferences, we think you'll enjoy these Nashville gems."}
         </p>
       </div>
 
