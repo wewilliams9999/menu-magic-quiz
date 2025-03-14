@@ -63,30 +63,33 @@ const QuizQuestion = ({
       {isNeighborhoodQuestion ? (
         <div className="relative w-full aspect-[4/3] mb-8 rounded-xl overflow-hidden shadow-lg">
           {/* Nashville Map Background */}
-          <div className="absolute inset-0 bg-nashville-50 dark:bg-nashville-800/50 overflow-hidden">
-            <img 
-              src="https://images.unsplash.com/photo-1548098338-9babf1bcbf1f?q=80&w=1000&auto=format&fit=crop" 
-              alt="Nashville Map" 
-              className="w-full h-full object-cover opacity-30 dark:opacity-20"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-nashville-50/80 to-nashville-100/90 dark:from-nashville-800/80 dark:to-nashville-900/90 overflow-hidden">
+            {/* Map Texture */}
+            <div className="absolute inset-0 opacity-10 dark:opacity-5">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                </pattern>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+              </svg>
+            </div>
             
             {/* Cumberland River */}
             <motion.div 
               initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 0.7 }}
+              animate={{ pathLength: 1, opacity: 0.9 }}
               transition={{ duration: 2, ease: "easeInOut" }}
               className="absolute top-0 left-0 w-full h-full"
             >
               <svg width="100%" height="100%" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path 
-                  d="M100,80 C150,70 170,120 180,150 C190,180 230,220 300,220" 
+                  d="M50,110 C100,90 150,120 180,150 C210,180 250,220 350,220" 
                   stroke="#6EB4D1" 
-                  strokeWidth="8" 
+                  strokeWidth="10" 
                   strokeLinecap="round"
                   strokeDasharray="1000"
                   strokeDashoffset="1000"
-                  style={{ filter: 'drop-shadow(0 0 5px rgba(110, 180, 209, 0.5))' }}
+                  style={{ filter: 'drop-shadow(0 0 8px rgba(110, 180, 209, 0.8))' }}
                 />
               </svg>
             </motion.div>
@@ -94,41 +97,52 @@ const QuizQuestion = ({
             {/* Interstate Highways */}
             <motion.div 
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
+              animate={{ opacity: 0.7 }}
               transition={{ delay: 0.5, duration: 1 }}
               className="absolute top-0 left-0 w-full h-full"
             >
               <svg width="100%" height="100%" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0,150 L400,150" stroke="#B9B9B9" strokeWidth="3" strokeDasharray="5,5" />
-                <path d="M200,0 L200,300" stroke="#B9B9B9" strokeWidth="3" strokeDasharray="5,5" />
+                {/* I-40 */}
+                <path d="M0,150 L400,150" stroke="#DDD" strokeWidth="4" />
+                {/* I-65 */}
+                <path d="M200,0 L200,300" stroke="#DDD" strokeWidth="4" />
+                {/* I-24 */}
+                <path d="M50,50 L350,250" stroke="#DDD" strokeWidth="4" strokeDasharray="8,8" />
+                {/* I-440 */}
+                <ellipse cx="200" cy="150" rx="100" ry="80" stroke="#DDD" strokeWidth="3" strokeDasharray="5,5" fill="none" />
               </svg>
             </motion.div>
           </div>
 
           {/* Neighborhood Markers */}
           <div className="absolute inset-0">
-            {question.options.map((option, index) => {
-              // Define positions for each neighborhood
-              const positions = {
-                east: { top: '40%', left: '65%' },
-                gulch: { top: '55%', left: '42%' },
-                downtown: { top: '50%', left: '52%' },
-                '12south': { top: '65%', left: '45%' },
-              };
-              
-              // Get position based on option value
-              const position = positions[option.value as keyof typeof positions];
+            {[
+              { id: "east", name: "East Nashville", position: { top: '30%', left: '65%' }, color: "from-[#F97316] to-[#FBBF24]", rotate: "-5deg" },
+              { id: "gulch", name: "The Gulch", position: { top: '58%', left: '42%' }, color: "from-[#8B5CF6] to-[#D946EF]", rotate: "3deg" },
+              { id: "downtown", name: "Downtown", position: { top: '48%', left: '52%' }, color: "from-[#0EA5E9] to-[#22D3EE]", rotate: "0deg" },
+              { id: "12south", name: "12 South", position: { top: '65%', left: '45%' }, color: "from-[#10B981] to-[#34D399]", rotate: "-2deg" },
+              { id: "germantown", name: "Germantown", position: { top: '38%', left: '52%' }, color: "from-[#EC4899] to-[#F472B6]", rotate: "2deg" },
+              { id: "music-row", name: "Music Row", position: { top: '55%', left: '30%' }, color: "from-[#EF4444] to-[#F87171]", rotate: "-3deg" },
+              { id: "berry-hill", name: "Berry Hill", position: { top: '75%', left: '35%' }, color: "from-[#6366F1] to-[#A78BFA]", rotate: "4deg" },
+              { id: "west-end", name: "West End", position: { top: '40%', left: '30%' }, color: "from-[#F59E0B] to-[#FBBF24]", rotate: "-1deg" },
+              { id: "belle-meade", name: "Belle Meade", position: { top: '30%', left: '15%' }, color: "from-[#4F46E5] to-[#6366F1]", rotate: "2deg" },
+              { id: "bellevue", name: "Bellevue", position: { top: '15%', left: '10%' }, color: "from-[#059669] to-[#10B981]", rotate: "-4deg" },
+              { id: "opryland", name: "Opryland", position: { top: '15%', left: '90%' }, color: "from-[#DC2626] to-[#EF4444]", rotate: "3deg" },
+              { id: "madison", name: "Madison", position: { top: '10%', left: '65%' }, color: "from-[#7C3AED] to-[#8B5CF6]", rotate: "-2deg" }
+            ].map((neighborhood) => {
+              const isActive = selectedAnswer === neighborhood.id;
               
               return (
                 <motion.div
-                  key={option.id}
+                  key={neighborhood.id}
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ 
-                    scale: selectedAnswer === option.value ? 1.1 : 1, 
-                    opacity: 1 
+                    scale: isActive ? 1.1 : 1, 
+                    opacity: 1,
+                    y: isActive ? -5 : 0
                   }}
                   transition={{ 
-                    delay: index * 0.2,
+                    delay: Math.random() * 0.4,
                     duration: 0.4,
                     scale: { 
                       duration: 0.2,
@@ -136,41 +150,37 @@ const QuizQuestion = ({
                       stiffness: 300
                     }
                   }}
-                  whileHover={{ scale: 1.1 }}
+                  whileHover={{ scale: 1.1, y: -5 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => onAnswer(question.id, option.value)}
-                  className={`absolute cursor-pointer ${selectedAnswer === option.value ? 'z-10' : 'z-0'}`}
+                  onClick={() => onAnswer(question.id, neighborhood.id)}
+                  className={`absolute cursor-pointer ${isActive ? 'z-20' : 'z-10'}`}
                   style={{
-                    top: position.top,
-                    left: position.left,
+                    top: neighborhood.position.top,
+                    left: neighborhood.position.left,
                   }}
                 >
                   <div 
                     className={`
                       neighborhood-marker p-1 rounded-full 
-                      ${selectedAnswer === option.value 
+                      ${isActive 
                         ? 'ring-4 ring-nashville-accent ring-opacity-70' 
                         : 'hover:ring-2 hover:ring-nashville-accent/50'
                       }
                     `}
                   >
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-white shadow-md">
-                      <img 
-                        src={option.image} 
-                        alt={option.text} 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className={`
-                      absolute -bottom-1 left-1/2 transform -translate-x-1/2 translate-y-full
-                      text-center mt-2 font-bold text-sm md:text-base px-3 py-1 rounded-lg
-                      ${selectedAnswer === option.value 
-                        ? 'bg-nashville-accent text-nashville-900' 
-                        : 'bg-white/90 dark:bg-nashville-800/90'
-                      }
-                      shadow-md whitespace-nowrap
-                    `}>
-                      {option.text}
+                    <div 
+                      className={`
+                        w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden 
+                        flex items-center justify-center
+                        bg-gradient-to-br ${neighborhood.color}
+                        shadow-lg
+                        ${isActive ? 'shadow-nashville-accent/30' : ''}
+                      `}
+                      style={{ transform: `rotate(${neighborhood.rotate})` }}
+                    >
+                      <div className="text-center text-white font-bold p-1 text-xs md:text-sm drop-shadow-md">
+                        {neighborhood.name}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -179,10 +189,14 @@ const QuizQuestion = ({
           </div>
           
           {/* Legend */}
-          <div className="absolute bottom-2 left-2 bg-white/70 dark:bg-nashville-900/70 backdrop-blur-sm px-2 py-1 rounded text-xs opacity-70">
-            <div className="flex items-center">
-              <div className="w-4 h-1 bg-[#6EB4D1] mr-1 rounded-full"></div>
+          <div className="absolute bottom-2 left-2 bg-white/80 dark:bg-nashville-900/80 backdrop-blur-sm px-3 py-2 rounded-lg text-xs opacity-80 shadow-sm">
+            <div className="flex items-center gap-1">
+              <div className="w-5 h-1.5 bg-[#6EB4D1] rounded-full shadow-sm"></div>
               <span>Cumberland River</span>
+            </div>
+            <div className="flex items-center gap-1 mt-1">
+              <div className="w-5 h-1.5 bg-[#DDD] rounded-full shadow-sm"></div>
+              <span>Interstate Highways</span>
             </div>
           </div>
         </div>

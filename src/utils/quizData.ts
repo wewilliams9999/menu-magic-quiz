@@ -1,4 +1,3 @@
-
 export type QuizQuestion = {
   id: string;
   question: string;
@@ -34,26 +33,62 @@ export const quizQuestions: QuizQuestion[] = [
       {
         id: "neighborhood-1",
         text: "East Nashville",
-        value: "east",
-        image: "https://images.unsplash.com/photo-1631191751048-5f5d808694a3?q=80&w=500&auto=format&fit=crop"
+        value: "east"
       },
       {
         id: "neighborhood-2",
         text: "The Gulch",
-        value: "gulch",
-        image: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?q=80&w=500&auto=format&fit=crop"
+        value: "gulch"
       },
       {
         id: "neighborhood-3",
         text: "Downtown",
-        value: "downtown",
-        image: "https://images.unsplash.com/photo-1578744422254-965a916d945b?q=80&w=500&auto=format&fit=crop"
+        value: "downtown"
       },
       {
         id: "neighborhood-4",
         text: "12 South",
-        value: "12south",
-        image: "https://images.unsplash.com/photo-1605276373954-0c4a0dac5b12?q=80&w=500&auto=format&fit=crop"
+        value: "12south"
+      },
+      {
+        id: "neighborhood-5",
+        text: "Germantown",
+        value: "germantown"
+      },
+      {
+        id: "neighborhood-6",
+        text: "Music Row",
+        value: "music-row"
+      },
+      {
+        id: "neighborhood-7",
+        text: "Berry Hill",
+        value: "berry-hill"
+      },
+      {
+        id: "neighborhood-8",
+        text: "West End",
+        value: "west-end"
+      },
+      {
+        id: "neighborhood-9",
+        text: "Belle Meade",
+        value: "belle-meade"
+      },
+      {
+        id: "neighborhood-10",
+        text: "Bellevue",
+        value: "bellevue"
+      },
+      {
+        id: "neighborhood-11",
+        text: "Opryland",
+        value: "opryland"
+      },
+      {
+        id: "neighborhood-12",
+        text: "Madison",
+        value: "madison"
       }
     ]
   },
@@ -250,7 +285,6 @@ export const quizResults: QuizResult[] = [
 ];
 
 export const getRecommendations = (answers: Record<string, string>): QuizResult[] => {
-  // First filter by neighborhood if selected
   let filteredResults = quizResults;
   if (answers.neighborhood) {
     filteredResults = filteredResults.filter(result => 
@@ -258,26 +292,21 @@ export const getRecommendations = (answers: Record<string, string>): QuizResult[
     );
   }
   
-  // If we have fewer than 3 restaurants for the selected neighborhood,
-  // don't filter by neighborhood to ensure we show enough options
   if (filteredResults.length < 3) {
     filteredResults = quizResults;
   }
   
-  // Convert answers object to array of values, excluding neighborhood
   const selectedValues = Object.entries(answers)
     .filter(([key]) => key !== 'neighborhood')
     .map(([_, value]) => value);
   
-  // Sort restaurants by how many matching tags they have with the selected answers
   return filteredResults
     .map(result => {
       const matchScore = result.tags.filter(tag => selectedValues.includes(tag)).length;
-      // Give extra weight to matching neighborhood
       const neighborhoodBonus = result.neighborhood === answers.neighborhood ? 2 : 0;
       return { result, matchScore: matchScore + neighborhoodBonus };
     })
     .sort((a, b) => b.matchScore - a.matchScore)
-    .slice(0, 3) // Get top 3 matches
+    .slice(0, 3)
     .map(item => item.result);
 };
