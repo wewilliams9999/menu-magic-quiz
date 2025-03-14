@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import WelcomeScreen from "./WelcomeScreen";
 import QuizQuestion from "./QuizQuestion";
 import ResultScreen from "./ResultScreen";
-import { quizQuestions, QuizResult } from "@/utils/quizData";
+import { quizQuestions } from "@/utils/quizData";
 import { useRestaurantData } from "@/hooks/useRestaurantData";
 
 type AnswerValue = string | string[];
@@ -25,7 +25,8 @@ const QuizContainer = () => {
     ? answers.preferences
     : (answers.preferences ? [answers.preferences as string] : []);
   
-  const { data: apiResults, isLoading, error } = useRestaurantData({
+  // Use the restaurant data hook
+  const { data: restaurantResults, isLoading, error } = useRestaurantData({
     neighborhoods: neighborhoods,
     cuisine: answers.cuisine as string,
     price: answers.price as string,
@@ -93,7 +94,7 @@ const QuizContainer = () => {
         {currentScreen === "result" && (
           <ResultScreen 
             key="result" 
-            results={apiResults || []} 
+            results={restaurantResults || []} 
             onReset={handleReset}
             isLoading={isLoading} 
           />
