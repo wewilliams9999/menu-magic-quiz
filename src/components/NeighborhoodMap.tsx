@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { QuizOption } from "@/utils/quizData";
 import { MapPin } from "lucide-react";
@@ -70,42 +71,77 @@ const NeighborhoodMap = ({
       </div>
       
       <div className="relative h-[500px] w-full rounded-xl shadow-lg overflow-hidden border border-nashville-200 dark:border-nashville-700">
-        {/* Nashville-inspired map background with accurate geographic features */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#f6f8fa] to-[#e9eef2] dark:from-[#1a2a3a] dark:to-[#0d1824]">
-          {/* Cumberland River */}
-          <div className="absolute top-0 h-full w-[10%] left-[48%] bg-[#c2d7e8] dark:bg-[#2a4a70] opacity-80 transform rotate-[15deg]"></div>
+        {/* Nashville-inspired map background with more organic, visual design */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#f9f7f2] to-[#e8edf0] dark:from-[#1e2a38] dark:to-[#162232]">
+          {/* Cumberland River - more natural, curved shape */}
+          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path 
+              d="M45,0 Q48,25 52,40 Q55,55 49,75 Q47,85 50,100" 
+              fill="none" 
+              stroke="#a3ceed" 
+              strokeWidth="6"
+              className="dark:stroke-[#2a4a70] opacity-80"
+            />
+          </svg>
           
-          {/* I-40 East-West */}
-          <div className="absolute top-[50%] h-[3px] w-[90%] left-[5%] bg-[#e0e0e0] dark:bg-[#555555]"></div>
+          {/* Main highways with more natural curves */}
+          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            {/* I-40 */}
+            <path 
+              d="M5,50 Q25,48 50,50 Q75,52 95,50" 
+              fill="none" 
+              stroke="#e0e0e0" 
+              strokeWidth="1.5"
+              className="dark:stroke-[#555555]"
+            />
+            
+            {/* I-65 */}
+            <path 
+              d="M50,5 Q48,25 50,50 Q52,75 50,95" 
+              fill="none" 
+              stroke="#e0e0e0" 
+              strokeWidth="1.5"
+              className="dark:stroke-[#555555]"
+            />
+            
+            {/* I-24 */}
+            <path 
+              d="M30,30 Q40,40 50,45 Q65,53 75,65" 
+              fill="none" 
+              stroke="#e0e0e0" 
+              strokeWidth="1.5"
+              className="dark:stroke-[#555555]"
+            />
+            
+            {/* Secondary roads - more organic */}
+            <path d="M20,35 Q30,40 40,35 Q50,30 65,35" fill="none" stroke="#e0e0e0" strokeWidth="0.75" className="dark:stroke-[#444444] opacity-30" />
+            <path d="M35,60 Q45,65 55,60 Q65,55 75,60" fill="none" stroke="#e0e0e0" strokeWidth="0.75" className="dark:stroke-[#444444] opacity-30" />
+            <path d="M40,20 Q45,30 50,25 Q55,20 60,30" fill="none" stroke="#e0e0e0" strokeWidth="0.75" className="dark:stroke-[#444444] opacity-30" />
+            <path d="M25,70 Q35,75 45,70 Q55,65 65,70" fill="none" stroke="#e0e0e0" strokeWidth="0.75" className="dark:stroke-[#444444] opacity-30" />
+          </svg>
           
-          {/* I-65 North-South */}
-          <div className="absolute left-[50%] h-[90%] w-[3px] top-[5%] bg-[#e0e0e0] dark:bg-[#555555]"></div>
+          {/* Downtown area highlight - warmer, more organic */}
+          <div className="absolute w-[12%] h-[12%] rounded-lg bg-[#fcf8e3] dark:bg-[#45462f] opacity-40 left-[46%] top-[47%]"></div>
+          <div className="absolute w-[8%] h-[8%] rounded-lg bg-[#fcf8e3] dark:bg-[#45462f] opacity-30 left-[49%] top-[45%]"></div>
           
-          {/* I-24 */}
-          <div className="absolute top-[40%] left-[30%] h-[3px] w-[40%] bg-[#e0e0e0] dark:bg-[#555555] transform rotate-[30deg]"></div>
+          {/* Parks and green areas - more organic shapes */}
+          <div className="absolute w-[15%] h-[11%] rounded-[40%_60%_60%_40%/40%_50%_50%_60%] bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[25%] top-[25%]"></div>
+          <div className="absolute w-[12%] h-[9%] rounded-[60%_40%_40%_60%/50%_50%_50%_50%] bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[70%] top-[60%]"></div>
+          <div className="absolute w-[10%] h-[8%] rounded-[40%_60%_30%_70%/30%_30%_70%_70%] bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[35%] top-[75%]"></div>
+          <div className="absolute w-[14%] h-[10%] rounded-[70%_30%_50%_50%/50%_50%_50%_50%] bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[60%] top-[25%]"></div>
           
-          {/* Secondary roads - grid pattern */}
-          <div className="absolute inset-0 grid grid-cols-8 opacity-30">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={`col-${i}`} className="border-r border-[#d0d0d0] dark:border-[#444444] h-full"></div>
-            ))}
-          </div>
-          <div className="absolute inset-0 grid grid-rows-8 opacity-30">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={`row-${i}`} className="border-b border-[#d0d0d0] dark:border-[#444444] w-full"></div>
-            ))}
-          </div>
+          {/* Percy Priest Lake */}
+          <div className="absolute w-[18%] h-[20%] rounded-[60%_40%_50%_50%/40%_60%_60%_40%] bg-[#b8d9eb] dark:bg-[#2a4c6a] opacity-30 left-[75%] top-[35%]"></div>
           
-          {/* Downtown area highlight */}
-          <div className="absolute w-[15%] h-[15%] rounded-lg bg-[#fcf8e3] dark:bg-[#45462f] opacity-40 left-[45%] top-[45%]"></div>
+          {/* Land contours/elevation indicators */}
+          <div className="absolute w-[25%] h-[15%] rounded-full bg-[#f0e9de] dark:bg-[#3c362e] opacity-20 left-[20%] top-[45%]"></div>
+          <div className="absolute w-[20%] h-[15%] rounded-full bg-[#f0e9de] dark:bg-[#3c362e] opacity-20 left-[65%] top-[70%]"></div>
           
-          {/* Parks and green areas */}
-          <div className="absolute w-[18%] h-[12%] rounded-full bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[25%] top-[25%]"></div>
-          <div className="absolute w-[15%] h-[10%] rounded-full bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[70%] top-[60%]"></div>
-          <div className="absolute w-[10%] h-[8%] rounded-full bg-[#e8f5e9] dark:bg-[#2c4c2e] opacity-30 left-[35%] top-[75%]"></div>
-          
-          {/* Subtle topography effect */}
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSgzMCkiPjxyZWN0IGlkPSJwYXR0ZXJuLWJhY2tncm91bmQiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InRyYW5zcGFyZW50Ij48L3JlY3Q+IDxwYXRoIGQ9Ik0tMTAgMTAgSDUwIE0tMTAgMjAgSDUwIE0tMTAgMzAgSDUwIE0tMTAgMCBINTAiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLW9wYWNpdHk9IjAuMDUiIHN0cm9rZS13aWR0aD0iMXB4Ij48L3BhdGg+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI3BhdHRlcm4pIiBoZWlnaHQ9IjEwMCUiIHdpZHRoPSIxMDAlIj48L3JlY3Q+PC9zdmc+')] opacity-10"></div>
+          {/* Light texture overlay */}
+          <div className="absolute inset-0 opacity-5 dark:opacity-10" style={{ 
+            backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDVMNSAwWk02IDRMNCA2Wk0tMSAxTDEgLTFaIiBzdHJva2U9IiM4ODgiIHN0cm9rZS13aWR0aD0iMSI+PC9wYXRoPgo8L3N2Zz4=')",
+            backgroundRepeat: 'repeat'
+          }}></div>
         </div>
         
         {/* Neighborhood bubbles */}
