@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { SparklesIcon } from "lucide-react";
 
 interface WelcomeScreenProps {
   onStart: () => void;
@@ -20,8 +21,8 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
         transition={{ delay: 0.3, duration: 0.5 }}
         className="mb-2"
       >
-        <div className="inline-flex items-center justify-center p-2 bg-nashville-accent/20 rounded-full mb-5">
-          <span className="text-nashville-accent text-2xl">✦</span>
+        <div className="inline-flex items-center justify-center p-3 bg-gradient-to-br from-nashville-accent/30 to-nashville-accent/10 rounded-full mb-5">
+          <SparklesIcon className="text-nashville-accent w-8 h-8" />
         </div>
       </motion.div>
 
@@ -29,7 +30,7 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className="text-4xl md:text-5xl font-bold tracking-tight"
+        className="text-4xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-nashville-900 to-nashville-accent dark:from-white dark:to-nashville-accent"
       >
         Find Your Perfect Nashville Restaurant
       </motion.h1>
@@ -40,7 +41,7 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
         transition={{ delay: 0.7, duration: 0.5 }}
         className="text-lg text-nashville-700 dark:text-nashville-300 max-w-md"
       >
-        Answer a few questions about your preferences, and we'll recommend Nashville restaurants that match your taste.
+        Answer a few quick questions about your preferences, and we'll match you with Nashville restaurants you'll love. No overthinking required!
       </motion.p>
 
       <motion.div
@@ -49,12 +50,17 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
         transition={{ delay: 0.9, duration: 0.5 }}
         className="w-full max-w-xs"
       >
-        <Button
-          onClick={onStart}
-          className="w-full bg-nashville-900 hover:bg-nashville-800 text-white py-6 text-lg transition-all duration-300"
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          Start Quiz
-        </Button>
+          <Button
+            onClick={onStart}
+            className="w-full bg-gradient-to-r from-nashville-accent to-nashville-accent/80 hover:from-nashville-accent/90 hover:to-nashville-accent/70 text-nashville-900 py-6 text-lg font-medium transition-all duration-300 shadow-lg hover:shadow-xl border-0"
+          >
+            Start the Quiz
+          </Button>
+        </motion.div>
       </motion.div>
     </motion.div>
   );

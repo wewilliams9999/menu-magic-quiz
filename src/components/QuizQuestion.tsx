@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { QuizQuestion as QuizQuestionType, QuizOption } from "@/utils/quizData";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -33,64 +33,84 @@ const QuizQuestion = ({
       transition={{ duration: 0.4 }}
       className="w-full max-w-2xl mx-auto px-4"
     >
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-sm text-nashville-500">Question {currentIndex + 1} of {totalQuestions}</span>
-          <span className="text-sm text-nashville-500">{Math.round(((currentIndex + 1) / totalQuestions) * 100)}% Complete</span>
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-nashville-600 dark:text-nashville-400">Question {currentIndex + 1} of {totalQuestions}</span>
+          <span className="text-sm font-medium text-nashville-600 dark:text-nashville-400">{Math.round(((currentIndex + 1) / totalQuestions) * 100)}% Complete</span>
         </div>
-        <div className="w-full bg-nashville-100 dark:bg-nashville-800 rounded-full h-1.5">
+        <div className="w-full bg-nashville-100 dark:bg-nashville-800 rounded-full h-2.5 overflow-hidden">
           <motion.div
             initial={{ width: `${(currentIndex / totalQuestions) * 100}%` }}
             animate={{ width: `${((currentIndex + 1) / totalQuestions) * 100}%` }}
-            className="bg-nashville-accent h-1.5 rounded-full"
+            className="bg-gradient-to-r from-nashville-accent to-nashville-accent/80 h-2.5 rounded-full"
           ></motion.div>
         </div>
       </div>
 
       <div className="text-center mb-10">
-        <h2 className="text-3xl font-bold mb-2">{question.question}</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-nashville-900 to-nashville-accent dark:from-white dark:to-nashville-accent">{question.question}</h2>
         {question.description && (
           <p className="text-nashville-600 dark:text-nashville-400">{question.description}</p>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-        {question.options.map((option) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
+        {question.options.map((option, index) => (
           <motion.div
             key={option.id}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.2 }}
-            onClick={() => onAnswer(question.id, option.value)}
-            className={`option-card ${selectedAnswer === option.value ? "selected" : ""}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1, duration: 0.3 }}
           >
-            {option.image && (
-              <div className="mb-3 rounded-md overflow-hidden h-32">
-                <img 
-                  src={option.image} 
-                  alt={option.text} 
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
-              </div>
-            )}
-            <div className="flex items-center">
-              <div className="flex-1">
-                <h3 className="font-medium text-lg">{option.text}</h3>
-              </div>
-              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                selectedAnswer === option.value
-                  ? "border-nashville-accent bg-nashville-accent/20"
-                  : "border-nashville-300"
-              }`}>
-                {selectedAnswer === option.value && (
-                  <motion.div 
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="w-2.5 h-2.5 bg-nashville-accent rounded-full" 
+            <motion.div
+              whileHover={{ scale: 1.03, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => onAnswer(question.id, option.value)}
+              className={`option-card relative overflow-hidden rounded-lg ${
+                selectedAnswer === option.value 
+                  ? "border-nashville-accent bg-nashville-50 dark:bg-nashville-800/50" 
+                  : "border-transparent hover:border-nashville-200 dark:hover:border-nashville-700"
+              }`}
+            >
+              {option.image && (
+                <div className="mb-3 rounded-md overflow-hidden h-40 shadow-sm">
+                  <img 
+                    src={option.image} 
+                    alt={option.text} 
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                   />
-                )}
+                </div>
+              )}
+              <div className="flex items-center p-4">
+                <div className="flex-1">
+                  <h3 className="font-medium text-lg">{option.text}</h3>
+                </div>
+                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                  selectedAnswer === option.value
+                    ? "border-nashville-accent bg-nashville-accent/20"
+                    : "border-nashville-300"
+                }`}>
+                  {selectedAnswer === option.value && (
+                    <motion.div 
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="text-nashville-accent" 
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                    </motion.div>
+                  )}
+                </div>
               </div>
-            </div>
+              
+              {selectedAnswer === option.value && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="absolute inset-0 border-2 border-nashville-accent rounded-lg pointer-events-none"
+                />
+              )}
+            </motion.div>
           </motion.div>
         ))}
       </div>
@@ -104,20 +124,25 @@ const QuizQuestion = ({
           <ChevronLeft className="mr-2 h-4 w-4" />
           Previous
         </Button>
-        <Button 
-          onClick={onNext}
-          disabled={!selectedAnswer}
-          className="bg-nashville-900 hover:bg-nashville-800 text-white transition-all duration-300"
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          {currentIndex === totalQuestions - 1 ? (
-            "See Results"
-          ) : (
-            <>
-              Next
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </>
-          )}
-        </Button>
+          <Button 
+            onClick={onNext}
+            disabled={!selectedAnswer}
+            className="bg-gradient-to-r from-nashville-accent to-nashville-accent/80 hover:from-nashville-accent/90 hover:to-nashville-accent/70 text-nashville-900 transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none"
+          >
+            {currentIndex === totalQuestions - 1 ? (
+              "See Results"
+            ) : (
+              <>
+                Next
+                <ChevronRight className="ml-2 h-4 w-4" />
+              </>
+            )}
+          </Button>
+        </motion.div>
       </div>
     </motion.div>
   );
