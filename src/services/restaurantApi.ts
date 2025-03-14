@@ -20,15 +20,22 @@ export interface ApiRestaurant {
   };
   url: string;
   neighborhoods?: string[];
+  cuisine?: string;
+  priceRange?: string;
+}
+
+// Define the input parameters for restaurant filtering
+export interface RestaurantQueryParams {
+  neighborhoods?: string[];
+  cuisine?: string;
+  price?: string;
+  atmosphere?: string;
+  preferences?: string[];
 }
 
 export const searchRestaurants = async (
-  location: string = "Nashville, TN",
-  categories?: string,
-  price?: string,
-  additionalFilters: Record<string, any> = {},
-  limit: number = 10
-): Promise<ApiRestaurant[]> => {
+  params: RestaurantQueryParams
+): Promise<QuizResult[]> => {
   try {
     // This simulates an API call for demonstration
     // In a real application, you'd replace this with actual API calls
@@ -42,41 +49,40 @@ export const searchRestaurants = async (
     // const data = await response.json();
     // return data.businesses;
     
-    console.log("API search parameters:", { location, categories, price, additionalFilters, limit });
+    console.log("API search parameters:", params);
     
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     // Return mock data - in production, this would be real API data
-    return mockRestaurants.filter(restaurant => {
+    const filteredRestaurants = mockRestaurants.filter(restaurant => {
       let match = true;
       
-      if (categories) {
-        const categoryList = categories.split(',');
-        match = match && categoryList.some(cat => 
-          restaurant.categories.some(c => c.alias.includes(cat))
+      if (params.cuisine) {
+        match = match && restaurant.categories.some(c => c.alias.includes(params.cuisine || ''));
+      }
+      
+      if (params.price) {
+        match = match && restaurant.price === params.price;
+      }
+
+      if (params.neighborhoods && params.neighborhoods.length > 0) {
+        match = match && params.neighborhoods.some(n => 
+          restaurant.neighborhoods?.includes(n)
         );
       }
       
-      if (price) {
-        match = match && restaurant.price === price;
-      }
-      
       // Apply additional filters from preferences
-      if (additionalFilters.attributes) {
+      if (params.preferences && params.preferences.length > 0) {
         // This is a simplified version - in a real API this would be more complex
         // Just demonstrating how we might handle attribute filtering
         match = match && true; // Mocked to always match in our demo
       }
       
-      if (additionalFilters.price) {
-        // Override the price filter with the preference-based one
-        const priceOptions = additionalFilters.price.split(',');
-        match = match && priceOptions.includes(restaurant.price);
-      }
-      
       return match;
-    }).slice(0, limit);
+    }).slice(0, 10);
+
+    return filteredRestaurants.map(mapApiRestaurantToQuizResult);
   } catch (error) {
     console.error("Error fetching restaurants:", error);
     return [];
@@ -92,22 +98,25 @@ export const mapApiRestaurantToQuizResult = (restaurant: ApiRestaurant): QuizRes
     "$$$$": "$$$$"
   };
   
-  // Map categories to tags
-  const tags = restaurant.categories.map(cat => cat.alias);
+  // Map categories to features
+  const features = restaurant.categories.map(cat => cat.title);
   
   // Extract neighborhood if available
   const neighborhood = restaurant.neighborhoods?.[0] || "downtown";
+  
+  // Extract cuisine from categories or use default
+  const cuisine = restaurant.categories[0]?.title || "American";
   
   return {
     id: restaurant.id,
     name: restaurant.name,
     description: restaurant.description,
-    image: restaurant.image_url || "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=500&auto=format&fit=crop",
-    tags: tags,
-    address: `${restaurant.location.address1}, ${restaurant.location.city}, ${restaurant.location.state} ${restaurant.location.zip_code}`,
+    imageUrl: restaurant.image_url || "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=500&auto=format&fit=crop",
+    features: features,
     website: restaurant.url,
-    priceRange: priceMap[restaurant.price] || "$$",
-    neighborhood: neighborhood
+    priceRange: restaurant.priceRange || priceMap[restaurant.price] || "$$",
+    neighborhood: restaurant.neighborhood || neighborhood,
+    cuisine: restaurant.cuisine || cuisine
   };
 };
 

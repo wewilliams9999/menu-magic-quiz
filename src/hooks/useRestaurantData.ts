@@ -1,6 +1,5 @@
-
 import { useQuery } from "@tanstack/react-query";
-import { searchRestaurants } from "@/services/restaurantApi";
+import { searchRestaurants, RestaurantQueryParams } from "@/services/restaurantApi";
 import { QuizResult } from "@/utils/quizData";
 
 // Fallback data in case the API fails
@@ -56,15 +55,6 @@ const fallbackResults: QuizResult[] = [
     openTableLink: "https://www.opentable.com/r/folk-nashville"
   }
 ];
-
-// Define the input parameters for restaurant filtering
-interface RestaurantQueryParams {
-  neighborhoods?: string[];
-  cuisine?: string;
-  price?: string;
-  atmosphere?: string;
-  preferences?: string[];
-}
 
 export const useRestaurantData = (params: RestaurantQueryParams) => {
   return useQuery({

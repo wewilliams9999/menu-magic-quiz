@@ -5,14 +5,18 @@ export interface QuizOption {
   id: string;
   text: string;
   value: string;
-  icon?: React.ElementType | string;
+  icon?: React.ElementType;
+  image?: string;
 }
 
 export interface QuizQuestion {
   id: string;
   questionText: string;
+  question: string;
+  description?: string;
   type: "singleChoice" | "multipleChoice";
   options: QuizOption[];
+  multiSelect?: boolean;
 }
 
 export interface QuizResult {
@@ -65,24 +69,29 @@ export const quizQuestions: QuizQuestion[] = [
   {
     id: "neighborhood",
     questionText: "Which neighborhood are you interested in?",
+    question: "Which neighborhood are you interested in?",
     type: "multipleChoice",
     options: neighborhoodOptions,
+    multiSelect: true,
   },
   {
     id: "cuisine",
     questionText: "What type of cuisine are you in the mood for?",
+    question: "What type of cuisine are you in the mood for?",
     type: "singleChoice",
     options: cuisineOptions,
   },
   {
     id: "price",
     questionText: "What's your preferred price range?",
+    question: "What's your preferred price range?",
     type: "singleChoice",
     options: priceOptions,
   },
   {
     id: "atmosphere",
     questionText: "What kind of atmosphere do you prefer?",
+    question: "What kind of atmosphere do you prefer?",
     type: "singleChoice",
     options: [
       {
@@ -114,7 +123,9 @@ export const quizQuestions: QuizQuestion[] = [
   {
     id: "preferences",
     questionText: "Any specific dietary preferences?",
+    question: "Any specific dietary preferences?",
     type: "multipleChoice",
     options: dietaryOptions,
+    multiSelect: true,
   },
 ];
