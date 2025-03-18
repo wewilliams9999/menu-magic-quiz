@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { MapPin, Navigation } from "lucide-react";
+import { MapPin, Navigation, MapIcon } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface LocationSelectionScreenProps {
   onContinue: (method: "manual" | "location") => void;
@@ -40,6 +41,13 @@ const LocationSelectionScreen = ({ onContinue }: LocationSelectionScreenProps) =
       transition={{ duration: 0.5 }}
       className="flex flex-col items-center justify-center max-w-2xl mx-auto text-center px-4"
     >
+      <Alert className="mb-6 border-nashville-accent/30 bg-nashville-accent/10">
+        <MapIcon className="h-5 w-5 text-nashville-accent" />
+        <AlertDescription className="text-sm font-medium text-nashville-800 dark:text-nashville-100">
+          Please allow access to your location for personalized restaurant recommendations
+        </AlertDescription>
+      </Alert>
+
       <div className="mb-8">
         <div className="inline-flex items-center justify-center p-3 bg-gradient-to-br from-nashville-accent/30 to-nashville-accent/10 rounded-full mb-4">
           <MapPin className="text-nashville-accent w-8 h-8" />
