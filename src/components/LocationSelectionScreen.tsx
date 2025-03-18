@@ -4,11 +4,10 @@ import { motion } from "framer-motion";
 import { MapPin, Navigation, Map } from "lucide-react";
 
 interface LocationSelectionScreenProps {
-  onContinue: () => void;
-  onAnswer?: (questionId: string, answerId: string) => void;
+  onAnswer: (questionId: string, answerId: string) => void;
 }
 
-const LocationSelectionScreen = ({ onContinue, onAnswer }: LocationSelectionScreenProps) => {
+const LocationSelectionScreen = ({ onAnswer }: LocationSelectionScreenProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   // Effect to continue to next question immediately after selection
@@ -16,12 +15,13 @@ const LocationSelectionScreen = ({ onContinue, onAnswer }: LocationSelectionScre
     if (selectedOption) {
       // Small delay for better UX to see the selection effect
       const timer = setTimeout(() => {
-        onContinue();
+        // The continue functionality is now handled inside the handleOptionSelect
+        // through the onAnswer callback
       }, 300);
       
       return () => clearTimeout(timer);
     }
-  }, [selectedOption, onContinue]);
+  }, [selectedOption]);
 
   const handleOptionSelect = (value: string) => {
     setSelectedOption(value);
