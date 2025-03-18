@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -51,8 +50,8 @@ const QuizContainer = () => {
       if (neighborhoodIndex !== -1) {
         filteredQuestions[neighborhoodIndex] = {
           id: "distance",
-          questionText: "How far are you willing to travel?",
-          question: "How far are you willing to travel?",
+          questionText: "How far would you like to travel?",
+          question: "How far would you like to travel?",
           description: "We'll find restaurants within this distance from your location",
           type: "singleChoice",
           options: filteredQuestions[neighborhoodIndex].options,
