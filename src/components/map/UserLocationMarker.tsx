@@ -29,8 +29,7 @@ const UserLocationMarker = ({ userLocation }: UserLocationMarkerProps) => {
               <div className="relative bg-nashville-accent text-white p-1.5 rounded-full shadow-lg">
                 <Navigation size={14} />
               </div>
-              {/* Decorative line below the marker (not functional) */}
-              <div className="absolute h-16 w-1 bg-nashville-accent/20 -bottom-16 left-1/2 transform -translate-x-1/2 z-[-1]"></div>
+              {/* Removed the decorative line below the marker */}
             </div>
           </TooltipTrigger>
           <TooltipContent side="top">

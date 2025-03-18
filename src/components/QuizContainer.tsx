@@ -78,7 +78,7 @@ const QuizContainer = () => {
       const isLocationBased = answerId === "location";
       setLocationMode(isLocationBased);
       
-      // If location-based, also set initial distance to 3 miles (changed from 5)
+      // If location-based, also set initial distance to 3 miles
       if (isLocationBased) {
         setAnswers((prev) => ({
           ...prev,
