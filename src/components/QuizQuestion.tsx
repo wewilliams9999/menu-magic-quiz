@@ -49,19 +49,6 @@ const QuizQuestion = ({
     }
   }, [isDistanceQuestion, locationMode]);
 
-  // Modified the auto-proceed logic to ensure the user has explicitly shared their location
-  // and only after that proceed automatically when a distance is selected
-  useEffect(() => {
-    if (isDistanceQuestion && typeof selectedAnswer === 'number' && userSharedLocation) {
-      // Small delay for better UX to see the selection
-      const timer = setTimeout(() => {
-        onNext();
-      }, 800);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [isDistanceQuestion, selectedAnswer, userSharedLocation, onNext]);
-
   const getSelectedArray = () => {
     if (isMultiSelect) {
       return Array.isArray(selectedAnswer) ? selectedAnswer : [];
