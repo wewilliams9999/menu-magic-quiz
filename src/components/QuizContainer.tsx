@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import WelcomeScreen from "./WelcomeScreen";
+import LocationSelectionScreen from "./LocationSelectionScreen";
 import QuizQuestion from "./QuizQuestion";
 import ResultScreen from "./ResultScreen";
 import { quizQuestions } from "@/utils/quizData";
@@ -11,7 +12,7 @@ import { useRestaurantData } from "@/hooks/useRestaurantData";
 type AnswerValue = string | string[] | number;
 
 const QuizContainer = () => {
-  const [currentScreen, setCurrentScreen] = useState<"welcome" | "quiz" | "result">("welcome");
+  const [currentScreen, setCurrentScreen] = useState<"welcome" | "location" | "quiz" | "result">("welcome");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
   const [locationMode, setLocationMode] = useState(false);
@@ -63,9 +64,7 @@ const QuizContainer = () => {
   };
 
   const handleStart = () => {
-    // Skip the location screen and go directly to quiz
-    setCurrentScreen("quiz");
-    setCurrentQuestionIndex(0);
+    setCurrentScreen("location");
   };
 
   const handleAnswer = (questionId: string, answerId: AnswerValue) => {
@@ -74,7 +73,7 @@ const QuizContainer = () => {
       [questionId]: answerId,
     }));
 
-    // If this is the first question (location method), set the location mode
+    // If this is the first question (location method), set the location mode and move directly to the quiz
     if (questionId === "locationMethod") {
       const isLocationBased = answerId === "location";
       setLocationMode(isLocationBased);
@@ -86,6 +85,10 @@ const QuizContainer = () => {
           distance: 5, // Default 5 mile radius
         }));
       }
+      
+      // Move directly to the quiz questions after selecting location method
+      setCurrentScreen("quiz");
+      setCurrentQuestionIndex(0);
     }
   };
 
@@ -109,8 +112,8 @@ const QuizContainer = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((prev) => prev - 1);
     } else {
-      // Go back to welcome screen if we're at the first question
-      setCurrentScreen("welcome");
+      // Go back to location screen if we're at the first question
+      setCurrentScreen("location");
     }
   };
 
@@ -129,6 +132,13 @@ const QuizContainer = () => {
       <AnimatePresence mode="wait">
         {currentScreen === "welcome" && (
           <WelcomeScreen key="welcome" onStart={handleStart} />
+        )}
+
+        {currentScreen === "location" && (
+          <LocationSelectionScreen 
+            key="location" 
+            onAnswer={handleAnswer}
+          />
         )}
 
         {currentScreen === "quiz" && currentQuestion && (
