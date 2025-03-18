@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,7 @@ interface QuizQuestionProps {
   selectedAnswer: string | string[] | null;
   currentIndex: number;
   totalQuestions: number;
+  useLocation?: boolean;
 }
 
 const QuizQuestion = ({
@@ -40,6 +42,7 @@ const QuizQuestion = ({
   selectedAnswer,
   currentIndex,
   totalQuestions,
+  useLocation = false,
 }: QuizQuestionProps) => {
   const isNeighborhoodQuestion = question.id === "neighborhood";
   const isPreferencesQuestion = question.id === "preferences";
@@ -132,6 +135,7 @@ const QuizQuestion = ({
             neighborhoods={convertToNeighborhoodFormat(question.options)} 
             selectedNeighborhoods={getSelectedArray()}
             onSelect={(values: string[]) => onAnswer(question.id, values)}
+            useUserLocation={useLocation}
           />
         </div>
       ) : isPreferencesQuestion ? (

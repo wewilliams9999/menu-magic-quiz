@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import WelcomeScreen from "./WelcomeScreen";
+import LocationSelectionScreen from "./LocationSelectionScreen";
 import QuizQuestion from "./QuizQuestion";
 import ResultScreen from "./ResultScreen";
 import { quizQuestions } from "@/utils/quizData";
@@ -11,9 +12,10 @@ import { useRestaurantData } from "@/hooks/useRestaurantData";
 type AnswerValue = string | string[];
 
 const QuizContainer = () => {
-  const [currentScreen, setCurrentScreen] = useState<"welcome" | "quiz" | "result">("welcome");
+  const [currentScreen, setCurrentScreen] = useState<"welcome" | "location" | "quiz" | "result">("welcome");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
+  const [useLocation, setUseLocation] = useState(false);
   
   // Get neighborhoods as string array for the API
   const neighborhoods = answers.neighborhood && Array.isArray(answers.neighborhood) 
@@ -35,6 +37,11 @@ const QuizContainer = () => {
   });
 
   const handleStart = () => {
+    setCurrentScreen("location");
+  };
+
+  const handleLocationMethod = (method: "manual" | "location") => {
+    setUseLocation(method === "location");
     setCurrentScreen("quiz");
   };
 
@@ -62,6 +69,9 @@ const QuizContainer = () => {
   const handlePreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((prev) => prev - 1);
+    } else {
+      // Go back to location selection if we're at the first question
+      setCurrentScreen("location");
     }
   };
 
@@ -69,6 +79,7 @@ const QuizContainer = () => {
     setCurrentScreen("welcome");
     setCurrentQuestionIndex(0);
     setAnswers({});
+    setUseLocation(false);
   };
 
   return (
@@ -76,6 +87,13 @@ const QuizContainer = () => {
       <AnimatePresence mode="wait">
         {currentScreen === "welcome" && (
           <WelcomeScreen key="welcome" onStart={handleStart} />
+        )}
+
+        {currentScreen === "location" && (
+          <LocationSelectionScreen 
+            key="location" 
+            onContinue={handleLocationMethod} 
+          />
         )}
 
         {currentScreen === "quiz" && (
@@ -88,6 +106,7 @@ const QuizContainer = () => {
             selectedAnswer={answers[quizQuestions[currentQuestionIndex].id] || null}
             currentIndex={currentQuestionIndex}
             totalQuestions={quizQuestions.length}
+            useLocation={useLocation && currentQuestionIndex === 0}
           />
         )}
 
