@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { MapPin, Navigation, NavigationOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -26,8 +27,8 @@ const neighborhoodPositions: Record<string, { left: string, top: string }> = {
   "12south": { left: "42%", top: "72%" },
   "berry-hill": { left: "52%", top: "77%" },
   "green-hills": { left: "34%", top: "78%" },
-  "franklin": { left: "38%", top: "95%" },
-  "brentwood": { left: "50%", top: "90%" },
+  "franklin": { left: "38%", top: "95%" }, // Moved within visible area
+  "brentwood": { left: "50%", top: "85%" }, // Moved up to be more visible
   "opryland": { left: "80%", top: "25%" },
   "madison": { left: "62%", top: "15%" },
   "crieve-hall": { left: "45%", top: "85%" },

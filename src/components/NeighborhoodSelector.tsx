@@ -1,12 +1,15 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Map } from "lucide-react";
+import { Map, List } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import NeighborhoodMap from "./NeighborhoodMap";
+import NeighborhoodList from "./NeighborhoodList";
 import NeighborhoodSelectionTags from "./NeighborhoodSelectionTags";
+import NeighborhoodSearch from "./NeighborhoodSearch";
 
 interface NeighborhoodSelectorProps {
   onSelect: (neighborhoods: string[]) => void;
@@ -20,6 +23,8 @@ const NeighborhoodSelector = ({
   neighborhoods,
 }: NeighborhoodSelectorProps) => {
   const isMobile = useIsMobile();
+  const [activeTab, setActiveTab] = useState<"map" | "list">("map");
+  const [searchQuery, setSearchQuery] = useState("");
   
   // Convert neighborhoods to the format expected by NeighborhoodMap
   const neighborhoodOptions = neighborhoods.map(neighborhood => ({
@@ -35,6 +40,11 @@ const NeighborhoodSelector = ({
       onSelect([...selectedNeighborhoods, neighborhoodId]);
     }
   };
+
+  // Filter neighborhoods based on search query
+  const filteredNeighborhoods = neighborhoods.filter((neighborhood) =>
+    neighborhood.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="w-full">
@@ -56,23 +66,55 @@ const NeighborhoodSelector = ({
         </motion.div>
       )}
       
-      {/* Full-width map */}
-      <motion.div 
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800"
-      >
-        <div className="p-4">
-          <div className="aspect-[16/9] overflow-hidden rounded-lg">
-            <NeighborhoodMap 
-              selectedNeighborhoods={selectedNeighborhoods} 
-              onSelect={toggleNeighborhood}
-              options={neighborhoodOptions}
-              useUserLocation={true}
-            />
-          </div>
+      {/* Tab toggle for Map and List view */}
+      <Tabs defaultValue="map" value={activeTab} onValueChange={(val) => setActiveTab(val as "map" | "list")} className="w-full">
+        <div className="flex justify-between items-center mb-4">
+          <TabsList className="grid grid-cols-2 w-40">
+            <TabsTrigger value="map" className="flex items-center gap-1.5">
+              <Map className="h-3.5 w-3.5" />
+              <span>Map</span>
+            </TabsTrigger>
+            <TabsTrigger value="list" className="flex items-center gap-1.5">
+              <List className="h-3.5 w-3.5" />
+              <span>List</span>
+            </TabsTrigger>
+          </TabsList>
+          
+          {activeTab === "list" && (
+            <div className="w-1/2">
+              <NeighborhoodSearch 
+                searchQuery={searchQuery} 
+                setSearchQuery={setSearchQuery} 
+              />
+            </div>
+          )}
         </div>
-      </motion.div>
+        
+        <div className="rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800">
+          <TabsContent value="map" className="mt-0">
+            <div className="p-4">
+              <div className="aspect-[16/9] overflow-hidden rounded-lg">
+                <NeighborhoodMap 
+                  selectedNeighborhoods={selectedNeighborhoods} 
+                  onSelect={toggleNeighborhood}
+                  options={neighborhoodOptions}
+                  useUserLocation={true}
+                />
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="list" className="mt-0">
+            <div className="p-4 max-h-[60vh] overflow-y-auto">
+              <NeighborhoodList 
+                neighborhoods={filteredNeighborhoods}
+                selectedNeighborhoods={selectedNeighborhoods}
+                onToggle={toggleNeighborhood}
+              />
+            </div>
+          </TabsContent>
+        </div>
+      </Tabs>
     </div>
   );
 };
