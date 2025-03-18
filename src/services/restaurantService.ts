@@ -7,7 +7,7 @@ const API_URL = "https://api.example.com/restaurants";
 export interface RestaurantApiParams {
   neighborhoods?: string[];
   cuisine?: string;
-  price?: string;
+  price?: string[];
   atmosphere?: string;
   preferences?: string[];
   distance?: number;
@@ -29,8 +29,8 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
       queryParams.append('cuisine', params.cuisine);
     }
     
-    if (params.price) {
-      queryParams.append('price', params.price);
+    if (params.price && params.price.length > 0) {
+      params.price.forEach(p => queryParams.append('price', p));
     }
     
     if (params.atmosphere) {

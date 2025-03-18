@@ -126,8 +126,10 @@ export const quizQuestions: QuizQuestion[] = [
     id: "price",
     questionText: "What's your preferred price range?",
     question: "What's your preferred price range?",
-    type: "singleChoice",
+    description: "Select all that apply",
+    type: "multipleChoice",
     options: priceOptions,
+    multiSelect: true,
   },
   {
     id: "atmosphere",
