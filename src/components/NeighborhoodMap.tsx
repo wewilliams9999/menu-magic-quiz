@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { MapPin, Navigation, NavigationOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -41,6 +42,7 @@ interface NeighborhoodMapProps {
   useUserLocation?: boolean;
   distanceMode?: boolean;
   distanceRadius?: number;
+  initialUserLocation?: { lat: number; lng: number } | null;
 }
 
 interface UserLocation {
@@ -56,12 +58,35 @@ const NeighborhoodMap = ({
   options = [],
   useUserLocation = false,
   distanceMode = false,
-  distanceRadius = 100
+  distanceRadius = 100,
+  initialUserLocation = null
 }: NeighborhoodMapProps) => {
   const [hoveredBubble, setHoveredBubble] = useState<string | null>(null);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const [locationEnabled, setLocationEnabled] = useState(false);
+  
+  // Effect to automatically use the initialUserLocation if provided
+  useEffect(() => {
+    if (initialUserLocation && !userLocation) {
+      const nashvilleCenter = { lat: 36.1627, lng: -86.7816 };
+      
+      const latDiff = initialUserLocation.lat - nashvilleCenter.lat;
+      const lngDiff = initialUserLocation.lng - nashvilleCenter.lng;
+      
+      const mapX = `${50 + (lngDiff * 200)}%`;
+      const mapY = `${50 - (latDiff * 200)}%`;
+      
+      setUserLocation({
+        latitude: initialUserLocation.lat,
+        longitude: initialUserLocation.lng,
+        mapX,
+        mapY
+      });
+      
+      setLocationEnabled(true);
+    }
+  }, [initialUserLocation]);
   
   const getUserLocation = () => {
     if (!navigator.geolocation) {
@@ -122,39 +147,41 @@ const NeighborhoodMap = ({
   
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between gap-2 px-3 py-2 text-sm text-gray-600 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-        <div className="flex items-center gap-2">
-          <MapPin size={14} className="flex-shrink-0 text-gray-500" />
-          <p>Select neighborhoods you're interested in exploring.</p>
-        </div>
-        
-        {useUserLocation && (
-          <div>
-            {locationEnabled ? (
-              <Button 
-                size="sm" 
-                variant="ghost" 
-                onClick={disableLocation}
-                className="h-8 px-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
-              >
-                <NavigationOff size={14} className="mr-1" />
-                <span className="text-xs">Hide Location</span>
-              </Button>
-            ) : (
-              <Button 
-                size="sm" 
-                variant="ghost" 
-                onClick={getUserLocation}
-                disabled={isLocating}
-                className="h-8 px-2 text-nashville-accent hover:bg-nashville-accent/10"
-              >
-                <Navigation size={14} className="mr-1" />
-                <span className="text-xs">{isLocating ? "Locating..." : "Show My Location"}</span>
-              </Button>
-            )}
+      {!initialUserLocation && (
+        <div className="flex items-center justify-between gap-2 px-3 py-2 text-sm text-gray-600 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-2">
+            <MapPin size={14} className="flex-shrink-0 text-gray-500" />
+            <p>Select neighborhoods you're interested in exploring.</p>
           </div>
-        )}
-      </div>
+          
+          {useUserLocation && (
+            <div>
+              {locationEnabled ? (
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  onClick={disableLocation}
+                  className="h-8 px-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+                >
+                  <NavigationOff size={14} className="mr-1" />
+                  <span className="text-xs">Hide Location</span>
+                </Button>
+              ) : (
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  onClick={getUserLocation}
+                  disabled={isLocating}
+                  className="h-8 px-2 text-nashville-accent hover:bg-nashville-accent/10"
+                >
+                  <Navigation size={14} className="mr-1" />
+                  <span className="text-xs">{isLocating ? "Locating..." : "Show My Location"}</span>
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
       
       <div className="relative h-[600px] w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">

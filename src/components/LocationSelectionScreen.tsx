@@ -1,13 +1,21 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Navigation, Map } from "lucide-react";
+import { toast } from "sonner";
+import NeighborhoodMap from "./NeighborhoodMap";
+
 interface LocationSelectionScreenProps {
   onAnswer: (questionId: string, answerId: string) => void;
 }
+
 const LocationSelectionScreen = ({
   onAnswer
 }: LocationSelectionScreenProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isLocating, setIsLocating] = useState(false);
+  const [permissionDenied, setPermissionDenied] = useState(false);
 
   // Effect to continue to next question immediately after selection
   useEffect(() => {
@@ -20,12 +28,51 @@ const LocationSelectionScreen = ({
       return () => clearTimeout(timer);
     }
   }, [selectedOption]);
+
   const handleOptionSelect = (value: string) => {
     setSelectedOption(value);
+    
+    if (value === "location") {
+      getUserLocation();
+    }
+    
     if (onAnswer) {
       onAnswer("locationMethod", value);
     }
   };
+  
+  const getUserLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error("Geolocation is not supported by your browser");
+      return;
+    }
+    
+    setIsLocating(true);
+    setPermissionDenied(false);
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const newLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        
+        setUserLocation(newLocation);
+        setIsLocating(false);
+        toast.success("Your location has been found");
+      },
+      (error) => {
+        setIsLocating(false);
+        if (error.code === 1) { // Permission denied
+          setPermissionDenied(true);
+          toast.error("Location permission denied. Please enable location services to use this feature.");
+        } else {
+          toast.error(`Unable to retrieve your location: ${error.message}`);
+        }
+      }
+    );
+  };
+
   return <motion.div initial={{
     opacity: 0,
     y: 20
@@ -52,24 +99,51 @@ const LocationSelectionScreen = ({
       </div>
 
       <div className="w-full max-w-md mb-8 space-y-4">
-        <motion.button whileHover={{
-        scale: 1.02
-      }} whileTap={{
-        scale: 0.98
-      }} onClick={() => handleOptionSelect("location")} className={`w-full py-4 px-6 rounded-lg flex items-center justify-center gap-3 text-lg font-medium transition-all duration-300 ${selectedOption === "location" ? "bg-nashville-accent text-nashville-900 shadow-lg" : "bg-nashville-accent/20 hover:bg-nashville-accent/30 text-nashville-900 dark:text-nashville-accent border border-nashville-accent/50"}`}>
+        <motion.button 
+          whileHover={{
+            scale: 1.02
+          }} 
+          whileTap={{
+            scale: 0.98
+          }} 
+          onClick={() => handleOptionSelect("location")} 
+          className={`w-full py-4 px-6 rounded-lg flex items-center justify-center gap-3 text-lg font-medium transition-all duration-300 ${selectedOption === "location" ? "bg-nashville-accent text-nashville-900 shadow-lg" : "bg-nashville-accent/20 hover:bg-nashville-accent/30 text-nashville-900 dark:text-nashville-accent border border-nashville-accent/50"}`}
+          disabled={isLocating}
+        >
           <Navigation className="w-5 h-5" />
-          Use My Location
+          {isLocating ? "Finding Location..." : "Use My Location"}
         </motion.button>
 
-        <motion.button whileHover={{
-        scale: 1.02
-      }} whileTap={{
-        scale: 0.98
-      }} onClick={() => handleOptionSelect("manual")} className={`w-full py-4 px-6 rounded-lg flex items-center justify-center gap-3 text-lg font-medium transition-all duration-300 ${selectedOption === "manual" ? "bg-nashville-accent text-nashville-900 shadow-lg" : "bg-nashville-accent/20 hover:bg-nashville-accent/30 text-nashville-900 dark:text-nashville-accent border border-nashville-accent/50"}`}>
+        <motion.button 
+          whileHover={{
+            scale: 1.02
+          }} 
+          whileTap={{
+            scale: 0.98
+          }} 
+          onClick={() => handleOptionSelect("manual")} 
+          className={`w-full py-4 px-6 rounded-lg flex items-center justify-center gap-3 text-lg font-medium transition-all duration-300 ${selectedOption === "manual" ? "bg-nashville-accent text-nashville-900 shadow-lg" : "bg-nashville-accent/20 hover:bg-nashville-accent/30 text-nashville-900 dark:text-nashville-accent border border-nashville-accent/50"}`}
+        >
           <Map className="w-5 h-5" />
           Choose Neighborhoods
         </motion.button>
       </div>
+      
+      {selectedOption === "location" && (
+        <div className="w-full max-w-2xl mt-4 bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-nashville-200 dark:border-nashville-800 shadow-lg">
+          <h3 className="text-lg font-medium mb-3">Your Location</h3>
+          <div className="h-[300px] rounded-lg overflow-hidden">
+            <NeighborhoodMap 
+              selectedNeighborhoods={[]}
+              onSelect={() => {}}
+              useUserLocation={true}
+              options={[]}
+              initialUserLocation={userLocation}
+            />
+          </div>
+        </div>
+      )}
     </motion.div>;
 };
+
 export default LocationSelectionScreen;

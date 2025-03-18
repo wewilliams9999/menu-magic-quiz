@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import QuizContainer from '@/components/QuizContainer';
+import { Toaster } from 'sonner';
 
 const Index = () => {
   const [mounted, setMounted] = useState(false);
@@ -44,6 +45,9 @@ const Index = () => {
           </div>
         </div>
       </footer>
+      
+      {/* Toast notifications */}
+      <Toaster position="top-right" />
     </div>
   );
 };
