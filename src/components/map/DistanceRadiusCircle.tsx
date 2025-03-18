@@ -19,7 +19,7 @@ const DistanceRadiusCircle: React.FC<DistanceRadiusCircleProps> = ({
   
   return (
     <div 
-      className="absolute rounded-full border-2 border-nashville-accent/20 bg-nashville-accent/10"
+      className="absolute rounded-full border-2 border-blue-400/20 bg-blue-400/10"
       style={{
         width: `${radiusInPixels * 2}px`,
         height: `${radiusInPixels * 2}px`,
