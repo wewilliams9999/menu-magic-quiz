@@ -1,12 +1,11 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Navigation, NavigationOff, AlertCircle } from "lucide-react";
+import { Navigation, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
-import NeighborhoodMap from "./NeighborhoodMap";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useLocationServices } from "./map/useLocationServices";
 
@@ -140,29 +139,20 @@ const DistanceSelector = ({
                     {selectedDistance} {selectedDistance === 1 ? 'mile' : 'miles'} radius
                   </Badge>
                 </div>
+                
+                <div className="p-8 flex items-center justify-center bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <div className="text-center">
+                    <div className="mb-3 inline-flex p-3 rounded-full bg-purple-100 dark:bg-purple-900/30">
+                      <Navigation className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      We'll search for restaurants within a {selectedDistance}-mile radius of your current location
+                    </p>
+                  </div>
+                </div>
               </>
             )}
           </div>
-          
-          {/* Only show map after location is shared */}
-          {location && (
-            <div className="overflow-hidden rounded-lg">
-              <div className="relative">
-                <NeighborhoodMap 
-                  selectedNeighborhoods={[]} 
-                  onSelect={() => {}} 
-                  options={options} 
-                  useUserLocation={true} 
-                  distanceMode={true} 
-                  distanceRadius={selectedDistance} 
-                  initialUserLocation={{
-                    lat: location.latitude,
-                    lng: location.longitude
-                  }} 
-                />
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>
