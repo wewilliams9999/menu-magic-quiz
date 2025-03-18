@@ -21,7 +21,7 @@ const DistanceSelector = ({
   userLocation,
 }: DistanceSelectorProps) => {
   const isMobile = useIsMobile();
-  const distances = [1, 2, 3, 5, 10, 15];
+  const distances = [3, 5, 10, 15]; // Removed 1 and 2 mile options
   
   return (
     <div className="w-full">
