@@ -3,7 +3,6 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import WelcomeScreen from "./WelcomeScreen";
-import LocationSelectionScreen from "./LocationSelectionScreen";
 import QuizQuestion from "./QuizQuestion";
 import ResultScreen from "./ResultScreen";
 import { quizQuestions } from "@/utils/quizData";
@@ -12,7 +11,7 @@ import { useRestaurantData } from "@/hooks/useRestaurantData";
 type AnswerValue = string | string[] | number;
 
 const QuizContainer = () => {
-  const [currentScreen, setCurrentScreen] = useState<"welcome" | "location" | "quiz" | "result">("welcome");
+  const [currentScreen, setCurrentScreen] = useState<"welcome" | "quiz" | "result">("welcome");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
   const [locationMode, setLocationMode] = useState(false);
@@ -64,13 +63,8 @@ const QuizContainer = () => {
   };
 
   const handleStart = () => {
-    setCurrentScreen("location");
-  };
-
-  const handleLocationContinue = () => {
-    // When continuing from location screen, directly move to the first question
+    // Skip the location screen and go directly to quiz
     setCurrentScreen("quiz");
-    // Make sure we're starting at the first real question
     setCurrentQuestionIndex(0);
   };
 
@@ -115,8 +109,8 @@ const QuizContainer = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((prev) => prev - 1);
     } else {
-      // Go back to location selection if we're at the first question
-      setCurrentScreen("location");
+      // Go back to welcome screen if we're at the first question
+      setCurrentScreen("welcome");
     }
   };
 
@@ -135,14 +129,6 @@ const QuizContainer = () => {
       <AnimatePresence mode="wait">
         {currentScreen === "welcome" && (
           <WelcomeScreen key="welcome" onStart={handleStart} />
-        )}
-
-        {currentScreen === "location" && (
-          <LocationSelectionScreen 
-            key="location" 
-            onContinue={handleLocationContinue} 
-            onAnswer={handleAnswer}
-          />
         )}
 
         {currentScreen === "quiz" && currentQuestion && (
