@@ -1,40 +1,55 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { fetchRestaurants, getFallbackRestaurants, RestaurantApiParams } from "@/services/restaurantService";
-import { toast } from "sonner";
 
-export const useRestaurantData = (params: RestaurantApiParams) => {
+interface RestaurantDataParams {
+  neighborhoods?: string[];
+  cuisine?: string;
+  price?: string;
+  atmosphere?: string;
+  preferences?: string[];
+  distance?: number;
+}
+
+export const useRestaurantData = (params: RestaurantDataParams) => {
   return useQuery({
     queryKey: ['restaurants', params],
     queryFn: async () => {
       try {
-        const data = await fetchRestaurants(params);
+        // Prepare API parameters
+        const apiParams: RestaurantApiParams = {
+          neighborhoods: params.neighborhoods,
+          cuisine: params.cuisine,
+          price: params.price,
+          atmosphere: params.atmosphere,
+          preferences: params.preferences,
+          distance: params.distance
+        };
         
-        // If we got results, return them
-        if (data && data.length > 0) {
-          return data;
+        const results = await fetchRestaurants(apiParams);
+        
+        // If we get no results, fall back to mock data
+        if (results.length === 0) {
+          console.log("No results from API, using fallback data");
+          return getFallbackRestaurants();
         }
         
-        // If no results, show a toast and return fallback data
-        toast.info("No restaurants match your exact criteria. Showing alternatives instead.");
-        return getFallbackRestaurants().map(result => ({
-          ...result,
-          isAlternative: true
-        }));
+        return results;
+        
       } catch (error) {
-        console.error("Error fetching restaurant data:", error);
-        // Show error toast
-        toast.error("Could not load restaurant data. Showing alternatives instead.");
-        // Return fallback data on error
-        return getFallbackRestaurants().map(result => ({
-          ...result,
-          isAlternative: true
-        }));
+        console.error("Error in useRestaurantData:", error);
+        // Fall back to mock data on error
+        return getFallbackRestaurants();
       }
     },
-    // Only enable the query when we have some parameters
-    enabled: Boolean(params.cuisine || params.neighborhoods?.length || params.preferences?.length),
-    staleTime: 1000 * 60 * 5, // Data considered fresh for 5 minutes
-    refetchOnWindowFocus: false, // Don't refetch when window regains focus
+    enabled: !!(
+      params.neighborhoods?.length || 
+      params.cuisine || 
+      params.price || 
+      params.atmosphere ||
+      params.distance
+    ),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnWindowFocus: false,
   });
 };

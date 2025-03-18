@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -20,18 +19,20 @@ import {
   XCircle
 } from "lucide-react";
 import NeighborhoodSelector from "./NeighborhoodSelector";
+import DistanceSelector from "./DistanceSelector";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
-  onAnswer: (questionId: string, answerId: string | string[]) => void;
+  onAnswer: (questionId: string, answerId: string | string[] | number) => void;
   onNext: () => void;
   onPrevious: () => void;
-  selectedAnswer: string | string[] | null;
+  selectedAnswer: string | string[] | number | null;
   currentIndex: number;
   totalQuestions: number;
   useLocation?: boolean;
+  locationMode?: boolean;
 }
 
 const QuizQuestion = ({
@@ -43,8 +44,10 @@ const QuizQuestion = ({
   currentIndex,
   totalQuestions,
   useLocation = false,
+  locationMode = false,
 }: QuizQuestionProps) => {
   const isNeighborhoodQuestion = question.id === "neighborhood";
+  const isDistanceQuestion = question.id === "distance" || (isNeighborhoodQuestion && locationMode);
   const isPreferencesQuestion = question.id === "preferences";
   const isCuisineQuestion = question.id === "cuisine";
   const isMultiSelect = question.multiSelect || false;
@@ -89,7 +92,6 @@ const QuizQuestion = ({
     }
   };
 
-  // Convert QuizOption array to the format expected by NeighborhoodSelector
   const convertToNeighborhoodFormat = (options: QuizOption[]) => {
     return options.map(option => ({
       id: option.value,
@@ -129,7 +131,16 @@ const QuizQuestion = ({
         )}
       </div>
 
-      {isNeighborhoodQuestion ? (
+      {isDistanceQuestion ? (
+        <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-nashville-200 dark:border-nashville-800 shadow-lg">
+          <DistanceSelector 
+            onSelect={(distance: number) => onAnswer(question.id, distance)}
+            selectedDistance={typeof selectedAnswer === 'number' ? selectedAnswer : 5}
+            options={question.options}
+            userLocation={null}
+          />
+        </div>
+      ) : isNeighborhoodQuestion ? (
         <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-nashville-200 dark:border-nashville-800 shadow-lg">
           <NeighborhoodSelector 
             neighborhoods={convertToNeighborhoodFormat(question.options)} 

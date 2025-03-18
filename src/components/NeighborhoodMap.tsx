@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { MapPin, Navigation, NavigationOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -40,6 +39,8 @@ interface NeighborhoodMapProps {
   onSelect: (neighborhoodId: string) => void;
   options?: QuizOption[];
   useUserLocation?: boolean;
+  distanceMode?: boolean;
+  distanceRadius?: number;
 }
 
 interface UserLocation {
@@ -53,7 +54,9 @@ const NeighborhoodMap = ({
   selectedNeighborhoods, 
   onSelect,
   options = [],
-  useUserLocation = false
+  useUserLocation = false,
+  distanceMode = false,
+  distanceRadius = 100
 }: NeighborhoodMapProps) => {
   const [hoveredBubble, setHoveredBubble] = useState<string | null>(null);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);

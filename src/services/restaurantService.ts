@@ -10,6 +10,7 @@ export interface RestaurantApiParams {
   price?: string;
   atmosphere?: string;
   preferences?: string[];
+  distance?: number;
 }
 
 /**
@@ -38,6 +39,10 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     
     if (params.preferences && params.preferences.length > 0) {
       params.preferences.forEach(p => queryParams.append('preference', p));
+    }
+    
+    if (params.distance) {
+      queryParams.append('distance', params.distance.toString());
     }
     
     const queryString = queryParams.toString();

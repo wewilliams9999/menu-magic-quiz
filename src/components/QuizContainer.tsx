@@ -9,13 +9,14 @@ import ResultScreen from "./ResultScreen";
 import { quizQuestions } from "@/utils/quizData";
 import { useRestaurantData } from "@/hooks/useRestaurantData";
 
-type AnswerValue = string | string[];
+type AnswerValue = string | string[] | number;
 
 const QuizContainer = () => {
   const [currentScreen, setCurrentScreen] = useState<"welcome" | "location" | "quiz" | "result">("welcome");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
   const [useLocation, setUseLocation] = useState(false);
+  const [locationMode, setLocationMode] = useState(false);
   
   // Get neighborhoods as string array for the API
   const neighborhoods = answers.neighborhood && Array.isArray(answers.neighborhood) 
@@ -27,6 +28,9 @@ const QuizContainer = () => {
     ? answers.preferences
     : (answers.preferences ? [answers.preferences as string] : []);
   
+  // Get distance value for location-based search
+  const distance = typeof answers.distance === 'number' ? answers.distance : undefined;
+  
   // Use the restaurant data hook
   const { data: restaurantResults, isLoading, error } = useRestaurantData({
     neighborhoods: neighborhoods,
@@ -34,6 +38,7 @@ const QuizContainer = () => {
     price: answers.price as string,
     atmosphere: answers.atmosphere as string,
     preferences: preferences,
+    distance: distance,
   });
 
   const handleStart = () => {
@@ -41,7 +46,18 @@ const QuizContainer = () => {
   };
 
   const handleLocationMethod = (method: "manual" | "location") => {
-    setUseLocation(method === "location");
+    const isLocationBased = method === "location";
+    setUseLocation(isLocationBased);
+    setLocationMode(isLocationBased);
+    
+    // If location-based, set initial distance
+    if (isLocationBased) {
+      setAnswers((prev) => ({
+        ...prev,
+        distance: 5, // Default 5 mile radius
+      }));
+    }
+    
     setCurrentScreen("quiz");
   };
 
@@ -80,6 +96,7 @@ const QuizContainer = () => {
     setCurrentQuestionIndex(0);
     setAnswers({});
     setUseLocation(false);
+    setLocationMode(false);
   };
 
   return (
@@ -107,6 +124,7 @@ const QuizContainer = () => {
             currentIndex={currentQuestionIndex}
             totalQuestions={quizQuestions.length}
             useLocation={useLocation && currentQuestionIndex === 0}
+            locationMode={locationMode}
           />
         )}
 
