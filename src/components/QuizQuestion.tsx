@@ -48,6 +48,19 @@ const QuizQuestion = ({
     }
   }, [isDistanceQuestion, locationMode]);
 
+  // Add effect to automatically proceed on distance selection
+  useEffect(() => {
+    // If it's a distance question and we have a selected distance, proceed automatically
+    if (isDistanceQuestion && typeof selectedAnswer === 'number' && userLocation) {
+      // Small delay for better UX to see the selection
+      const timer = setTimeout(() => {
+        onNext();
+      }, 800);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isDistanceQuestion, selectedAnswer, userLocation, onNext]);
+
   const getSelectedArray = () => {
     if (isMultiSelect) {
       return Array.isArray(selectedAnswer) ? selectedAnswer : [];
@@ -72,7 +85,10 @@ const QuizQuestion = ({
       return (
         <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-nashville-200 dark:border-nashville-800 shadow-lg">
           <DistanceSelector 
-            onSelect={(distance: number) => onAnswer(question.id, distance)}
+            onSelect={(distance: number) => {
+              onAnswer(question.id, distance);
+              setUserLocation(userLocation);
+            }}
             selectedDistance={typeof selectedAnswer === 'number' ? selectedAnswer : 3}
             options={question.options}
             userLocation={userLocation}
