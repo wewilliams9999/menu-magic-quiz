@@ -1,40 +1,95 @@
-
 import { useState, useEffect } from "react";
 import { MapPin, Navigation, NavigationOff } from "lucide-react";
 import { motion } from "framer-motion";
-import { 
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { QuizOption } from "@/utils/quizData";
 import { toast } from "sonner";
-
-const neighborhoodPositions: Record<string, { left: string, top: string }> = {
-  "downtown": { left: "50%", top: "45%" },
-  "germantown": { left: "48%", top: "35%" },
-  "gulch": { left: "45%", top: "50%" },
-  "music-row": { left: "40%", top: "55%" },
-  "north-nashville": { left: "35%", top: "25%" },
-  "east": { left: "68%", top: "40%" },
-  "west-end": { left: "30%", top: "50%" },
-  "belle-meade": { left: "20%", top: "45%" },
-  "bellevue": { left: "12%", top: "65%" },
-  "bordeaux": { left: "25%", top: "20%" },
-  "whites-creek": { left: "38%", top: "10%" },
-  "12south": { left: "42%", top: "63%" },
-  "berry-hill": { left: "50%", top: "68%" },
-  "green-hills": { left: "34%", top: "68%" },
-  "franklin": { left: "38%", top: "85%" },
-  "brentwood": { left: "48%", top: "78%" },
-  "opryland": { left: "80%", top: "25%" },
-  "madison": { left: "62%", top: "15%" },
-  "crieve-hall": { left: "45%", top: "73%" },
-  "woodbine": { left: "60%", top: "60%" }
+const neighborhoodPositions: Record<string, {
+  left: string;
+  top: string;
+}> = {
+  "downtown": {
+    left: "50%",
+    top: "45%"
+  },
+  "germantown": {
+    left: "48%",
+    top: "35%"
+  },
+  "gulch": {
+    left: "45%",
+    top: "50%"
+  },
+  "music-row": {
+    left: "40%",
+    top: "55%"
+  },
+  "north-nashville": {
+    left: "35%",
+    top: "25%"
+  },
+  "east": {
+    left: "68%",
+    top: "40%"
+  },
+  "west-end": {
+    left: "30%",
+    top: "50%"
+  },
+  "belle-meade": {
+    left: "20%",
+    top: "45%"
+  },
+  "bellevue": {
+    left: "12%",
+    top: "65%"
+  },
+  "bordeaux": {
+    left: "25%",
+    top: "20%"
+  },
+  "whites-creek": {
+    left: "38%",
+    top: "10%"
+  },
+  "12south": {
+    left: "42%",
+    top: "63%"
+  },
+  "berry-hill": {
+    left: "50%",
+    top: "68%"
+  },
+  "green-hills": {
+    left: "34%",
+    top: "68%"
+  },
+  "franklin": {
+    left: "38%",
+    top: "85%"
+  },
+  "brentwood": {
+    left: "48%",
+    top: "78%"
+  },
+  "opryland": {
+    left: "80%",
+    top: "25%"
+  },
+  "madison": {
+    left: "62%",
+    top: "15%"
+  },
+  "crieve-hall": {
+    left: "45%",
+    top: "73%"
+  },
+  "woodbine": {
+    left: "60%",
+    top: "60%"
+  }
 };
-
 interface NeighborhoodMapProps {
   selectedNeighborhoods: string[];
   onSelect: (neighborhoodId: string) => void;
@@ -42,18 +97,19 @@ interface NeighborhoodMapProps {
   useUserLocation?: boolean;
   distanceMode?: boolean;
   distanceRadius?: number;
-  initialUserLocation?: { lat: number; lng: number } | null;
+  initialUserLocation?: {
+    lat: number;
+    lng: number;
+  } | null;
 }
-
 interface UserLocation {
   latitude: number;
   longitude: number;
   mapX: string;
   mapY: string;
 }
-
-const NeighborhoodMap = ({ 
-  selectedNeighborhoods, 
+const NeighborhoodMap = ({
+  selectedNeighborhoods,
   onSelect,
   options = [],
   useUserLocation = false,
@@ -65,147 +121,85 @@ const NeighborhoodMap = ({
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const [locationEnabled, setLocationEnabled] = useState(false);
-  
+
   // Effect to automatically use the initialUserLocation if provided
   useEffect(() => {
     if (initialUserLocation && !userLocation) {
-      const nashvilleCenter = { lat: 36.1627, lng: -86.7816 };
-      
+      const nashvilleCenter = {
+        lat: 36.1627,
+        lng: -86.7816
+      };
       const latDiff = initialUserLocation.lat - nashvilleCenter.lat;
       const lngDiff = initialUserLocation.lng - nashvilleCenter.lng;
-      
-      const mapX = `${50 + (lngDiff * 200)}%`;
-      const mapY = `${50 - (latDiff * 200)}%`;
-      
+      const mapX = `${50 + lngDiff * 200}%`;
+      const mapY = `${50 - latDiff * 200}%`;
       setUserLocation({
         latitude: initialUserLocation.lat,
         longitude: initialUserLocation.lng,
         mapX,
         mapY
       });
-      
       setLocationEnabled(true);
     }
   }, [initialUserLocation]);
-  
   const getUserLocation = () => {
     if (!navigator.geolocation) {
       toast.error("Geolocation is not supported by your browser");
       return;
     }
-    
     setIsLocating(true);
-    
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const nashvilleCenter = { lat: 36.1627, lng: -86.7816 };
-        
-        const latDiff = position.coords.latitude - nashvilleCenter.lat;
-        const lngDiff = position.coords.longitude - nashvilleCenter.lng;
-        
-        const mapX = `${50 + (lngDiff * 200)}%`;
-        const mapY = `${50 - (latDiff * 200)}%`;
-        
-        setUserLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          mapX,
-          mapY
-        });
-        
-        setLocationEnabled(true);
-        setIsLocating(false);
-        toast.success("Your location has been found");
-      },
-      (error) => {
-        setIsLocating(false);
-        toast.error(`Unable to retrieve your location: ${error.message}`);
-      }
-    );
+    navigator.geolocation.getCurrentPosition(position => {
+      const nashvilleCenter = {
+        lat: 36.1627,
+        lng: -86.7816
+      };
+      const latDiff = position.coords.latitude - nashvilleCenter.lat;
+      const lngDiff = position.coords.longitude - nashvilleCenter.lng;
+      const mapX = `${50 + lngDiff * 200}%`;
+      const mapY = `${50 - latDiff * 200}%`;
+      setUserLocation({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        mapX,
+        mapY
+      });
+      setLocationEnabled(true);
+      setIsLocating(false);
+      toast.success("Your location has been found");
+    }, error => {
+      setIsLocating(false);
+      toast.error(`Unable to retrieve your location: ${error.message}`);
+    });
   };
-  
   const disableLocation = () => {
     setUserLocation(null);
     setLocationEnabled(false);
     toast.info("Location services disabled");
   };
-  
-  const bubbleColors = [
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800"
-  ];
-
+  const bubbleColors = ["bg-white/90 text-gray-800", "bg-white/90 text-gray-800", "bg-white/90 text-gray-800", "bg-white/90 text-gray-800", "bg-white/90 text-gray-800", "bg-white/90 text-gray-800", "bg-white/90 text-gray-800", "bg-white/90 text-gray-800"];
   const getBubbleColor = (index: number) => {
     return bubbleColors[index % bubbleColors.length];
   };
-  
-  return (
-    <div className="space-y-2">
-      {!initialUserLocation && (
-        <div className="flex items-center justify-between gap-2 px-3 py-2 text-sm text-gray-600 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-2">
-            <MapPin size={14} className="flex-shrink-0 text-gray-500" />
-            <p>Select neighborhoods you're interested in exploring.</p>
-          </div>
-          
-          {useUserLocation && (
-            <div>
-              {locationEnabled ? (
-                <Button 
-                  size="sm" 
-                  variant="ghost" 
-                  onClick={disableLocation}
-                  className="h-8 px-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
-                >
-                  <NavigationOff size={14} className="mr-1" />
-                  <span className="text-xs">Hide Location</span>
-                </Button>
-              ) : (
-                <Button 
-                  size="sm" 
-                  variant="ghost" 
-                  onClick={getUserLocation}
-                  disabled={isLocating}
-                  className="h-8 px-2 text-nashville-accent hover:bg-nashville-accent/10"
-                >
-                  <Navigation size={14} className="mr-1" />
-                  <span className="text-xs">{isLocating ? "Locating..." : "Show My Location"}</span>
-                </Button>
-              )}
-            </div>
-          )}
-        </div>
-      )}
+  return <div className="space-y-2">
+      {!initialUserLocation}
       
       <div className="relative h-[600px] w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
           <div className="absolute h-full w-full overflow-hidden">
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
               {/* Cumberland River Path - Extended to flow naturally across the entire map */}
-              <path 
-                d="M18,0 Q22,5 25,10 Q30,20 35,25 Q38,28 40,35 Q42,40 45,42 Q47,45 50,50 Q53,55 58,58 Q63,62 65,70 Q67,78 70,85 Q72,92 75,100" 
-                fill="none" 
-                stroke="#0EA5E9" 
-                strokeWidth="3"
-                className="dark:stroke-[#33C3F0] opacity-70"
-              />
+              <path d="M18,0 Q22,5 25,10 Q30,20 35,25 Q38,28 40,35 Q42,40 45,42 Q47,45 50,50 Q53,55 58,58 Q63,62 65,70 Q67,78 70,85 Q72,92 75,100" fill="none" stroke="#0EA5E9" strokeWidth="3" className="dark:stroke-[#33C3F0] opacity-70" />
             </svg>
           </div>
           
           <div className="absolute inset-0 opacity-10">
             <div className="w-full h-full" style={{
-              backgroundImage: `
+            backgroundImage: `
                 linear-gradient(to right, #9ca3af 1px, transparent 1px),
                 linear-gradient(to bottom, #9ca3af 1px, transparent 1px)
               `,
-              backgroundSize: '50px 50px'
-            }}></div>
+            backgroundSize: '50px 50px'
+          }}></div>
           </div>
           
           {/* Downtown "glow" effect */}
@@ -213,35 +207,22 @@ const NeighborhoodMap = ({
         </div>
         
         {options.map((option, index) => {
-          const position = neighborhoodPositions[option.value];
-          if (!position) return null;
-          
-          const isSelected = selectedNeighborhoods.includes(option.value);
-          
-          return (
-            <TooltipProvider key={option.id}>
+        const position = neighborhoodPositions[option.value];
+        if (!position) return null;
+        const isSelected = selectedNeighborhoods.includes(option.value);
+        return <TooltipProvider key={option.id}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button
-                    className={`absolute z-10 transform -translate-x-1/2 -translate-y-1/2 
+                  <button className={`absolute z-10 transform -translate-x-1/2 -translate-y-1/2 
                       ${getBubbleColor(index)}
                       px-2.5 py-1 rounded-full border backdrop-blur-sm
-                      ${isSelected 
-                        ? 'border-nashville-accent shadow-md' 
-                        : 'border-gray-300 dark:border-gray-600'}
-                      transition-colors duration-200`}
-                    style={{
-                      left: position.left,
-                      top: position.top,
-                    }}
-                    onClick={() => onSelect(option.value)}
-                    onMouseEnter={() => setHoveredBubble(option.value)}
-                    onMouseLeave={() => setHoveredBubble(null)}
-                  >
+                      ${isSelected ? 'border-nashville-accent shadow-md' : 'border-gray-300 dark:border-gray-600'}
+                      transition-colors duration-200`} style={{
+                left: position.left,
+                top: position.top
+              }} onClick={() => onSelect(option.value)} onMouseEnter={() => setHoveredBubble(option.value)} onMouseLeave={() => setHoveredBubble(null)}>
                     <div className="flex items-center gap-1.5">
-                      {isSelected && (
-                        <div className="w-2 h-2 rounded-full bg-nashville-accent"></div>
-                      )}
+                      {isSelected && <div className="w-2 h-2 rounded-full bg-nashville-accent"></div>}
                       <span className={`text-xs font-medium whitespace-nowrap ${isSelected ? 'font-semibold' : ''}`}>
                         {option.text}
                       </span>
@@ -252,20 +233,19 @@ const NeighborhoodMap = ({
                   <p>{option.text}</p>
                 </TooltipContent>
               </Tooltip>
-            </TooltipProvider>
-          );
-        })}
+            </TooltipProvider>;
+      })}
         
-        {userLocation && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="absolute z-20 transform -translate-x-1/2 -translate-y-1/2"
-            style={{
-              left: userLocation.mapX,
-              top: userLocation.mapY,
-            }}
-          >
+        {userLocation && <motion.div initial={{
+        opacity: 0,
+        y: -20
+      }} animate={{
+        opacity: 1,
+        y: 0
+      }} className="absolute z-20 transform -translate-x-1/2 -translate-y-1/2" style={{
+        left: userLocation.mapX,
+        top: userLocation.mapY
+      }}>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -285,11 +265,8 @@ const NeighborhoodMap = ({
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-          </motion.div>
-        )}
+          </motion.div>}
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default NeighborhoodMap;
