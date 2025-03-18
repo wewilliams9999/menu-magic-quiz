@@ -144,26 +144,29 @@ const DistanceSelector = ({
             )}
           </div>
           
-          <div className="overflow-hidden rounded-lg">
-            <div className="relative">
-              <NeighborhoodMap 
-                selectedNeighborhoods={[]} 
-                onSelect={() => {}} 
-                options={options} 
-                useUserLocation={true} 
-                distanceMode={true} 
-                distanceRadius={selectedDistance} 
-                initialUserLocation={location}
-              />
-              
-              {location && <div className="absolute top-4 left-4 bg-white dark:bg-gray-800 p-2 rounded-md shadow-md text-xs">
-                  <div className="flex items-center gap-1.5">
-                    <Navigation className="h-3.5 w-3.5 text-nashville-accent" />
-                    <span>Your location</span>
-                  </div>
-                </div>}
+          {/* Only show map after location is shared */}
+          {location && (
+            <div className="overflow-hidden rounded-lg">
+              <div className="relative">
+                <NeighborhoodMap 
+                  selectedNeighborhoods={[]} 
+                  onSelect={() => {}} 
+                  options={options} 
+                  useUserLocation={true} 
+                  distanceMode={true} 
+                  distanceRadius={selectedDistance} 
+                  initialUserLocation={location}
+                />
+                
+                {location && <div className="absolute top-4 left-4 bg-white dark:bg-gray-800 p-2 rounded-md shadow-md text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <Navigation className="h-3.5 w-3.5 text-nashville-accent" />
+                      <span>Your location</span>
+                    </div>
+                  </div>}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>;
