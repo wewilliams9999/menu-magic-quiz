@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Map, List } from "lucide-react";
@@ -26,7 +25,6 @@ const NeighborhoodSelector = ({
   const [activeTab, setActiveTab] = useState<"map" | "list">("map");
   const [searchQuery, setSearchQuery] = useState("");
   
-  // Convert neighborhoods to the format expected by NeighborhoodMap
   const neighborhoodOptions = neighborhoods.map(neighborhood => ({
     id: neighborhood.id,
     text: neighborhood.name,
@@ -41,14 +39,12 @@ const NeighborhoodSelector = ({
     }
   };
 
-  // Filter neighborhoods based on search query
   const filteredNeighborhoods = neighborhoods.filter((neighborhood) =>
     neighborhood.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className="w-full">
-      {/* Selected neighborhood tags appear above the map */}
       {selectedNeighborhoods.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -66,7 +62,6 @@ const NeighborhoodSelector = ({
         </motion.div>
       )}
       
-      {/* Tab toggle for Map and List view */}
       <Tabs defaultValue="map" value={activeTab} onValueChange={(val) => setActiveTab(val as "map" | "list")} className="w-full">
         <div className="flex justify-between items-center mb-4">
           <TabsList className="grid grid-cols-2 w-40">
@@ -93,7 +88,7 @@ const NeighborhoodSelector = ({
         <div className="rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800">
           <TabsContent value="map" className="mt-0">
             <div className="p-4">
-              <div className="aspect-[16/9] overflow-hidden rounded-lg">
+              <div className="overflow-hidden rounded-lg">
                 <NeighborhoodMap 
                   selectedNeighborhoods={selectedNeighborhoods} 
                   onSelect={toggleNeighborhood}

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { MapPin, Navigation, NavigationOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -13,26 +12,26 @@ import { QuizOption } from "@/utils/quizData";
 import { toast } from "sonner";
 
 const neighborhoodPositions: Record<string, { left: string, top: string }> = {
-  "downtown": { left: "50%", top: "47%" },
+  "downtown": { left: "50%", top: "45%" },
   "germantown": { left: "48%", top: "35%" },
-  "gulch": { left: "45%", top: "52%" },  // Adjusted up slightly
-  "music-row": { left: "40%", top: "58%" },  // Adjusted up to be more visible
+  "gulch": { left: "45%", top: "50%" },
+  "music-row": { left: "40%", top: "55%" },
   "north-nashville": { left: "35%", top: "25%" },
   "east": { left: "68%", top: "40%" },
-  "west-end": { left: "30%", top: "52%" },
-  "belle-meade": { left: "20%", top: "48%" },
-  "bellevue": { left: "12%", top: "70%" },
+  "west-end": { left: "30%", top: "50%" },
+  "belle-meade": { left: "20%", top: "45%" },
+  "bellevue": { left: "12%", top: "65%" },
   "bordeaux": { left: "25%", top: "20%" },
-  "whites-creek": { left: "38%", top: "8%" },
-  "12south": { left: "42%", top: "67%" },  // Adjusted position
-  "berry-hill": { left: "52%", top: "72%" },  // Adjusted position
-  "green-hills": { left: "34%", top: "73%" },  // Adjusted position
-  "franklin": { left: "38%", top: "90%" },
-  "brentwood": { left: "50%", top: "82%" },
+  "whites-creek": { left: "38%", top: "10%" },
+  "12south": { left: "42%", top: "63%" },
+  "berry-hill": { left: "50%", top: "68%" },
+  "green-hills": { left: "34%", top: "68%" },
+  "franklin": { left: "38%", top: "85%" },
+  "brentwood": { left: "48%", top: "78%" },
   "opryland": { left: "80%", top: "25%" },
   "madison": { left: "62%", top: "15%" },
-  "crieve-hall": { left: "45%", top: "78%" },
-  "woodbine": { left: "60%", top: "65%" }
+  "crieve-hall": { left: "45%", top: "73%" },
+  "woodbine": { left: "60%", top: "60%" }
 };
 
 interface NeighborhoodMapProps {
@@ -153,7 +152,7 @@ const NeighborhoodMap = ({
         )}
       </div>
       
-      <div className="relative h-[500px] w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+      <div className="relative h-[600px] w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
           <div className="absolute h-full w-full overflow-hidden">
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
