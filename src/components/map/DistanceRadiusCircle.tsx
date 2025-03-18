@@ -23,8 +23,8 @@ const DistanceRadiusCircle: React.FC<DistanceRadiusCircleProps> = ({
       style={{
         width: `${radiusInPixels * 2}px`,
         height: `${radiusInPixels * 2}px`,
-        left: `calc(${userLocation.mapX})`,
-        top: `calc(${userLocation.mapY})`,
+        left: userLocation.mapX,
+        top: userLocation.mapY,
         transform: 'translate(-50%, -50%)', // This ensures the circle is centered on the point
         pointerEvents: 'none',
         zIndex: 5,
