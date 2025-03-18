@@ -34,6 +34,21 @@ export interface QuizResult {
   openTableLink?: string;
 }
 
+export const locationMethodOptions: QuizOption[] = [
+  {
+    id: "method-1",
+    text: "Use My Location",
+    value: "location",
+    icon: undefined
+  },
+  {
+    id: "method-2",
+    text: "Choose Neighborhoods",
+    value: "manual",
+    icon: undefined
+  },
+];
+
 export const neighborhoodOptions: QuizOption[] = [
   { id: "neighborhood-1", text: "Downtown", value: "downtown" },
   { id: "neighborhood-2", text: "Germantown", value: "germantown" },
@@ -81,6 +96,14 @@ export const dietaryOptions: QuizOption[] = [
 ];
 
 export const quizQuestions: QuizQuestion[] = [
+  {
+    id: "locationMethod",
+    questionText: "How would you like to explore Nashville?",
+    question: "How would you like to explore Nashville?",
+    description: "We can help you discover restaurants based on specific neighborhoods or your current location.",
+    type: "singleChoice",
+    options: locationMethodOptions,
+  },
   {
     id: "neighborhood",
     questionText: "Which neighborhood are you interested in?",

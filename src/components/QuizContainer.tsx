@@ -15,7 +15,6 @@ const QuizContainer = () => {
   const [currentScreen, setCurrentScreen] = useState<"welcome" | "location" | "quiz" | "result">("welcome");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
-  const [useLocation, setUseLocation] = useState(false);
   const [locationMode, setLocationMode] = useState(false);
   
   // Get neighborhoods as string array for the API
@@ -43,20 +42,22 @@ const QuizContainer = () => {
 
   // Get the appropriate questions based on location mode
   const getQuestions = () => {
-    // Make a deep copy of the original questions
+    // Start with all questions
     const questions = [...quizQuestions];
     
-    // Replace the first question if we're in location mode
     if (locationMode) {
-      // Use distance selector as first question for location-based search
-      questions[0] = {
-        id: "distance",
-        questionText: "How far are you willing to travel?",
-        question: "How far are you willing to travel?",
-        description: "We'll find restaurants within this distance from your location",
-        type: "singleChoice",
-        options: quizQuestions[0].options, // We'll just pass the same options but use them differently
-      };
+      // If using location, replace the "neighborhood" question with "distance"
+      const neighborhoodIndex = questions.findIndex(q => q.id === "neighborhood");
+      if (neighborhoodIndex !== -1) {
+        questions[neighborhoodIndex] = {
+          id: "distance",
+          questionText: "How far are you willing to travel?",
+          question: "How far are you willing to travel?",
+          description: "We'll find restaurants within this distance from your location",
+          type: "singleChoice",
+          options: questions[neighborhoodIndex].options,
+        };
+      }
     }
     
     return questions;
@@ -66,19 +67,7 @@ const QuizContainer = () => {
     setCurrentScreen("location");
   };
 
-  const handleLocationMethod = (method: "manual" | "location") => {
-    const isLocationBased = method === "location";
-    setUseLocation(isLocationBased);
-    setLocationMode(isLocationBased);
-    
-    // If location-based, set initial distance
-    if (isLocationBased) {
-      setAnswers((prev) => ({
-        ...prev,
-        distance: 5, // Default 5 mile radius
-      }));
-    }
-    
+  const handleLocationContinue = () => {
     setCurrentScreen("quiz");
   };
 
@@ -87,6 +76,20 @@ const QuizContainer = () => {
       ...prev,
       [questionId]: answerId,
     }));
+
+    // If this is the first question (location method), set the location mode
+    if (questionId === "locationMethod") {
+      const isLocationBased = answerId === "location";
+      setLocationMode(isLocationBased);
+      
+      // If location-based, also set initial distance
+      if (isLocationBased) {
+        setAnswers((prev) => ({
+          ...prev,
+          distance: 5, // Default 5 mile radius
+        }));
+      }
+    }
   };
 
   const handleNextQuestion = () => {
@@ -118,7 +121,6 @@ const QuizContainer = () => {
     setCurrentScreen("welcome");
     setCurrentQuestionIndex(0);
     setAnswers({});
-    setUseLocation(false);
     setLocationMode(false);
   };
 
@@ -135,7 +137,7 @@ const QuizContainer = () => {
         {currentScreen === "location" && (
           <LocationSelectionScreen 
             key="location" 
-            onContinue={handleLocationMethod} 
+            onContinue={handleLocationContinue} 
           />
         )}
 
@@ -149,7 +151,7 @@ const QuizContainer = () => {
             selectedAnswer={answers[currentQuestion.id] || null}
             currentIndex={currentQuestionIndex}
             totalQuestions={getQuestions().length}
-            useLocation={useLocation && currentQuestionIndex === 0}
+            useLocation={locationMode && currentQuestion.id === "distance"}
             locationMode={locationMode}
           />
         )}
