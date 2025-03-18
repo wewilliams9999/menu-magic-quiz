@@ -40,76 +40,34 @@ const LocationSelectionScreen = ({ onContinue, onAnswer }: LocationSelectionScre
         </p>
       </div>
 
-      <div className="w-full max-w-md mb-8">
-        <div className="space-y-4">
-          <motion.div 
-            whileHover={{ scale: 1.02 }} 
-            whileTap={{ scale: 0.98 }}
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              selectedOption === "location" 
-                ? "border-nashville-accent bg-nashville-accent/10" 
-                : "border-nashville-200 dark:border-nashville-700 hover:border-nashville-accent/50"
-            }`}
-            onClick={() => handleOptionSelect("location")}
-          >
-            <div className="flex items-center space-x-3">
-              <div className={`p-2 rounded-full ${
-                selectedOption === "location" 
-                  ? "bg-nashville-accent text-white" 
-                  : "bg-nashville-100 dark:bg-nashville-800"
-              }`}>
-                <Navigation className="w-5 h-5" />
-              </div>
-              <div className="flex-1 text-left">
-                <h3 className="font-medium text-lg">Use My Location</h3>
-                <p className="text-sm text-nashville-600 dark:text-nashville-400">Find restaurants close to you</p>
-              </div>
-              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                selectedOption === "location" 
-                  ? "border-nashville-accent" 
-                  : "border-nashville-300 dark:border-nashville-600"
-              }`}>
-                {selectedOption === "location" && (
-                  <div className="w-2.5 h-2.5 rounded-full bg-nashville-accent" />
-                )}
-              </div>
-            </div>
-          </motion.div>
+      <div className="w-full max-w-md mb-8 space-y-4">
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => handleOptionSelect("location")}
+          className={`w-full py-4 px-6 rounded-lg flex items-center justify-center gap-3 text-lg font-medium transition-all duration-300 ${
+            selectedOption === "location"
+              ? "bg-nashville-accent text-nashville-900 shadow-lg"
+              : "bg-nashville-accent/20 hover:bg-nashville-accent/30 text-nashville-900 dark:text-nashville-accent border border-nashville-accent/50"
+          }`}
+        >
+          <Navigation className="w-5 h-5" />
+          Use My Location
+        </motion.button>
 
-          <motion.div 
-            whileHover={{ scale: 1.02 }} 
-            whileTap={{ scale: 0.98 }}
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              selectedOption === "manual" 
-                ? "border-nashville-accent bg-nashville-accent/10" 
-                : "border-nashville-200 dark:border-nashville-700 hover:border-nashville-accent/50"
-            }`}
-            onClick={() => handleOptionSelect("manual")}
-          >
-            <div className="flex items-center space-x-3">
-              <div className={`p-2 rounded-full ${
-                selectedOption === "manual" 
-                  ? "bg-nashville-accent text-white" 
-                  : "bg-nashville-100 dark:bg-nashville-800"
-              }`}>
-                <Map className="w-5 h-5" />
-              </div>
-              <div className="flex-1 text-left">
-                <h3 className="font-medium text-lg">Choose Neighborhoods</h3>
-                <p className="text-sm text-nashville-600 dark:text-nashville-400">Browse by Nashville areas</p>
-              </div>
-              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                selectedOption === "manual" 
-                  ? "border-nashville-accent" 
-                  : "border-nashville-300 dark:border-nashville-600"
-              }`}>
-                {selectedOption === "manual" && (
-                  <div className="w-2.5 h-2.5 rounded-full bg-nashville-accent" />
-                )}
-              </div>
-            </div>
-          </motion.div>
-        </div>
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => handleOptionSelect("manual")}
+          className={`w-full py-4 px-6 rounded-lg flex items-center justify-center gap-3 text-lg font-medium transition-all duration-300 ${
+            selectedOption === "manual"
+              ? "bg-nashville-accent text-nashville-900 shadow-lg"
+              : "bg-nashville-accent/20 hover:bg-nashville-accent/30 text-nashville-900 dark:text-nashville-accent border border-nashville-accent/50"
+          }`}
+        >
+          <Map className="w-5 h-5" />
+          Choose Neighborhoods
+        </motion.button>
       </div>
 
       <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
