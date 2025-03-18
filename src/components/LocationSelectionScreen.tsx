@@ -55,20 +55,6 @@ const LocationSelectionScreen = ({ onContinue }: LocationSelectionScreenProps) =
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-xl">
         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
           <Button
-            onClick={() => onContinue("manual")}
-            variant="outline"
-            className="w-full h-32 flex flex-col gap-2 text-lg bg-white/50 dark:bg-nashville-800/50 hover:bg-white/80 dark:hover:bg-nashville-800/80 border-nashville-200 dark:border-nashville-700"
-          >
-            <MapPin size={24} className="mb-1 text-nashville-accent" />
-            <span className="font-medium">Choose Neighborhoods</span>
-            <span className="text-xs text-nashville-500 dark:text-nashville-400">
-              I'll select specific areas to explore
-            </span>
-          </Button>
-        </motion.div>
-
-        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-          <Button
             onClick={handleLocationSelect}
             disabled={isCheckingPermission}
             className="w-full h-32 flex flex-col gap-2 text-lg bg-gradient-to-r from-nashville-accent to-nashville-accent/80 hover:from-nashville-accent/90 hover:to-nashville-accent/70 text-nashville-900"
@@ -81,6 +67,20 @@ const LocationSelectionScreen = ({ onContinue }: LocationSelectionScreenProps) =
             {isCheckingPermission && (
               <span className="text-xs mt-1">Checking permissions...</span>
             )}
+          </Button>
+        </motion.div>
+
+        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+          <Button
+            onClick={() => onContinue("manual")}
+            variant="outline"
+            className="w-full h-32 flex flex-col gap-2 text-lg bg-white/50 dark:bg-nashville-800/50 hover:bg-white/80 dark:hover:bg-nashville-800/80 border-nashville-200 dark:border-nashville-700"
+          >
+            <MapPin size={24} className="mb-1 text-nashville-accent" />
+            <span className="font-medium">Choose Neighborhoods</span>
+            <span className="text-xs text-nashville-500 dark:text-nashville-400">
+              I'll select specific areas to explore
+            </span>
           </Button>
         </motion.div>
       </div>
