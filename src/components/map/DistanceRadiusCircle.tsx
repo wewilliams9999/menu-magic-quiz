@@ -32,7 +32,6 @@ const DistanceRadiusCircle: React.FC<DistanceRadiusCircleProps> = ({
       style={{
         width: `${radiusInPixels * 2}px`,
         height: `${radiusInPixels * 2}px`,
-        position: 'absolute',
         left: userLocation.mapX,
         top: userLocation.mapY,
         transform: 'translate(-50%, -50%)',
