@@ -68,7 +68,10 @@ const QuizContainer = () => {
   };
 
   const handleLocationContinue = () => {
+    // When continuing from location screen, directly move to the first question
     setCurrentScreen("quiz");
+    // Make sure we're starting at the first real question
+    setCurrentQuestionIndex(0);
   };
 
   const handleAnswer = (questionId: string, answerId: AnswerValue) => {
@@ -138,10 +141,11 @@ const QuizContainer = () => {
           <LocationSelectionScreen 
             key="location" 
             onContinue={handleLocationContinue} 
+            onAnswer={handleAnswer}
           />
         )}
 
-        {currentScreen === "quiz" && (
+        {currentScreen === "quiz" && currentQuestion && (
           <QuizQuestion
             key={`question-${currentQuestionIndex}`}
             question={currentQuestion}
