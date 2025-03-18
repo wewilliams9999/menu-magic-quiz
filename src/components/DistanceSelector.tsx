@@ -8,6 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 import NeighborhoodMap from "./NeighborhoodMap";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useLocationServices } from "./map/useLocationServices";
 
 interface DistanceSelectorProps {
   onSelect: (distance: number) => void;
@@ -28,64 +29,34 @@ const DistanceSelector = ({
   onSelect,
   selectedDistance,
   options,
-  userLocation,
+  userLocation: initialUserLocation,
   onLocationShared
 }: DistanceSelectorProps) => {
   const isMobile = useIsMobile();
-  const distances = [3, 5, 10, 15, 30, 50]; // Added 30 and 50 mile options
-  const [location, setLocation] = useState<{
-    lat: number;
-    lng: number;
-  } | null>(null);
-  const [isLocating, setIsLocating] = useState(false);
+  const distances = [3, 5, 10, 15, 30, 50];
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [userInitiatedLocationRequest, setUserInitiatedLocationRequest] = useState(false);
+  
+  // Use the location services hook with toasts disabled
+  const { 
+    userLocation: location, 
+    isLocating, 
+    getUserLocation: getLocation 
+  } = useLocationServices(initialUserLocation, false);
 
+  // Effect to notify parent when location is obtained
   useEffect(() => {
-    // Only set location from props if user has explicitly requested location
-    if (userLocation && userInitiatedLocationRequest) {
-      setLocation(userLocation);
-      console.log("DistanceSelector received userLocation:", userLocation);
+    if (location && userInitiatedLocationRequest && onLocationShared) {
+      onLocationShared();
+      // Show toast here instead
+      toast.success("Your location has been found");
     }
-  }, [userLocation, userInitiatedLocationRequest]);
+  }, [location, userInitiatedLocationRequest, onLocationShared]);
 
   const getUserLocation = () => {
-    if (!navigator.geolocation) {
-      toast.error("Geolocation is not supported by your browser");
-      return;
-    }
-
-    setIsLocating(true);
     setPermissionDenied(false);
     setUserInitiatedLocationRequest(true);
-
-    navigator.geolocation.getCurrentPosition(position => {
-      const newLocation = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-      console.log("Got user location in DistanceSelector:", newLocation);
-      setLocation(newLocation);
-      setIsLocating(false);
-
-      // Only show success toast if the user explicitly initiated the request
-      if (userInitiatedLocationRequest) {
-        toast.success("Your location has been found");
-        // Call the callback to notify that location has been shared
-        if (onLocationShared) {
-          onLocationShared();
-        }
-      }
-    }, error => {
-      setIsLocating(false);
-      if (error.code === 1) {
-        // Permission denied
-        setPermissionDenied(true);
-        toast.error("Location permission denied. Please enable location services to use this feature.");
-      } else {
-        toast.error(`Unable to retrieve your location: ${error.message}`);
-      }
-    });
+    getLocation();
   };
 
   return (
@@ -180,7 +151,10 @@ const DistanceSelector = ({
                   useUserLocation={true} 
                   distanceMode={true} 
                   distanceRadius={selectedDistance} 
-                  initialUserLocation={location} 
+                  initialUserLocation={{
+                    lat: location.latitude,
+                    lng: location.longitude
+                  }} 
                 />
               </div>
             </div>

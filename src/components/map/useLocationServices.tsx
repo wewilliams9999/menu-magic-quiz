@@ -6,7 +6,7 @@ import { UserLocation, convertCoordsToMapPosition } from '@/utils/mapCoordinates
 export const useLocationServices = (initialUserLocation?: {
   lat: number;
   lng: number;
-} | null) => {
+} | null, showToasts: boolean = true) => {
   const [userLocation, setUserLocation] = useState<UserLocation | null>(
     initialUserLocation ? 
     {
@@ -20,7 +20,9 @@ export const useLocationServices = (initialUserLocation?: {
 
   const getUserLocation = () => {
     if (!navigator.geolocation) {
-      toast.error("Geolocation is not supported by your browser");
+      if (showToasts) {
+        toast.error("Geolocation is not supported by your browser");
+      }
       return;
     }
     
@@ -43,7 +45,11 @@ export const useLocationServices = (initialUserLocation?: {
         setUserLocation(newLocation);
         setLocationEnabled(true);
         setIsLocating(false);
-        toast.success("Your location has been found");
+        
+        // Only show toast if showToasts is true
+        if (showToasts) {
+          toast.success("Your location has been found");
+        }
         
         console.log("User location:", {
           lat: position.coords.latitude,
@@ -54,7 +60,9 @@ export const useLocationServices = (initialUserLocation?: {
       }, 
       error => {
         setIsLocating(false);
-        toast.error(`Unable to retrieve your location: ${error.message}`);
+        if (showToasts) {
+          toast.error(`Unable to retrieve your location: ${error.message}`);
+        }
       }
     );
   };
@@ -62,7 +70,9 @@ export const useLocationServices = (initialUserLocation?: {
   const disableLocation = () => {
     setUserLocation(null);
     setLocationEnabled(false);
-    toast.info("Location services disabled");
+    if (showToasts) {
+      toast.info("Location services disabled");
+    }
   };
 
   return {

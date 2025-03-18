@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { MapPin, Navigation, Map } from "lucide-react";
 import { toast } from "sonner";
 import NeighborhoodMap from "./NeighborhoodMap";
+import { useLocationServices } from "./map/useLocationServices";
 
 interface LocationSelectionScreenProps {
   onAnswer: (questionId: string, answerId: string) => void;
@@ -13,9 +14,11 @@ const LocationSelectionScreen = ({
   onAnswer
 }: LocationSelectionScreenProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [isLocating, setIsLocating] = useState(false);
-  const [permissionDenied, setPermissionDenied] = useState(false);
+  const { 
+    userLocation, 
+    isLocating, 
+    getUserLocation 
+  } = useLocationServices(null);
 
   // Effect to continue to next question immediately after selection
   useEffect(() => {
@@ -39,38 +42,6 @@ const LocationSelectionScreen = ({
     if (onAnswer) {
       onAnswer("locationMethod", value);
     }
-  };
-  
-  const getUserLocation = () => {
-    if (!navigator.geolocation) {
-      toast.error("Geolocation is not supported by your browser");
-      return;
-    }
-    
-    setIsLocating(true);
-    setPermissionDenied(false);
-    
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const newLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        
-        setUserLocation(newLocation);
-        setIsLocating(false);
-        toast.success("Your location has been found");
-      },
-      (error) => {
-        setIsLocating(false);
-        if (error.code === 1) { // Permission denied
-          setPermissionDenied(true);
-          toast.error("Location permission denied. Please enable location services to use this feature.");
-        } else {
-          toast.error(`Unable to retrieve your location: ${error.message}`);
-        }
-      }
-    );
   };
 
   return <motion.div initial={{
@@ -129,7 +100,7 @@ const LocationSelectionScreen = ({
         </motion.button>
       </div>
       
-      {selectedOption === "location" && (
+      {selectedOption === "location" && userLocation && (
         <div className="w-full max-w-2xl mt-4 bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-nashville-200 dark:border-nashville-800 shadow-lg">
           <h3 className="text-lg font-medium mb-3">Your Location</h3>
           <div className="h-[300px] rounded-lg overflow-hidden">
@@ -138,7 +109,10 @@ const LocationSelectionScreen = ({
               onSelect={() => {}}
               useUserLocation={true}
               options={[]}
-              initialUserLocation={userLocation}
+              initialUserLocation={{
+                lat: userLocation.latitude,
+                lng: userLocation.longitude
+              }}
             />
           </div>
         </div>
