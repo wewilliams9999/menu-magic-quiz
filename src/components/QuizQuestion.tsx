@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { QuizQuestion as QuizQuestionType } from "@/utils/quizData";
 import QuestionBase from "./questions/QuestionBase";
@@ -39,6 +38,7 @@ const QuizQuestion = ({
   const isCuisineQuestion = question.id === "cuisine";
   const isMultiSelect = question.multiSelect || false;
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [userSharedLocation, setUserSharedLocation] = useState(false);
 
   // Effect to handle location initialization
   useEffect(() => {
@@ -49,10 +49,10 @@ const QuizQuestion = ({
     }
   }, [isDistanceQuestion, locationMode]);
 
-  // Fix: Modified the auto-proceed logic to be less restrictive 
-  // Now it only requires having a selected distance, not necessarily a user location
+  // Modified the auto-proceed logic to ensure the user has explicitly shared their location
+  // and only after that proceed automatically when a distance is selected
   useEffect(() => {
-    if (isDistanceQuestion && typeof selectedAnswer === 'number') {
+    if (isDistanceQuestion && typeof selectedAnswer === 'number' && userSharedLocation) {
       // Small delay for better UX to see the selection
       const timer = setTimeout(() => {
         onNext();
@@ -60,7 +60,7 @@ const QuizQuestion = ({
       
       return () => clearTimeout(timer);
     }
-  }, [isDistanceQuestion, selectedAnswer, onNext]);
+  }, [isDistanceQuestion, selectedAnswer, userSharedLocation, onNext]);
 
   const getSelectedArray = () => {
     if (isMultiSelect) {
@@ -76,11 +76,11 @@ const QuizQuestion = ({
     }));
   };
 
-  // Fix: Modified the next button disabled logic for distance questions
-  // Now it only checks if there's a selected answer, not necessarily a user location
+  // Modified the next button disabled logic for distance questions
+  // Now it checks if the user has shared their location and selected a distance
   const isNextDisabled = isMultiSelect 
     ? getSelectedArray().length === 0 
-    : (isDistanceQuestion && !selectedAnswer) || !selectedAnswer;
+    : (isDistanceQuestion && (!selectedAnswer || !userSharedLocation)) || !selectedAnswer;
 
   // Determine which question component to render
   const renderQuestionComponent = () => {
@@ -95,6 +95,7 @@ const QuizQuestion = ({
             selectedDistance={typeof selectedAnswer === 'number' ? selectedAnswer : 3}
             options={question.options}
             userLocation={userLocation}
+            onLocationShared={() => setUserSharedLocation(true)}
           />
         </div>
       );

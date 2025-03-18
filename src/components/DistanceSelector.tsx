@@ -21,13 +21,15 @@ interface DistanceSelectorProps {
     lat: number;
     lng: number;
   } | null;
+  onLocationShared?: () => void;
 }
 
 const DistanceSelector = ({
   onSelect,
   selectedDistance,
   options,
-  userLocation
+  userLocation,
+  onLocationShared
 }: DistanceSelectorProps) => {
   const isMobile = useIsMobile();
   const distances = [3, 5, 10, 15, 30, 50]; // Added 30 and 50 mile options
@@ -69,6 +71,10 @@ const DistanceSelector = ({
       // Only show success toast if the user explicitly initiated the request
       if (userInitiatedLocationRequest) {
         toast.success("Your location has been found");
+        // Call the callback to notify that location has been shared
+        if (onLocationShared) {
+          onLocationShared();
+        }
       }
     }, error => {
       setIsLocating(false);
