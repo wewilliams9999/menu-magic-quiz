@@ -1,4 +1,5 @@
 
+import { useState, useEffect } from "react";
 import { QuizQuestion as QuizQuestionType } from "@/utils/quizData";
 import QuestionBase from "./questions/QuestionBase";
 import CuisineQuestion from "./questions/CuisineQuestion";
@@ -37,6 +38,15 @@ const QuizQuestion = ({
   const isPreferencesQuestion = question.id === "preferences";
   const isCuisineQuestion = question.id === "cuisine";
   const isMultiSelect = question.multiSelect || false;
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    // Only attempt to get user location if this is the distance question and we're in location mode
+    if (isDistanceQuestion && locationMode) {
+      // We don't automatically request location here anymore
+      // The DistanceSelector component will handle this with explicit user interaction
+    }
+  }, [isDistanceQuestion, locationMode]);
 
   const getSelectedArray = () => {
     if (isMultiSelect) {
@@ -54,7 +64,7 @@ const QuizQuestion = ({
 
   const isNextDisabled = isMultiSelect 
     ? getSelectedArray().length === 0 
-    : !selectedAnswer;
+    : (isDistanceQuestion && locationMode && !userLocation) || !selectedAnswer;
 
   // Determine which question component to render
   const renderQuestionComponent = () => {
@@ -65,7 +75,7 @@ const QuizQuestion = ({
             onSelect={(distance: number) => onAnswer(question.id, distance)}
             selectedDistance={typeof selectedAnswer === 'number' ? selectedAnswer : 3}
             options={question.options}
-            userLocation={null}
+            userLocation={userLocation}
           />
         </div>
       );
