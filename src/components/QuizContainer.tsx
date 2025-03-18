@@ -42,25 +42,25 @@ const QuizContainer = () => {
 
   // Get the appropriate questions based on location mode
   const getQuestions = () => {
-    // Start with all questions
-    const questions = [...quizQuestions];
+    // Filter out the locationMethod question since we already asked this in LocationSelectionScreen
+    const filteredQuestions = quizQuestions.filter(q => q.id !== "locationMethod");
     
     if (locationMode) {
       // If using location, replace the "neighborhood" question with "distance"
-      const neighborhoodIndex = questions.findIndex(q => q.id === "neighborhood");
+      const neighborhoodIndex = filteredQuestions.findIndex(q => q.id === "neighborhood");
       if (neighborhoodIndex !== -1) {
-        questions[neighborhoodIndex] = {
+        filteredQuestions[neighborhoodIndex] = {
           id: "distance",
           questionText: "How far are you willing to travel?",
           question: "How far are you willing to travel?",
           description: "We'll find restaurants within this distance from your location",
           type: "singleChoice",
-          options: questions[neighborhoodIndex].options,
+          options: filteredQuestions[neighborhoodIndex].options,
         };
       }
     }
     
-    return questions;
+    return filteredQuestions;
   };
 
   const handleStart = () => {
@@ -73,7 +73,7 @@ const QuizContainer = () => {
       [questionId]: answerId,
     }));
 
-    // If this is the first question (location method), set the location mode and move directly to the quiz
+    // If this is from the location method screen, set the location mode and move to the quiz
     if (questionId === "locationMethod") {
       const isLocationBased = answerId === "location";
       setLocationMode(isLocationBased);
