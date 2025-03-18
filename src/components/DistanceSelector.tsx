@@ -2,10 +2,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Navigation } from "lucide-react";
-import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { useIsMobile } from "@/hooks/use-mobile";
 import NeighborhoodMap from "./NeighborhoodMap";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface DistanceSelectorProps {
   onSelect: (distance: number) => void;
@@ -33,20 +33,28 @@ const DistanceSelector = ({
               We'll find restaurants within this distance from your current location
             </p>
             
-            <div className="mb-4">
-              <Slider
-                defaultValue={[selectedDistance]}
-                max={15}
-                min={1}
-                step={1}
-                onValueChange={(value) => onSelect(value[0])}
-                className="py-4"
-              />
-              <div className="flex justify-between text-xs text-gray-500 mt-1 px-1">
-                {distances.map((d) => (
-                  <span key={d}>{d} mi</span>
+            <div className="mb-6">
+              <ToggleGroup 
+                type="single" 
+                value={selectedDistance.toString()}
+                onValueChange={(value) => value && onSelect(parseInt(value))}
+                className="flex flex-wrap justify-between gap-2"
+              >
+                {distances.map((distance) => (
+                  <ToggleGroupItem 
+                    key={distance} 
+                    value={distance.toString()}
+                    variant="outline"
+                    className={`flex-1 min-w-[60px] border border-gray-200 dark:border-gray-700 rounded-md px-2 py-3 ${
+                      selectedDistance === distance 
+                        ? "bg-nashville-accent/20 border-nashville-accent text-nashville-accent dark:border-nashville-accent dark:text-nashville-accent"
+                        : ""
+                    }`}
+                  >
+                    {distance} mi
+                  </ToggleGroupItem>
                 ))}
-              </div>
+              </ToggleGroup>
             </div>
             
             <div className="mt-4 mb-6 flex justify-center">
