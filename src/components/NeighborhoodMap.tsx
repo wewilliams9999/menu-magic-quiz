@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -8,7 +7,6 @@ import MapBackground from "./map/MapBackground";
 import NeighborhoodBubble from "./map/NeighborhoodBubble";
 import UserLocationMarker from "./map/UserLocationMarker";
 import { useLocationServices } from "./map/useLocationServices";
-
 interface NeighborhoodMapProps {
   selectedNeighborhoods: string[];
   onSelect: (neighborhoodId: string) => void;
@@ -21,7 +19,6 @@ interface NeighborhoodMapProps {
     lng: number;
   } | null;
 }
-
 const NeighborhoodMap = ({
   selectedNeighborhoods,
   onSelect,
@@ -32,29 +29,26 @@ const NeighborhoodMap = ({
   initialUserLocation = null
 }: NeighborhoodMapProps) => {
   const [hoveredBubble, setHoveredBubble] = useState<string | null>(null);
-  const { 
-    userLocation, 
+  const {
+    userLocation,
     setUserLocation,
     isLocating,
     locationEnabled,
     getUserLocation,
     disableLocation
   } = useLocationServices(initialUserLocation);
-
   useEffect(() => {
     if (initialUserLocation && !userLocation) {
-      const { mapX, mapY } = convertCoordsToMapPosition(
-        initialUserLocation.lat, 
-        initialUserLocation.lng
-      );
-      
+      const {
+        mapX,
+        mapY
+      } = convertCoordsToMapPosition(initialUserLocation.lat, initialUserLocation.lng);
       setUserLocation({
         latitude: initialUserLocation.lat,
         longitude: initialUserLocation.lng,
         mapX,
         mapY
       });
-      
       console.log("Setting initial user location:", {
         lat: initialUserLocation.lat,
         lng: initialUserLocation.lng,
@@ -63,41 +57,18 @@ const NeighborhoodMap = ({
       });
     }
   }, [initialUserLocation, userLocation, setUserLocation]);
-
-  return (
-    <div className="space-y-2">
-      {!initialUserLocation && useUserLocation && !locationEnabled && (
-        <div className="flex justify-end mb-2">
-          <Button 
-            size="sm" 
-            onClick={getUserLocation} 
-            disabled={isLocating}
-            className="text-xs"
-          >
-            {isLocating ? "Finding location..." : "Show my location"}
-          </Button>
-        </div>
-      )}
+  return <div className="space-y-2">
+      {!initialUserLocation && useUserLocation && !locationEnabled && <div className="flex justify-end mb-2">
+          
+        </div>}
       
       <MapBackground>
         {/* Neighborhood bubbles */}
-        {options.map((option, index) => (
-          <NeighborhoodBubble 
-            key={option.id}
-            option={option}
-            index={index}
-            isSelected={selectedNeighborhoods.includes(option.value)}
-            onSelect={onSelect}
-          />
-        ))}
+        {options.map((option, index) => <NeighborhoodBubble key={option.id} option={option} index={index} isSelected={selectedNeighborhoods.includes(option.value)} onSelect={onSelect} />)}
         
         {/* User location marker */}
-        {userLocation && (
-          <UserLocationMarker userLocation={userLocation} />
-        )}
+        {userLocation && <UserLocationMarker userLocation={userLocation} />}
       </MapBackground>
-    </div>
-  );
+    </div>;
 };
-
 export default NeighborhoodMap;
