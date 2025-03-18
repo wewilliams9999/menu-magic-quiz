@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { MapPin, Navigation, NavigationOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -156,12 +157,13 @@ const NeighborhoodMap = ({
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
           <div className="absolute h-full w-full overflow-hidden">
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              {/* Cumberland River Path - More accurately representing the river's course through Nashville */}
               <path 
-                d="M45,0 Q48,25 52,40 Q55,55 49,75 Q47,85 50,100" 
+                d="M25,10 Q30,20 35,25 Q38,28 40,35 Q42,40 45,42 Q47,45 50,50 Q53,55 58,58 Q63,62 65,70 Q67,78 70,85" 
                 fill="none" 
-                stroke="#e0f2fe" 
+                stroke="#0EA5E9" 
                 strokeWidth="3"
-                className="dark:stroke-[#1e3a5f] opacity-70"
+                className="dark:stroke-[#33C3F0] opacity-70"
               />
             </svg>
           </div>
@@ -176,6 +178,7 @@ const NeighborhoodMap = ({
             }}></div>
           </div>
           
+          {/* Downtown "glow" effect */}
           <div className="absolute w-[12%] h-[12%] rounded-full bg-white dark:bg-gray-700 opacity-20 left-[46%] top-[47%] blur-sm"></div>
         </div>
         
