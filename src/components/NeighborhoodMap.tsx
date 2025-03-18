@@ -13,10 +13,10 @@ import { QuizOption } from "@/utils/quizData";
 import { toast } from "sonner";
 
 const neighborhoodPositions: Record<string, { left: string, top: string }> = {
-  "downtown": { left: "50%", top: "50%" },
+  "downtown": { left: "50%", top: "47%" },
   "germantown": { left: "48%", top: "35%" },
-  "gulch": { left: "45%", top: "55%" },
-  "music-row": { left: "40%", top: "63%" },
+  "gulch": { left: "45%", top: "52%" },  // Adjusted up slightly
+  "music-row": { left: "40%", top: "58%" },  // Adjusted up to be more visible
   "north-nashville": { left: "35%", top: "25%" },
   "east": { left: "68%", top: "40%" },
   "west-end": { left: "30%", top: "52%" },
@@ -24,14 +24,14 @@ const neighborhoodPositions: Record<string, { left: string, top: string }> = {
   "bellevue": { left: "12%", top: "70%" },
   "bordeaux": { left: "25%", top: "20%" },
   "whites-creek": { left: "38%", top: "8%" },
-  "12south": { left: "42%", top: "72%" },
-  "berry-hill": { left: "52%", top: "77%" },
-  "green-hills": { left: "34%", top: "78%" },
-  "franklin": { left: "38%", top: "95%" }, // Moved within visible area
-  "brentwood": { left: "50%", top: "85%" }, // Moved up to be more visible
+  "12south": { left: "42%", top: "67%" },  // Adjusted position
+  "berry-hill": { left: "52%", top: "72%" },  // Adjusted position
+  "green-hills": { left: "34%", top: "73%" },  // Adjusted position
+  "franklin": { left: "38%", top: "90%" },
+  "brentwood": { left: "50%", top: "82%" },
   "opryland": { left: "80%", top: "25%" },
   "madison": { left: "62%", top: "15%" },
-  "crieve-hall": { left: "45%", top: "85%" },
+  "crieve-hall": { left: "45%", top: "78%" },
   "woodbine": { left: "60%", top: "65%" }
 };
 
