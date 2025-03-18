@@ -86,12 +86,12 @@ const DistanceSelector = ({
             </p>
             
             {!location && <motion.div initial={{
-            opacity: 0,
-            y: 10
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              opacity: 0,
+              y: 10
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
                 <div className="flex flex-col items-center text-center gap-3">
                   <div className="bg-blue-100 dark:bg-blue-800/30 p-2 rounded-full">
                     <Navigation className="h-6 w-6 text-blue-600 dark:text-blue-400" />
@@ -107,12 +107,12 @@ const DistanceSelector = ({
               </motion.div>}
             
             {permissionDenied && <motion.div initial={{
-            opacity: 0,
-            y: 10
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+              opacity: 0,
+              y: 10
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                 <div className="flex items-start gap-3">
                   <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
                   <div>
@@ -124,19 +124,24 @@ const DistanceSelector = ({
                 </div>
               </motion.div>}
             
-            <div className="mb-6">
-              <ToggleGroup type="single" value={selectedDistance.toString()} onValueChange={value => value && onSelect(parseInt(value))} className="flex flex-wrap justify-between gap-2">
-                {distances.map(distance => <ToggleGroupItem key={distance} value={distance.toString()} variant="outline" disabled={!location} className={`flex-1 min-w-[60px] border border-gray-200 dark:border-gray-700 rounded-md px-2 py-3 ${selectedDistance === distance ? "bg-nashville-accent/20 border-nashville-accent text-nashville-accent dark:border-nashville-accent dark:text-nashville-accent" : ""} ${!location ? "opacity-50 cursor-not-allowed" : ""}`}>
-                    {distance} mi
-                  </ToggleGroupItem>)}
-              </ToggleGroup>
-            </div>
-            
-            <div className="mt-4 mb-6 flex justify-center">
-              <Badge variant="secondary" className={`px-4 py-2 text-base ${!location ? "opacity-50" : ""}`}>
-                {selectedDistance} {selectedDistance === 1 ? 'mile' : 'miles'} radius
-              </Badge>
-            </div>
+            {/* Only show distance options after location is shared */}
+            {location && (
+              <>
+                <div className="mb-6">
+                  <ToggleGroup type="single" value={selectedDistance.toString()} onValueChange={value => value && onSelect(parseInt(value))} className="flex flex-wrap justify-between gap-2">
+                    {distances.map(distance => <ToggleGroupItem key={distance} value={distance.toString()} variant="outline" className={`flex-1 min-w-[60px] border border-gray-200 dark:border-gray-700 rounded-md px-2 py-3 ${selectedDistance === distance ? "bg-nashville-accent/20 border-nashville-accent text-nashville-accent dark:border-nashville-accent dark:text-nashville-accent" : ""}`}>
+                        {distance} mi
+                      </ToggleGroupItem>)}
+                  </ToggleGroup>
+                </div>
+                
+                <div className="mt-4 mb-6 flex justify-center">
+                  <Badge variant="secondary" className="px-4 py-2 text-base">
+                    {selectedDistance} {selectedDistance === 1 ? 'mile' : 'miles'} radius
+                  </Badge>
+                </div>
+              </>
+            )}
           </div>
           
           <div className="overflow-hidden rounded-lg">
