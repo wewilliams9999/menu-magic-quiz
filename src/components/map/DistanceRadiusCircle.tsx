@@ -1,34 +1,38 @@
 
-import { motion } from "framer-motion";
-import { UserLocation } from "@/utils/mapCoordinates";
+import React from 'react';
+import { UserLocation } from '@/utils/mapCoordinates';
 
 interface DistanceRadiusCircleProps {
   userLocation: UserLocation;
   radiusMiles: number;
 }
 
-const DistanceRadiusCircle = ({ userLocation, radiusMiles }: DistanceRadiusCircleProps) => {
-  // Convert miles to a percentage of the map (approximate)
-  // Nashville map is roughly 50 miles across, so 1 mile is ~2% of map width
-  const percentageSize = radiusMiles * 2;
-
+const DistanceRadiusCircle: React.FC<DistanceRadiusCircleProps> = ({ 
+  userLocation, 
+  radiusMiles 
+}) => {
+  // Convert miles to approximate pixels based on map scale
+  // This is a simplified approach - for a more accurate representation,
+  // we would need to use actual geographic calculations
+  const radiusInPixels = radiusMiles * 30; // Scale factor
+  
   return (
-    <motion.div
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ 
-        scale: 1, 
-        opacity: 0.3,
-      }}
-      transition={{ duration: 0.5 }}
-      className="absolute rounded-full bg-nashville-accent/20 border border-nashville-accent/40 pointer-events-none z-10"
+    <div 
+      className="absolute rounded-full border-2 border-nashville-accent/20 bg-nashville-accent/10"
       style={{
-        width: `${percentageSize}%`,
-        height: `${percentageSize}%`,
+        width: `${radiusInPixels * 2}px`,
+        height: `${radiusInPixels * 2}px`,
         left: userLocation.mapX,
         top: userLocation.mapY,
-        transform: 'translate(-50%, -50%)'
+        transform: 'translate(-50%, -50%)', // This ensures the circle is centered on the point
+        pointerEvents: 'none',
+        zIndex: 5
       }}
-    />
+    >
+      <div className="absolute bottom-2 right-2 bg-white/90 dark:bg-gray-800/90 text-xs px-2 py-1 rounded-full shadow-sm">
+        {radiusMiles} {radiusMiles === 1 ? 'mile' : 'miles'} radius
+      </div>
+    </div>
   );
 };
 

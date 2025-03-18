@@ -69,7 +69,7 @@ const NeighborhoodMap = ({
         </div>}
       
       <MapBackground>
-        {/* Distance radius circle */}
+        {/* Distance radius circle - render BEFORE user marker so marker appears on top */}
         {distanceMode && userLocation && distanceRadius && (
           <DistanceRadiusCircle userLocation={userLocation} radiusMiles={distanceRadius} />
         )}
@@ -77,7 +77,7 @@ const NeighborhoodMap = ({
         {/* Neighborhood bubbles */}
         {options.map((option, index) => <NeighborhoodBubble key={option.id} option={option} index={index} isSelected={selectedNeighborhoods.includes(option.value)} onSelect={onSelect} />)}
         
-        {/* User location marker */}
+        {/* User location marker - rendered LAST to appear on top */}
         {userLocation && <UserLocationMarker userLocation={userLocation} />}
       </MapBackground>
     </div>;
