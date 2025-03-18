@@ -5,6 +5,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Button } from "@/components/ui/button";
 import { QuizOption } from "@/utils/quizData";
 import { toast } from "sonner";
+
 const neighborhoodPositions: Record<string, {
   left: string;
   top: string;
@@ -90,6 +91,7 @@ const neighborhoodPositions: Record<string, {
     top: "60%"
   }
 };
+
 interface NeighborhoodMapProps {
   selectedNeighborhoods: string[];
   onSelect: (neighborhoodId: string) => void;
@@ -102,12 +104,19 @@ interface NeighborhoodMapProps {
     lng: number;
   } | null;
 }
+
 interface UserLocation {
   latitude: number;
   longitude: number;
   mapX: string;
   mapY: string;
 }
+
+const NASHVILLE_CENTER = {
+  lat: 36.1627,
+  lng: -86.7816
+};
+
 const NeighborhoodMap = ({
   selectedNeighborhoods,
   onSelect,
@@ -122,17 +131,26 @@ const NeighborhoodMap = ({
   const [isLocating, setIsLocating] = useState(false);
   const [locationEnabled, setLocationEnabled] = useState(false);
 
-  // Effect to automatically use the initialUserLocation if provided
+  const convertCoordsToMapPosition = (lat: number, lng: number): { mapX: string, mapY: string } => {
+    const latMultiplier = 100;
+    const lngMultiplier = 100;
+    
+    const latDiff = lat - NASHVILLE_CENTER.lat;
+    const lngDiff = lng - NASHVILLE_CENTER.lng;
+    
+    const mapX = `${50 + lngDiff * lngMultiplier}%`;
+    const mapY = `${50 - latDiff * latMultiplier}%`;
+    
+    return { mapX, mapY };
+  };
+
   useEffect(() => {
     if (initialUserLocation && !userLocation) {
-      const nashvilleCenter = {
-        lat: 36.1627,
-        lng: -86.7816
-      };
-      const latDiff = initialUserLocation.lat - nashvilleCenter.lat;
-      const lngDiff = initialUserLocation.lng - nashvilleCenter.lng;
-      const mapX = `${50 + lngDiff * 200}%`;
-      const mapY = `${50 - latDiff * 200}%`;
+      const { mapX, mapY } = convertCoordsToMapPosition(
+        initialUserLocation.lat, 
+        initialUserLocation.lng
+      );
+      
       setUserLocation({
         latitude: initialUserLocation.lat,
         longitude: initialUserLocation.lng,
@@ -142,44 +160,57 @@ const NeighborhoodMap = ({
       setLocationEnabled(true);
     }
   }, [initialUserLocation]);
+
   const getUserLocation = () => {
     if (!navigator.geolocation) {
       toast.error("Geolocation is not supported by your browser");
       return;
     }
+    
     setIsLocating(true);
+    
     navigator.geolocation.getCurrentPosition(position => {
-      const nashvilleCenter = {
-        lat: 36.1627,
-        lng: -86.7816
-      };
-      const latDiff = position.coords.latitude - nashvilleCenter.lat;
-      const lngDiff = position.coords.longitude - nashvilleCenter.lng;
-      const mapX = `${50 + lngDiff * 200}%`;
-      const mapY = `${50 - latDiff * 200}%`;
+      const { mapX, mapY } = convertCoordsToMapPosition(
+        position.coords.latitude,
+        position.coords.longitude
+      );
+      
       setUserLocation({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
         mapX,
         mapY
       });
+      
       setLocationEnabled(true);
       setIsLocating(false);
       toast.success("Your location has been found");
+      
+      console.log("User location:", {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        mapX,
+        mapY
+      });
+      
     }, error => {
       setIsLocating(false);
       toast.error(`Unable to retrieve your location: ${error.message}`);
     });
   };
+
   const disableLocation = () => {
     setUserLocation(null);
     setLocationEnabled(false);
     toast.info("Location services disabled");
   };
+
   const bubbleColors = ["bg-white/90 text-gray-800", "bg-white/90 text-gray-800", "bg-white/90 text-gray-800", "bg-white/90 text-gray-800", "bg-white/90 text-gray-800", "bg-white/90 text-gray-800", "bg-white/90 text-gray-800", "bg-white/90 text-gray-800"];
+  
   const getBubbleColor = (index: number) => {
     return bubbleColors[index % bubbleColors.length];
   };
+
   return <div className="space-y-2">
       {!initialUserLocation}
       
@@ -187,7 +218,6 @@ const NeighborhoodMap = ({
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
           <div className="absolute h-full w-full overflow-hidden">
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-              {/* Cumberland River Path - Extended to flow naturally across the entire map */}
               <path d="M18,0 Q22,5 25,10 Q30,20 35,25 Q38,28 40,35 Q42,40 45,42 Q47,45 50,50 Q53,55 58,58 Q63,62 65,70 Q67,78 70,85 Q72,92 75,100" fill="none" stroke="#0EA5E9" strokeWidth="3" className="dark:stroke-[#33C3F0] opacity-70" />
             </svg>
           </div>
@@ -202,7 +232,6 @@ const NeighborhoodMap = ({
           }}></div>
           </div>
           
-          {/* Downtown "glow" effect */}
           <div className="absolute w-[12%] h-[12%] rounded-full bg-white dark:bg-gray-700 opacity-20 left-[46%] top-[47%] blur-sm"></div>
         </div>
         
@@ -269,4 +298,5 @@ const NeighborhoodMap = ({
       </div>
     </div>;
 };
+
 export default NeighborhoodMap;
