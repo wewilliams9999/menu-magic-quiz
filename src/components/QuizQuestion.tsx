@@ -40,6 +40,7 @@ const QuizQuestion = ({
   const isMultiSelect = question.multiSelect || false;
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
+  // Effect to handle location initialization
   useEffect(() => {
     // Only attempt to get user location if this is the distance question and we're in location mode
     if (isDistanceQuestion && locationMode) {
@@ -48,10 +49,10 @@ const QuizQuestion = ({
     }
   }, [isDistanceQuestion, locationMode]);
 
-  // Add effect to automatically proceed on distance selection
+  // Fix: Modified the auto-proceed logic to be less restrictive 
+  // Now it only requires having a selected distance, not necessarily a user location
   useEffect(() => {
-    // If it's a distance question and we have a selected distance, proceed automatically
-    if (isDistanceQuestion && typeof selectedAnswer === 'number' && userLocation) {
+    if (isDistanceQuestion && typeof selectedAnswer === 'number') {
       // Small delay for better UX to see the selection
       const timer = setTimeout(() => {
         onNext();
@@ -59,7 +60,7 @@ const QuizQuestion = ({
       
       return () => clearTimeout(timer);
     }
-  }, [isDistanceQuestion, selectedAnswer, userLocation, onNext]);
+  }, [isDistanceQuestion, selectedAnswer, onNext]);
 
   const getSelectedArray = () => {
     if (isMultiSelect) {
@@ -75,9 +76,11 @@ const QuizQuestion = ({
     }));
   };
 
+  // Fix: Modified the next button disabled logic for distance questions
+  // Now it only checks if there's a selected answer, not necessarily a user location
   const isNextDisabled = isMultiSelect 
     ? getSelectedArray().length === 0 
-    : (isDistanceQuestion && locationMode && !userLocation) || !selectedAnswer;
+    : (isDistanceQuestion && !selectedAnswer) || !selectedAnswer;
 
   // Determine which question component to render
   const renderQuestionComponent = () => {
