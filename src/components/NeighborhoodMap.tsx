@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -6,7 +7,9 @@ import { convertCoordsToMapPosition, UserLocation } from "@/utils/mapCoordinates
 import MapBackground from "./map/MapBackground";
 import NeighborhoodBubble from "./map/NeighborhoodBubble";
 import UserLocationMarker from "./map/UserLocationMarker";
+import DistanceRadiusCircle from "./map/DistanceRadiusCircle";
 import { useLocationServices } from "./map/useLocationServices";
+
 interface NeighborhoodMapProps {
   selectedNeighborhoods: string[];
   onSelect: (neighborhoodId: string) => void;
@@ -19,6 +22,7 @@ interface NeighborhoodMapProps {
     lng: number;
   } | null;
 }
+
 const NeighborhoodMap = ({
   selectedNeighborhoods,
   onSelect,
@@ -37,6 +41,7 @@ const NeighborhoodMap = ({
     getUserLocation,
     disableLocation
   } = useLocationServices(initialUserLocation);
+
   useEffect(() => {
     if (initialUserLocation && !userLocation) {
       const {
@@ -57,12 +62,18 @@ const NeighborhoodMap = ({
       });
     }
   }, [initialUserLocation, userLocation, setUserLocation]);
+
   return <div className="space-y-2">
       {!initialUserLocation && useUserLocation && !locationEnabled && <div className="flex justify-end mb-2">
           
         </div>}
       
       <MapBackground>
+        {/* Distance radius circle */}
+        {distanceMode && userLocation && distanceRadius && (
+          <DistanceRadiusCircle userLocation={userLocation} radiusMiles={distanceRadius} />
+        )}
+        
         {/* Neighborhood bubbles */}
         {options.map((option, index) => <NeighborhoodBubble key={option.id} option={option} index={index} isSelected={selectedNeighborhoods.includes(option.value)} onSelect={onSelect} />)}
         
@@ -71,4 +82,5 @@ const NeighborhoodMap = ({
       </MapBackground>
     </div>;
 };
+
 export default NeighborhoodMap;
