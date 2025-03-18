@@ -11,10 +11,11 @@ const DistanceRadiusCircle: React.FC<DistanceRadiusCircleProps> = ({
   userLocation, 
   radiusMiles 
 }) => {
-  // Convert miles to approximate pixels based on map scale
-  // This is a simplified approach - for a more accurate representation,
-  // we would need to use actual geographic calculations
-  const radiusInPixels = radiusMiles * 30; // Scale factor
+  // Better scaling factor to make radius proportional
+  // A typical city might span ~30 miles across, and our map is ~900px wide
+  // So 1 mile ≈ 15 pixels (adjusted from previous 30)
+  const scaleFactor = 12; // Pixels per mile
+  const radiusInPixels = radiusMiles * scaleFactor;
   
   return (
     <div 
