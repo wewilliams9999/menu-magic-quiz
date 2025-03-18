@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -77,11 +78,11 @@ const QuizContainer = () => {
       const isLocationBased = answerId === "location";
       setLocationMode(isLocationBased);
       
-      // If location-based, also set initial distance
+      // If location-based, also set initial distance to 3 miles (changed from 5)
       if (isLocationBased) {
         setAnswers((prev) => ({
           ...prev,
-          distance: 5, // Default 5 mile radius
+          distance: 3, // Default to 3 mile radius
         }));
       }
       
