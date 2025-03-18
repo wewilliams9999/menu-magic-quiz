@@ -17,15 +17,25 @@ const DistanceRadiusCircle: React.FC<DistanceRadiusCircleProps> = ({
   const scaleFactor = 12; // Pixels per mile
   const radiusInPixels = radiusMiles * scaleFactor;
   
+  // Log position values for debugging
+  console.log("Circle positioning:", {
+    mapX: userLocation.mapX,
+    mapY: userLocation.mapY,
+    radiusInPixels,
+    width: `${radiusInPixels * 2}px`,
+    height: `${radiusInPixels * 2}px`
+  });
+  
   return (
     <div 
       className="absolute rounded-full border-2 border-purple-400/40 bg-gradient-to-br from-purple-400/20 via-pink-400/15 to-blue-400/10"
       style={{
         width: `${radiusInPixels * 2}px`,
         height: `${radiusInPixels * 2}px`,
+        position: 'absolute',
         left: userLocation.mapX,
         top: userLocation.mapY,
-        transform: 'translate(-50%, -50%)', // This ensures the circle is centered on the point
+        transform: 'translate(-50%, -50%)',
         pointerEvents: 'none',
         zIndex: 5,
         backdropFilter: 'blur(1px)'
