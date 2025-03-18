@@ -22,6 +22,7 @@ const LocationSelectionScreen = ({ onContinue }: LocationSelectionScreenProps) =
         <div className="inline-flex items-center justify-center p-3 bg-gradient-to-br from-nashville-accent/30 to-nashville-accent/10 rounded-full mb-4">
           <MapPin className="text-nashville-accent w-8 h-8" />
         </div>
+        <div className="mb-2 text-sm font-medium text-nashville-accent">Question 1</div>
         <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-nashville-900 to-nashville-accent dark:from-white dark:to-nashville-accent mb-4">
           Find Your Perfect Nashville Restaurant
         </h2>
