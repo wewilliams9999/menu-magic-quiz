@@ -1,8 +1,7 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { MapPin, MapIcon, Navigation, Map } from "lucide-react";
+import { MapPin, Navigation, Map } from "lucide-react";
 
 interface LocationSelectionScreenProps {
   onContinue: () => void;
@@ -11,6 +10,18 @@ interface LocationSelectionScreenProps {
 
 const LocationSelectionScreen = ({ onContinue, onAnswer }: LocationSelectionScreenProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  // Effect to continue to next question immediately after selection
+  useEffect(() => {
+    if (selectedOption) {
+      // Small delay for better UX to see the selection effect
+      const timer = setTimeout(() => {
+        onContinue();
+      }, 300);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [selectedOption, onContinue]);
 
   const handleOptionSelect = (value: string) => {
     setSelectedOption(value);
@@ -69,16 +80,6 @@ const LocationSelectionScreen = ({ onContinue, onAnswer }: LocationSelectionScre
           Choose Neighborhoods
         </motion.button>
       </div>
-
-      <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-        <Button
-          onClick={onContinue}
-          disabled={!selectedOption}
-          className="w-64 py-6 flex flex-col gap-2 text-lg bg-gradient-to-r from-nashville-accent to-nashville-accent/80 hover:from-nashville-accent/90 hover:to-nashville-accent/70 text-nashville-900 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <span className="font-medium">Continue</span>
-        </Button>
-      </motion.div>
     </motion.div>
   );
 };
