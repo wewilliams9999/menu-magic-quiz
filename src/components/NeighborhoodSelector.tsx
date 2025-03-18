@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Map, List } from "lucide-react";
@@ -14,12 +15,14 @@ interface NeighborhoodSelectorProps {
   onSelect: (neighborhoods: string[]) => void;
   selectedNeighborhoods: string[];
   neighborhoods: { id: string; name: string }[];
+  useUserLocation?: boolean;
 }
 
 const NeighborhoodSelector = ({
   onSelect,
   selectedNeighborhoods,
   neighborhoods,
+  useUserLocation = false,
 }: NeighborhoodSelectorProps) => {
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState<"map" | "list">("map");
@@ -93,7 +96,7 @@ const NeighborhoodSelector = ({
                   selectedNeighborhoods={selectedNeighborhoods} 
                   onSelect={toggleNeighborhood}
                   options={neighborhoodOptions}
-                  useUserLocation={true}
+                  useUserLocation={useUserLocation}
                 />
               </div>
             </div>
