@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { MapPin, Navigation, NavigationOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -112,6 +113,7 @@ interface UserLocation {
   mapY: string;
 }
 
+// Nashville's approximate coordinates
 const NASHVILLE_CENTER = {
   lat: 36.1627,
   lng: -86.7816
@@ -132,14 +134,27 @@ const NeighborhoodMap = ({
   const [locationEnabled, setLocationEnabled] = useState(false);
 
   const convertCoordsToMapPosition = (lat: number, lng: number): { mapX: string, mapY: string } => {
-    const latMultiplier = 100;
-    const lngMultiplier = 100;
+    // Significantly improved scaling factors for more accurate positioning
+    // Nashville is approximately at these bounds
+    const nashvilleBounds = {
+      north: 36.4,    // Northern boundary
+      south: 35.9,    // Southern boundary
+      east: -86.5,    // Eastern boundary
+      west: -87.1     // Western boundary
+    };
     
-    const latDiff = lat - NASHVILLE_CENTER.lat;
-    const lngDiff = lng - NASHVILLE_CENTER.lng;
+    // Calculate position as percentage within Nashville bounds
+    const latRange = nashvilleBounds.north - nashvilleBounds.south;
+    const lngRange = nashvilleBounds.east - nashvilleBounds.west;
     
-    const mapX = `${50 + lngDiff * lngMultiplier}%`;
-    const mapY = `${50 - latDiff * latMultiplier}%`;
+    const latPercent = ((lat - nashvilleBounds.south) / latRange) * 100;
+    const lngPercent = ((lng - nashvilleBounds.west) / lngRange) * 100;
+    
+    // Invert Y axis since map coordinates go from top to bottom
+    const mapY = `${100 - latPercent}%`;
+    const mapX = `${lngPercent}%`;
+    
+    console.log("Converting coordinates:", { lat, lng, mapX, mapY });
     
     return { mapX, mapY };
   };
@@ -158,6 +173,13 @@ const NeighborhoodMap = ({
         mapY
       });
       setLocationEnabled(true);
+      
+      console.log("Setting initial user location:", {
+        lat: initialUserLocation.lat,
+        lng: initialUserLocation.lng,
+        mapX,
+        mapY
+      });
     }
   }, [initialUserLocation]);
 

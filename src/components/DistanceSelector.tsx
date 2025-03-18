@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Navigation, NavigationOff, AlertCircle } from "lucide-react";
@@ -7,6 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
 import NeighborhoodMap from "./NeighborhoodMap";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+
 interface DistanceSelectorProps {
   onSelect: (distance: number) => void;
   selectedDistance: number;
@@ -20,6 +22,7 @@ interface DistanceSelectorProps {
     lng: number;
   } | null;
 }
+
 const DistanceSelector = ({
   onSelect,
   selectedDistance,
@@ -34,23 +37,30 @@ const DistanceSelector = ({
   } | null>(userLocation || null);
   const [isLocating, setIsLocating] = useState(false);
   const [permissionDenied, setPermissionDenied] = useState(false);
+
   useEffect(() => {
     if (userLocation) {
       setLocation(userLocation);
+      console.log("DistanceSelector received userLocation:", userLocation);
     }
   }, [userLocation]);
+
   const getUserLocation = () => {
     if (!navigator.geolocation) {
       toast.error("Geolocation is not supported by your browser");
       return;
     }
+    
     setIsLocating(true);
     setPermissionDenied(false);
+    
     navigator.geolocation.getCurrentPosition(position => {
       const newLocation = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       };
+      
+      console.log("Got user location in DistanceSelector:", newLocation);
       setLocation(newLocation);
       setIsLocating(false);
       toast.success("Your location has been found");
@@ -65,6 +75,7 @@ const DistanceSelector = ({
       }
     });
   };
+
   return <div className="w-full">
       <div className="rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800">
         <div className="p-4">
@@ -130,7 +141,15 @@ const DistanceSelector = ({
           
           <div className="overflow-hidden rounded-lg">
             <div className="relative">
-              <NeighborhoodMap selectedNeighborhoods={[]} onSelect={() => {}} options={options} useUserLocation={true} distanceMode={true} distanceRadius={selectedDistance} />
+              <NeighborhoodMap 
+                selectedNeighborhoods={[]} 
+                onSelect={() => {}} 
+                options={options} 
+                useUserLocation={true} 
+                distanceMode={true} 
+                distanceRadius={selectedDistance} 
+                initialUserLocation={location}
+              />
               
               {location && <div className="absolute top-4 left-4 bg-white dark:bg-gray-800 p-2 rounded-md shadow-md text-xs">
                   <div className="flex items-center gap-1.5">
@@ -144,4 +163,5 @@ const DistanceSelector = ({
       </div>
     </div>;
 };
+
 export default DistanceSelector;
