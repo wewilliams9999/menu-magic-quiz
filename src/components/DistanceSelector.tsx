@@ -34,7 +34,7 @@ const DistanceSelector = ({
   const [location, setLocation] = useState<{
     lat: number;
     lng: number;
-  } | null>(null); // Don't initialize with userLocation
+  } | null>(null); 
   const [isLocating, setIsLocating] = useState(false);
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [userInitiatedLocationRequest, setUserInitiatedLocationRequest] = useState(false);
@@ -65,7 +65,11 @@ const DistanceSelector = ({
       console.log("Got user location in DistanceSelector:", newLocation);
       setLocation(newLocation);
       setIsLocating(false);
-      toast.success("Your location has been found");
+      
+      // Only show success toast if the user explicitly initiated the request
+      if (userInitiatedLocationRequest) {
+        toast.success("Your location has been found");
+      }
     }, error => {
       setIsLocating(false);
       if (error.code === 1) {
