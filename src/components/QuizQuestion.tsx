@@ -47,7 +47,7 @@ const QuizQuestion = ({
   locationMode = false,
 }: QuizQuestionProps) => {
   const isNeighborhoodQuestion = question.id === "neighborhood";
-  const isDistanceQuestion = question.id === "distance" || (isNeighborhoodQuestion && locationMode);
+  const isDistanceQuestion = question.id === "distance";
   const isPreferencesQuestion = question.id === "preferences";
   const isCuisineQuestion = question.id === "cuisine";
   const isMultiSelect = question.multiSelect || false;

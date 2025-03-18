@@ -41,6 +41,27 @@ const QuizContainer = () => {
     distance: distance,
   });
 
+  // Get the appropriate questions based on location mode
+  const getQuestions = () => {
+    // Make a deep copy of the original questions
+    const questions = [...quizQuestions];
+    
+    // Replace the first question if we're in location mode
+    if (locationMode) {
+      // Use distance selector as first question for location-based search
+      questions[0] = {
+        id: "distance",
+        questionText: "How far are you willing to travel?",
+        question: "How far are you willing to travel?",
+        description: "We'll find restaurants within this distance from your location",
+        type: "singleChoice",
+        options: quizQuestions[0].options, // We'll just pass the same options but use them differently
+      };
+    }
+    
+    return questions;
+  };
+
   const handleStart = () => {
     setCurrentScreen("location");
   };
@@ -69,7 +90,9 @@ const QuizContainer = () => {
   };
 
   const handleNextQuestion = () => {
-    if (currentQuestionIndex === quizQuestions.length - 1) {
+    const questions = getQuestions();
+    
+    if (currentQuestionIndex === questions.length - 1) {
       // Move to results screen
       setCurrentScreen("result");
       
@@ -99,6 +122,9 @@ const QuizContainer = () => {
     setLocationMode(false);
   };
 
+  // Get the current question
+  const currentQuestion = getQuestions()[currentQuestionIndex];
+
   return (
     <div className="min-h-[80vh] flex flex-col justify-center">
       <AnimatePresence mode="wait">
@@ -116,13 +142,13 @@ const QuizContainer = () => {
         {currentScreen === "quiz" && (
           <QuizQuestion
             key={`question-${currentQuestionIndex}`}
-            question={quizQuestions[currentQuestionIndex]}
+            question={currentQuestion}
             onAnswer={handleAnswer}
             onNext={handleNextQuestion}
             onPrevious={handlePreviousQuestion}
-            selectedAnswer={answers[quizQuestions[currentQuestionIndex].id] || null}
+            selectedAnswer={answers[currentQuestion.id] || null}
             currentIndex={currentQuestionIndex}
-            totalQuestions={quizQuestions.length}
+            totalQuestions={getQuestions().length}
             useLocation={useLocation && currentQuestionIndex === 0}
             locationMode={locationMode}
           />

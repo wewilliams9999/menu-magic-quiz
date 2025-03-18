@@ -43,11 +43,10 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
       }
     },
     enabled: !!(
-      params.neighborhoods?.length || 
+      (params.neighborhoods?.length || params.distance) ||
       params.cuisine || 
       params.price || 
-      params.atmosphere ||
-      params.distance
+      params.atmosphere
     ),
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
