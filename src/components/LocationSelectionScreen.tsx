@@ -14,11 +14,13 @@ const LocationSelectionScreen = ({
   onAnswer
 }: LocationSelectionScreenProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [locationToastShown, setLocationToastShown] = useState(false);
+  
   const { 
     userLocation, 
     isLocating, 
     getUserLocation 
-  } = useLocationServices(null);
+  } = useLocationServices(null, false); // Disable automatic toasts
 
   // Effect to continue to next question immediately after selection
   useEffect(() => {
@@ -31,6 +33,14 @@ const LocationSelectionScreen = ({
       return () => clearTimeout(timer);
     }
   }, [selectedOption]);
+
+  // Effect to show toast when location is found
+  useEffect(() => {
+    if (userLocation && selectedOption === "location" && !locationToastShown) {
+      toast.success("Your location has been found");
+      setLocationToastShown(true);
+    }
+  }, [userLocation, selectedOption, locationToastShown]);
 
   const handleOptionSelect = (value: string) => {
     setSelectedOption(value);

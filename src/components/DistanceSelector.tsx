@@ -36,6 +36,7 @@ const DistanceSelector = ({
   const distances = [3, 5, 10, 15, 30, 50];
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [userInitiatedLocationRequest, setUserInitiatedLocationRequest] = useState(false);
+  const [locationToastShown, setLocationToastShown] = useState(false);
   
   // Use the location services hook with toasts disabled
   const { 
@@ -48,10 +49,13 @@ const DistanceSelector = ({
   useEffect(() => {
     if (location && userInitiatedLocationRequest && onLocationShared) {
       onLocationShared();
-      // Show toast here instead
-      toast.success("Your location has been found");
+      // Show toast here instead, but only once
+      if (!locationToastShown) {
+        toast.success("Your location has been found");
+        setLocationToastShown(true);
+      }
     }
-  }, [location, userInitiatedLocationRequest, onLocationShared]);
+  }, [location, userInitiatedLocationRequest, onLocationShared, locationToastShown]);
 
   const getUserLocation = () => {
     setPermissionDenied(false);

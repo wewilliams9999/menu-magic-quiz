@@ -17,6 +17,7 @@ export const useLocationServices = (initialUserLocation?: {
   );
   const [isLocating, setIsLocating] = useState(false);
   const [locationEnabled, setLocationEnabled] = useState(!!initialUserLocation);
+  const [toastShown, setToastShown] = useState(false);
 
   const getUserLocation = () => {
     if (!navigator.geolocation) {
@@ -46,9 +47,10 @@ export const useLocationServices = (initialUserLocation?: {
         setLocationEnabled(true);
         setIsLocating(false);
         
-        // Only show toast if showToasts is true
-        if (showToasts) {
+        // Only show toast if showToasts is true and we haven't shown it yet
+        if (showToasts && !toastShown) {
           toast.success("Your location has been found");
+          setToastShown(true);
         }
         
         console.log("User location:", {
