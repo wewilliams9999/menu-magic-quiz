@@ -19,7 +19,7 @@ const DistanceRadiusCircle: React.FC<DistanceRadiusCircleProps> = ({
   
   return (
     <div 
-      className="absolute rounded-full border-2 border-blue-400/20 bg-blue-400/10"
+      className="absolute rounded-full border-2 border-purple-400/40 bg-gradient-to-br from-purple-400/20 via-pink-400/15 to-blue-400/10"
       style={{
         width: `${radiusInPixels * 2}px`,
         height: `${radiusInPixels * 2}px`,
@@ -27,10 +27,11 @@ const DistanceRadiusCircle: React.FC<DistanceRadiusCircleProps> = ({
         top: userLocation.mapY,
         transform: 'translate(-50%, -50%)', // This ensures the circle is centered on the point
         pointerEvents: 'none',
-        zIndex: 5
+        zIndex: 5,
+        backdropFilter: 'blur(1px)'
       }}
     >
-      <div className="absolute bottom-2 right-2 bg-white/90 dark:bg-gray-800/90 text-xs px-2 py-1 rounded-full shadow-sm">
+      <div className="absolute bottom-2 right-2 bg-white/90 dark:bg-gray-800/90 text-xs font-medium px-2 py-1 rounded-full shadow-sm text-purple-600 dark:text-purple-300">
         {radiusMiles} {radiusMiles === 1 ? 'mile' : 'miles'} radius
       </div>
     </div>
