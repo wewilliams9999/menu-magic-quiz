@@ -119,8 +119,10 @@ export const quizQuestions: QuizQuestion[] = [
     id: "cuisine",
     questionText: "What type of cuisine are you in the mood for?",
     question: "What type of cuisine are you in the mood for?",
-    type: "singleChoice",
+    description: "Select all that apply",
+    type: "multipleChoice",
     options: cuisineOptions,
+    multiSelect: true,  // Changed from singleChoice to multipleChoice with multiSelect true
   },
   {
     id: "price",

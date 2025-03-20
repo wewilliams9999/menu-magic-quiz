@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { QuizQuestion as QuizQuestionType } from "@/utils/quizData";
 import QuestionBase from "./questions/QuestionBase";
@@ -111,7 +112,17 @@ const QuizQuestion = ({
       );
     }
     
-    if (isCuisineQuestion) {
+    if (isCuisineQuestion && isMultiSelect) {
+      return (
+        <PreferencesQuestion 
+          options={question.options} 
+          selectedAnswers={getSelectedArray()} 
+          onSelect={(values) => onAnswer(question.id, values)} 
+        />
+      );
+    }
+    
+    if (isCuisineQuestion && !isMultiSelect) {
       return (
         <CuisineQuestion 
           options={question.options} 

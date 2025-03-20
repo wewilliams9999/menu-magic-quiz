@@ -4,7 +4,7 @@ import { fetchRestaurants, getFallbackRestaurants, RestaurantApiParams } from "@
 
 interface RestaurantDataParams {
   neighborhoods?: string[];
-  cuisine?: string;
+  cuisine?: string[];  // Changed from string to string[] to allow multiple cuisines
   price?: string[];  // Changed from string to string[] to match the updated RestaurantApiParams
   atmosphere?: string;
   preferences?: string[];
@@ -19,7 +19,7 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         // Prepare API parameters
         const apiParams: RestaurantApiParams = {
           neighborhoods: params.neighborhoods,
-          cuisine: params.cuisine,
+          cuisine: params.cuisine,  // Now correctly passing string[] instead of string
           price: params.price,  // Now this matches: string[] to string[]
           atmosphere: params.atmosphere,
           preferences: params.preferences,
@@ -44,8 +44,8 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
     },
     enabled: !!(
       (params.neighborhoods?.length || params.distance) ||
-      params.cuisine || 
-      params.price || 
+      params.cuisine?.length || 
+      params.price?.length || 
       params.atmosphere
     ),
     staleTime: 1000 * 60 * 5, // 5 minutes
