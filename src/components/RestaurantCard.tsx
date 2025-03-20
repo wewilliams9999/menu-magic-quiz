@@ -1,5 +1,5 @@
 
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Instagram } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -107,6 +107,15 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
             <a href={restaurant.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
               <span>Website</span>
               <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </Button>
+        )}
+        
+        {restaurant.instagramLink && (
+          <Button variant="outline" size="sm" asChild>
+            <a href={restaurant.instagramLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+              <Instagram className="h-3.5 w-3.5" />
+              <span>Instagram</span>
             </a>
           </Button>
         )}

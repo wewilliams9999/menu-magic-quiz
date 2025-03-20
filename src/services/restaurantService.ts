@@ -80,7 +80,8 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       features: ["Farm-to-table", "Historic setting", "Seasonal menu"],
       website: "https://husknashville.com",
       resyLink: "https://resy.com/cities/bna/venues/husk-nashville",
-      openTableLink: "https://www.opentable.com/r/husk-nashville"
+      openTableLink: "https://www.opentable.com/r/husk-nashville",
+      instagramLink: "https://www.instagram.com/husknashville"
     },
     {
       id: "2",
@@ -93,7 +94,8 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       logoUrl: "https://images.squarespace-cdn.com/content/v1/5c5c3833840b161566b59a22/70dbb757-1e8b-4159-b5e6-3fed48338e30/radlogo.png",
       features: ["House-made pasta", "Craft cocktails", "Industrial chic"],
       website: "https://www.rolfanddaughters.com",
-      resyLink: "https://resy.com/cities/bna/venues/rolf-and-daughters"
+      resyLink: "https://resy.com/cities/bna/venues/rolf-and-daughters",
+      instagramLink: "https://www.instagram.com/rolfanddaughters"
     },
     {
       id: "3",
@@ -106,7 +108,8 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       logoUrl: "https://images.squarespace-cdn.com/content/v1/5ef25f8a509c313cb73a9b20/1592942166899-8X5QI1WCY01LGG9HZCPC/Optimist+Logo+BW.png",
       features: ["Fresh seafood", "Craft cocktails", "Upscale casual"],
       website: "https://theoptimistrestaurant.com",
-      openTableLink: "https://www.opentable.com/r/the-optimist-nashville"
+      openTableLink: "https://www.opentable.com/r/the-optimist-nashville",
+      instagramLink: "https://www.instagram.com/theoptimistnashville"
     }
   ];
 };

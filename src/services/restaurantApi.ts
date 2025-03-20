@@ -22,6 +22,7 @@ export interface ApiRestaurant {
   neighborhoods?: string[];
   cuisine?: string;
   priceRange?: string;
+  instagram_url?: string;
 }
 
 // Define the input parameters for restaurant filtering
@@ -117,7 +118,8 @@ export const mapApiRestaurantToQuizResult = (restaurant: ApiRestaurant): QuizRes
     website: restaurant.url,
     priceRange: restaurant.priceRange || priceMap[restaurant.price] || "$$",
     neighborhood: neighborhood,
-    cuisine: restaurant.cuisine || cuisine
+    cuisine: restaurant.cuisine || cuisine,
+    instagramLink: restaurant.instagram_url
   };
 };
 
@@ -141,7 +143,8 @@ const mockRestaurants: ApiRestaurant[] = [
       zip_code: "37210"
     },
     url: "https://husknashville.com",
-    neighborhoods: ["downtown"]
+    neighborhoods: ["downtown"],
+    instagram_url: "https://www.instagram.com/husknashville"
   },
   {
     id: "butcher-and-bee-nashville",
@@ -161,7 +164,8 @@ const mockRestaurants: ApiRestaurant[] = [
       zip_code: "37206"
     },
     url: "https://butcherandbee.com/nashville",
-    neighborhoods: ["east"]
+    neighborhoods: ["east"],
+    instagram_url: "https://www.instagram.com/butcherandbee"
   },
   {
     id: "folk-nashville",
@@ -181,7 +185,8 @@ const mockRestaurants: ApiRestaurant[] = [
       zip_code: "37207"
     },
     url: "https://www.folkrestaurant.com",
-    neighborhoods: ["east"]
+    neighborhoods: ["east"],
+    instagram_url: "https://www.instagram.com/folkrestaurant"
   },
   {
     id: "henrietta-red-nashville",
@@ -201,7 +206,8 @@ const mockRestaurants: ApiRestaurant[] = [
       zip_code: "37208"
     },
     url: "https://www.henriettared.com",
-    neighborhoods: ["germantown"]
+    neighborhoods: ["germantown"],
+    instagram_url: "https://www.instagram.com/henriettared"
   },
   {
     id: "lockeland-table-nashville",
@@ -222,7 +228,8 @@ const mockRestaurants: ApiRestaurant[] = [
       zip_code: "37206"
     },
     url: "https://www.lockelandtable.com",
-    neighborhoods: ["east"]
+    neighborhoods: ["east"],
+    instagram_url: "https://www.instagram.com/lockelandtable"
   },
   {
     id: "arnold-country-kitchen-nashville",
@@ -241,7 +248,8 @@ const mockRestaurants: ApiRestaurant[] = [
       zip_code: "37203"
     },
     url: "https://www.arnoldscountrykitchen.com",
-    neighborhoods: ["downtown"]
+    neighborhoods: ["downtown"],
+    instagram_url: "https://www.instagram.com/arnoldscountrykitchen"
   },
   {
     id: "bartaco-nashville",
@@ -261,7 +269,8 @@ const mockRestaurants: ApiRestaurant[] = [
       zip_code: "37204"
     },
     url: "https://bartaco.com",
-    neighborhoods: ["12south"]
+    neighborhoods: ["12south"],
+    instagram_url: "https://www.instagram.com/bartaco"
   },
   {
     id: "five-daughters-bakery-nashville",
@@ -280,7 +289,8 @@ const mockRestaurants: ApiRestaurant[] = [
       zip_code: "37204"
     },
     url: "https://fivedaughtersbakery.com",
-    neighborhoods: ["12south"]
+    neighborhoods: ["12south"],
+    instagram_url: "https://www.instagram.com/fivedaughtersbakery"
   },
   {
     id: "kayne-prime-nashville",
@@ -299,6 +309,7 @@ const mockRestaurants: ApiRestaurant[] = [
       zip_code: "37203"
     },
     url: "https://www.mstreetnashville.com/kayne-prime",
-    neighborhoods: ["gulch"]
+    neighborhoods: ["gulch"],
+    instagram_url: "https://www.instagram.com/kayneprime"
   }
 ];

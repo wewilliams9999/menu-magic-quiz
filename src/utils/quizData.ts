@@ -1,4 +1,3 @@
-
 import { CasualIcon, ElegantIcon, TrendyIcon, UniqueIcon } from "@/utils/atmosphere-icons";
 
 export interface QuizOption {
@@ -33,6 +32,7 @@ export interface QuizResult {
   isAlternative?: boolean;
   resyLink?: string;
   openTableLink?: string;
+  instagramLink?: string;
 }
 
 export const locationMethodOptions: QuizOption[] = [
