@@ -1,4 +1,3 @@
-
 import { CasualIcon, ElegantIcon, TrendyIcon, UniqueIcon } from "@/utils/atmosphere-icons";
 
 export interface QuizOption {
@@ -122,7 +121,7 @@ export const quizQuestions: QuizQuestion[] = [
     description: "Select all that apply",
     type: "multipleChoice",
     options: cuisineOptions,
-    multiSelect: true,  // Changed from singleChoice to multipleChoice with multiSelect true
+    multiSelect: true,
   },
   {
     id: "price",

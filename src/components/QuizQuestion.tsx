@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { QuizQuestion as QuizQuestionType } from "@/utils/quizData";
 import QuestionBase from "./questions/QuestionBase";
@@ -37,13 +36,12 @@ const QuizQuestion = ({
   const isDistanceQuestion = question.id === "distance";
   const isPreferencesQuestion = question.id === "preferences";
   const isCuisineQuestion = question.id === "cuisine";
+  const isPriceQuestion = question.id === "price";
   const isMultiSelect = question.multiSelect || false;
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [userSharedLocation, setUserSharedLocation] = useState(false);
 
-  // Effect to handle location initialization
   useEffect(() => {
-    // Only attempt to get user location if this is the distance question and we're in location mode
     if (isDistanceQuestion && locationMode) {
       // We don't automatically request location here anymore
       // The DistanceSelector component will handle this with explicit user interaction
@@ -64,13 +62,10 @@ const QuizQuestion = ({
     }));
   };
 
-  // Modified the next button disabled logic for distance questions
-  // Now it checks if the user has shared their location and selected a distance
   const isNextDisabled = isMultiSelect 
     ? getSelectedArray().length === 0 
     : (isDistanceQuestion && (!selectedAnswer || !userSharedLocation)) || !selectedAnswer;
 
-  // Determine which question component to render
   const renderQuestionComponent = () => {
     if (isDistanceQuestion) {
       return (
@@ -102,17 +97,7 @@ const QuizQuestion = ({
       );
     }
     
-    if (isPreferencesQuestion) {
-      return (
-        <PreferencesQuestion 
-          options={question.options} 
-          selectedAnswers={getSelectedArray()} 
-          onSelect={(values) => onAnswer(question.id, values)} 
-        />
-      );
-    }
-    
-    if (isCuisineQuestion && isMultiSelect) {
+    if (isPreferencesQuestion || isPriceQuestion || (isCuisineQuestion && isMultiSelect)) {
       return (
         <PreferencesQuestion 
           options={question.options} 
@@ -132,7 +117,6 @@ const QuizQuestion = ({
       );
     }
     
-    // Default to standard question
     return (
       <StandardQuestion 
         options={question.options} 
