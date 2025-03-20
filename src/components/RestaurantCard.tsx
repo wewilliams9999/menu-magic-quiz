@@ -24,9 +24,12 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         <div className="relative h-48 w-full overflow-hidden">
           <img 
             src={restaurant.imageUrl} 
-            alt={restaurant.name} 
+            alt={`${restaurant.cuisine} food`} 
             className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
           />
+          <div className="absolute bottom-0 right-0 bg-black/60 text-white text-xs px-2 py-1 rounded-tl-md">
+            Representative image
+          </div>
         </div>
       )}
       
