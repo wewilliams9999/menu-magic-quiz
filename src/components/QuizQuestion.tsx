@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { QuizQuestion as QuizQuestionType } from "@/utils/quizData";
 import QuestionBase from "./questions/QuestionBase";
@@ -37,6 +38,7 @@ const QuizQuestion = ({
   const isPreferencesQuestion = question.id === "preferences";
   const isCuisineQuestion = question.id === "cuisine";
   const isPriceQuestion = question.id === "price";
+  const isAtmosphereQuestion = question.id === "atmosphere";
   const isMultiSelect = question.multiSelect || false;
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [userSharedLocation, setUserSharedLocation] = useState(false);
@@ -97,7 +99,7 @@ const QuizQuestion = ({
       );
     }
     
-    if (isPreferencesQuestion || isPriceQuestion || (isCuisineQuestion && isMultiSelect)) {
+    if (isPreferencesQuestion || isPriceQuestion || isAtmosphereQuestion || (isCuisineQuestion && isMultiSelect)) {
       return (
         <PreferencesQuestion 
           options={question.options} 

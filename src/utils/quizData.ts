@@ -1,3 +1,4 @@
+
 import { CasualIcon, ElegantIcon, TrendyIcon, UniqueIcon } from "@/utils/atmosphere-icons";
 
 export interface QuizOption {
@@ -136,7 +137,8 @@ export const quizQuestions: QuizQuestion[] = [
     id: "atmosphere",
     questionText: "What kind of atmosphere do you prefer?",
     question: "What kind of atmosphere do you prefer?",
-    type: "singleChoice",
+    description: "Select all that apply",
+    type: "multipleChoice",
     options: [
       {
         id: "atmosphere-1",
@@ -162,7 +164,8 @@ export const quizQuestions: QuizQuestion[] = [
         value: "unique",
         icon: UniqueIcon
       }
-    ]
+    ],
+    multiSelect: true,
   },
   {
     id: "preferences",

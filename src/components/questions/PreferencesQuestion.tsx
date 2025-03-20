@@ -3,6 +3,7 @@ import { Utensils, XCircle, Sparkles } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { QuizOption } from "@/utils/quizData";
+import AtmosphereOption from "../AtmosphereOption";
 
 interface PreferencesQuestionProps {
   options: QuizOption[];
@@ -11,6 +12,8 @@ interface PreferencesQuestionProps {
 }
 
 const PreferencesQuestion = ({ options, selectedAnswers, onSelect }: PreferencesQuestionProps) => {
+  const isAtmosphereQuestion = options.some(option => option.id.startsWith('atmosphere-'));
+
   const handleMultiSelectChange = (id: string, checked: boolean) => {
     if (id === 'none' && checked) {
       onSelect(['none']);
@@ -41,6 +44,47 @@ const PreferencesQuestion = ({ options, selectedAnswers, onSelect }: Preferences
         return <Utensils className="w-5 h-5" />;
     }
   };
+
+  if (isAtmosphereQuestion) {
+    return (
+      <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-nashville-200 dark:border-nashville-800 shadow-lg">
+        <div className="grid grid-cols-2 sm:grid-cols-2 gap-6">
+          {options.map((option) => (
+            <div 
+              key={option.id}
+              className={`flex flex-col items-center p-4 rounded-lg hover:bg-nashville-100/50 dark:hover:bg-nashville-800/50 transition-colors ${
+                selectedAnswers.includes(option.value) 
+                  ? 'bg-nashville-100/50 dark:bg-nashville-800/50' 
+                  : ''
+              }`}
+              onClick={() => {
+                const isSelected = selectedAnswers.includes(option.value);
+                handleMultiSelectChange(option.value, !isSelected);
+              }}
+            >
+              <AtmosphereOption icon={option.icon} isSelected={selectedAnswers.includes(option.value)} />
+              <div className="mt-2 flex items-center space-x-2">
+                <Checkbox 
+                  id={option.id}
+                  checked={selectedAnswers.includes(option.value)}
+                  onCheckedChange={(checked) => {
+                    handleMultiSelectChange(option.value, checked === true);
+                  }}
+                  className="data-[state=checked]:bg-nashville-accent data-[state=checked]:border-nashville-accent"
+                />
+                <Label
+                  htmlFor={option.id}
+                  className="text-base font-medium cursor-pointer"
+                >
+                  {option.text}
+                </Label>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-nashville-200 dark:border-nashville-800 shadow-lg">
