@@ -140,25 +140,25 @@ export const quizQuestions: QuizQuestion[] = [
     options: [
       {
         id: "atmosphere-1",
-        text: "Casual & Relaxed",
+        text: "Casual",
         value: "casual",
         icon: CasualIcon
       },
       {
         id: "atmosphere-2",
-        text: "Trendy & Energetic",
+        text: "Trendy",
         value: "trendy",
         icon: TrendyIcon
       },
       {
         id: "atmosphere-3",
-        text: "Elegant & Refined",
+        text: "Elegant",
         value: "elegant",
         icon: ElegantIcon
       },
       {
         id: "atmosphere-4",
-        text: "Unique & Memorable",
+        text: "Unique",
         value: "unique",
         icon: UniqueIcon
       }
