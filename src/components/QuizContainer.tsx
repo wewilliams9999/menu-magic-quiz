@@ -27,6 +27,11 @@ const QuizContainer = () => {
     ? answers.preferences
     : (answers.preferences ? [answers.preferences as string] : []);
   
+  // Get price as string array for the API
+  const prices = answers.price && Array.isArray(answers.price)
+    ? answers.price
+    : (answers.price ? [answers.price as string] : []);
+  
   // Get distance value for location-based search
   const distance = typeof answers.distance === 'number' ? answers.distance : undefined;
   
@@ -34,7 +39,7 @@ const QuizContainer = () => {
   const { data: restaurantResults, isLoading, error } = useRestaurantData({
     neighborhoods: neighborhoods,
     cuisine: answers.cuisine as string,
-    price: answers.price as string,
+    price: prices,
     atmosphere: answers.atmosphere as string,
     preferences: preferences,
     distance: distance,

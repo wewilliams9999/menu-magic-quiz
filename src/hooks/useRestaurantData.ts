@@ -5,7 +5,7 @@ import { fetchRestaurants, getFallbackRestaurants, RestaurantApiParams } from "@
 interface RestaurantDataParams {
   neighborhoods?: string[];
   cuisine?: string;
-  price?: string;
+  price?: string[];  // Changed from string to string[] to match the updated RestaurantApiParams
   atmosphere?: string;
   preferences?: string[];
   distance?: number;
@@ -20,7 +20,7 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         const apiParams: RestaurantApiParams = {
           neighborhoods: params.neighborhoods,
           cuisine: params.cuisine,
-          price: params.price,
+          price: params.price,  // Now this matches: string[] to string[]
           atmosphere: params.atmosphere,
           preferences: params.preferences,
           distance: params.distance
