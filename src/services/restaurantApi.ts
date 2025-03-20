@@ -111,7 +111,7 @@ export const mapApiRestaurantToQuizResult = (restaurant: ApiRestaurant): QuizRes
     id: restaurant.id,
     name: restaurant.name,
     description: restaurant.description,
-    imageUrl: restaurant.image_url || "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=500&auto=format&fit=crop",
+    imageUrl: restaurant.image_url,
     features: features,
     website: restaurant.url,
     priceRange: restaurant.priceRange || priceMap[restaurant.price] || "$$",
@@ -126,7 +126,7 @@ const mockRestaurants: ApiRestaurant[] = [
     id: "husk-nashville",
     name: "Husk",
     description: "A celebration of Southern ingredients reimagined with a modern approach.",
-    image_url: "https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=500&auto=format&fit=crop",
+    image_url: "https://huskrestarant.com/nashville/wp-content/uploads/sites/2/2018/08/MPHP-HUSK_NASHfacadexfade1.jpg",
     categories: [
       { alias: "southern", title: "Southern" },
       { alias: "newamerican", title: "New American" }
@@ -145,7 +145,7 @@ const mockRestaurants: ApiRestaurant[] = [
     id: "butcher-and-bee-nashville",
     name: "Butcher & Bee",
     description: "Farm-to-table Mediterranean-inspired fare with a focus on shared plates.",
-    image_url: "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?q=80&w=500&auto=format&fit=crop",
+    image_url: "https://butcherandbee.com/nashville/wp-content/uploads/sites/3/2018/05/BandB_NASH-41.jpg",
     categories: [
       { alias: "farm-to-table", title: "Farm to Table" },
       { alias: "mediterranean", title: "Mediterranean" }
@@ -164,7 +164,7 @@ const mockRestaurants: ApiRestaurant[] = [
     id: "folk-nashville",
     name: "Folk",
     description: "Artisanal pizzas and seasonal small plates in a bright, airy space.",
-    image_url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=500&auto=format&fit=crop",
+    image_url: "https://static.spacecrafted.com/fc949565f8c041de82d47246772f381d/i/ee3d0f74b16649a99ed0895b65a3e97f/1/GCuCv726gZycFxatRCb2ix/Folk_20221207_SM_36.jpg",
     categories: [
       { alias: "pizza", title: "Pizza" },
       { alias: "american", title: "American" }
@@ -183,7 +183,7 @@ const mockRestaurants: ApiRestaurant[] = [
     id: "henrietta-red-nashville",
     name: "Henrietta Red",
     description: "Seafood-focused, seasonal menu with an exceptional raw bar.",
-    image_url: "https://images.unsplash.com/photo-1535140728325-a4d3707eee61?q=80&w=500&auto=format&fit=crop",
+    image_url: "https://images.squarespace-cdn.com/content/v1/586cfd48bebafb9f84b7cef6/1585084099200-M50KD0NRXIFNQOKDZNF9/Henrietta+Red+Exterior.JPG",
     categories: [
       { alias: "seafood", title: "Seafood" },
       { alias: "american", title: "American" }
@@ -202,7 +202,7 @@ const mockRestaurants: ApiRestaurant[] = [
     id: "lockeland-table-nashville",
     name: "Lockeland Table",
     description: "Community-focused eatery serving wood-fired pizzas and Southern-inspired dishes.",
-    image_url: "https://images.unsplash.com/photo-1528137871618-79d2761e3fd5?q=80&w=500&auto=format&fit=crop",
+    image_url: "https://lockelandtable.com/wp-content/uploads/2020/09/AEE81243-D493-45C8-9F55-A11022BDDD73.jpeg",
     categories: [
       { alias: "pizza", title: "Pizza" },
       { alias: "southern", title: "Southern" },
@@ -222,7 +222,7 @@ const mockRestaurants: ApiRestaurant[] = [
     id: "arnold-country-kitchen-nashville",
     name: "Arnold's Country Kitchen",
     description: "Iconic meat-and-three cafeteria serving Nashville's best comfort food.",
-    image_url: "https://images.unsplash.com/photo-1562565652-a0d8f0c59eb8?q=80&w=500&auto=format&fit=crop",
+    image_url: "https://arnoldscountrykitchen.com/wp-content/uploads/2019/07/arnolds_header.jpg",
     categories: [
       { alias: "southern", title: "Southern" },
       { alias: "comfortfood", title: "Comfort Food" }
@@ -241,7 +241,7 @@ const mockRestaurants: ApiRestaurant[] = [
     id: "bartaco-nashville",
     name: "Bartaco",
     description: "Upscale street food with a coastal vibe, specializing in tacos and rice bowls.",
-    image_url: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?q=80&w=500&auto=format&fit=crop",
+    image_url: "https://bartaco.com/wp-content/uploads/2021/09/MG_0173_bartaco_Nashville-patio-1.jpg",
     categories: [
       { alias: "mexican", title: "Mexican" },
       { alias: "tacos", title: "Tacos" },
@@ -261,7 +261,7 @@ const mockRestaurants: ApiRestaurant[] = [
     id: "five-daughters-bakery-nashville",
     name: "Five Daughters Bakery",
     description: "Artisanal bakery famous for their 100-layer donuts and pastries.",
-    image_url: "https://images.unsplash.com/photo-1556745753-b2904692b3cd?q=80&w=500&auto=format&fit=crop",
+    image_url: "https://fivedaughtersbakery.com/wp-content/uploads/2018/07/12-South-outside.jpg",
     categories: [
       { alias: "bakeries", title: "Bakeries" },
       { alias: "dessert", title: "Dessert" }
@@ -280,7 +280,7 @@ const mockRestaurants: ApiRestaurant[] = [
     id: "kayne-prime-nashville",
     name: "Kayne Prime",
     description: "Upscale steakhouse offering modern interpretations of classic American cuisine.",
-    image_url: "https://images.unsplash.com/photo-1579312624347-ef08db393114?q=80&w=500&auto=format&fit=crop",
+    image_url: "https://www.mstreetnashville.com/wp-content/uploads/2019/04/Kayne-Prime-entrance-exterior-dark-Kayne.jpg",
     categories: [
       { alias: "steak", title: "Steakhouses" },
       { alias: "american", title: "American" }
