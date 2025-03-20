@@ -1,4 +1,3 @@
-
 import { QuizResult } from "@/utils/quizData";
 
 // API Key should ideally be stored in environment variables on a backend
@@ -128,7 +127,7 @@ const mockRestaurants: ApiRestaurant[] = [
     id: "husk-nashville",
     name: "Husk",
     description: "A celebration of Southern ingredients reimagined with a modern approach.",
-    image_url: "https://huskrestarant.com/nashville/wp-content/uploads/sites/2/2018/08/MPHP-HUSK_NASHfacadexfade1.jpg",
+    image_url: "https://husknashville.com/wp-content/uploads/sites/2/2018/08/MPHP-HUSK_NASHfacadexfade1.jpg",
     logo_url: "https://husknashville.com/wp-content/uploads/sites/2/2021/07/husknew_gold.png",
     categories: [
       { alias: "southern", title: "Southern" },
@@ -303,4 +302,3 @@ const mockRestaurants: ApiRestaurant[] = [
     neighborhoods: ["gulch"]
   }
 ];
-

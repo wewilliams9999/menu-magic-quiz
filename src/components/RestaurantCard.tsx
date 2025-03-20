@@ -26,6 +26,13 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
             src={restaurant.logoUrl} 
             alt={`${restaurant.name} logo`} 
             className="max-h-full max-w-full object-contain"
+            onError={(e) => {
+              console.error(`Failed to load logo for ${restaurant.name}:`, restaurant.logoUrl);
+              // Fallback to imageUrl if logo fails to load
+              if (restaurant.imageUrl) {
+                (e.target as HTMLImageElement).src = restaurant.imageUrl;
+              }
+            }}
           />
         </div>
       ) : restaurant.imageUrl && (

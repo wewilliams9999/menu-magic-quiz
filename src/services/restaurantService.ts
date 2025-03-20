@@ -75,7 +75,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       neighborhood: "Downtown",
       priceRange: "$$$",
       description: "Locally sourced Southern dishes served in a historic mansion with a modern touch.",
-      imageUrl: "https://huskrestarant.com/nashville/wp-content/uploads/sites/2/2018/08/MPHP-HUSK_NASHfacadexfade1.jpg",
+      imageUrl: "https://husknashville.com/wp-content/uploads/sites/2/2018/08/MPHP-HUSK_NASHfacadexfade1.jpg",
       logoUrl: "https://husknashville.com/wp-content/uploads/sites/2/2021/07/husknew_gold.png",
       features: ["Farm-to-table", "Historic setting", "Seasonal menu"],
       website: "https://husknashville.com",
@@ -90,7 +90,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       priceRange: "$$$",
       description: "Rustic-modern spot with pasta dishes & innovative small plates in a converted factory space.",
       imageUrl: "https://www.rolfanddaughters.com/wp-content/uploads/2015/10/DSC_9863-1600x1067.jpg",
-      logoUrl: "https://images.squarespace-cdn.com/content/v1/5c5c3833840b161566b59a22/70dbb757-1e8b-4159-b5e6-3fed48338e30/Screen+Shot+2019-02-05+at+6.14.11+PM.png",
+      logoUrl: "https://images.squarespace-cdn.com/content/v1/5c5c3833840b161566b59a22/70dbb757-1e8b-4159-b5e6-3fed48338e30/radlogo.png",
       features: ["House-made pasta", "Craft cocktails", "Industrial chic"],
       website: "https://www.rolfanddaughters.com",
       resyLink: "https://resy.com/cities/bna/venues/rolf-and-daughters"
