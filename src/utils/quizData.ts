@@ -133,6 +133,15 @@ export const quizQuestions: QuizQuestion[] = [
     multiSelect: true,
   },
   {
+    id: "preferences",
+    questionText: "Any specific dietary preferences?",
+    question: "Any specific dietary preferences?",
+    description: "Select all that apply or choose 'No Specific Preferences'",
+    type: "multipleChoice",
+    options: dietaryOptions,
+    multiSelect: true,
+  },
+  {
     id: "atmosphere",
     questionText: "What kind of atmosphere do you prefer?",
     question: "What kind of atmosphere do you prefer?",
@@ -164,15 +173,6 @@ export const quizQuestions: QuizQuestion[] = [
         icon: UniqueIcon
       }
     ],
-    multiSelect: true,
-  },
-  {
-    id: "preferences",
-    questionText: "Any specific dietary preferences?",
-    question: "Any specific dietary preferences?",
-    description: "Select all that apply or choose 'No Specific Preferences'",
-    type: "multipleChoice",
-    options: dietaryOptions,
     multiSelect: true,
   },
 ];

@@ -35,10 +35,10 @@ const QuizQuestion = ({
 }: QuizQuestionProps) => {
   const isNeighborhoodQuestion = question.id === "neighborhood";
   const isDistanceQuestion = question.id === "distance";
-  const isPreferencesQuestion = question.id === "preferences";
+  const isDietaryQuestion = question.id === "preferences";
+  const isAtmosphereQuestion = question.id === "atmosphere";
   const isCuisineQuestion = question.id === "cuisine";
   const isPriceQuestion = question.id === "price";
-  const isAtmosphereQuestion = question.id === "atmosphere";
   const isMultiSelect = question.multiSelect || false;
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [userSharedLocation, setUserSharedLocation] = useState(false);
@@ -99,7 +99,7 @@ const QuizQuestion = ({
       );
     }
     
-    if (isPreferencesQuestion || isPriceQuestion || isAtmosphereQuestion || (isCuisineQuestion && isMultiSelect)) {
+    if (isDietaryQuestion || isPriceQuestion || isAtmosphereQuestion || (isCuisineQuestion && isMultiSelect)) {
       return (
         <PreferencesQuestion 
           options={question.options} 
