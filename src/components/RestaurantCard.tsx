@@ -20,13 +20,24 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         </div>
       )}
       
-      {restaurant.imageUrl && (
+      {restaurant.logoUrl ? (
+        <div className="relative h-48 w-full overflow-hidden bg-white flex items-center justify-center p-4">
+          <img 
+            src={restaurant.logoUrl} 
+            alt={`${restaurant.name} logo`} 
+            className="max-h-full max-w-full object-contain"
+          />
+        </div>
+      ) : restaurant.imageUrl && (
         <div className="relative h-48 w-full overflow-hidden">
           <img 
             src={restaurant.imageUrl} 
             alt={restaurant.name} 
             className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
           />
+          <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs px-2 py-1">
+            Exterior photo
+          </div>
         </div>
       )}
       

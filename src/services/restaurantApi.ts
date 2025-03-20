@@ -10,6 +10,7 @@ export interface ApiRestaurant {
   name: string;
   description: string;
   image_url: string;
+  logo_url?: string;
   categories: { alias: string; title: string }[];
   price: string;
   location: {
@@ -112,6 +113,7 @@ export const mapApiRestaurantToQuizResult = (restaurant: ApiRestaurant): QuizRes
     name: restaurant.name,
     description: restaurant.description,
     imageUrl: restaurant.image_url,
+    logoUrl: restaurant.logo_url,
     features: features,
     website: restaurant.url,
     priceRange: restaurant.priceRange || priceMap[restaurant.price] || "$$",
@@ -127,6 +129,7 @@ const mockRestaurants: ApiRestaurant[] = [
     name: "Husk",
     description: "A celebration of Southern ingredients reimagined with a modern approach.",
     image_url: "https://huskrestarant.com/nashville/wp-content/uploads/sites/2/2018/08/MPHP-HUSK_NASHfacadexfade1.jpg",
+    logo_url: "https://husknashville.com/wp-content/uploads/sites/2/2021/07/husknew_gold.png",
     categories: [
       { alias: "southern", title: "Southern" },
       { alias: "newamerican", title: "New American" }
@@ -146,6 +149,7 @@ const mockRestaurants: ApiRestaurant[] = [
     name: "Butcher & Bee",
     description: "Farm-to-table Mediterranean-inspired fare with a focus on shared plates.",
     image_url: "https://butcherandbee.com/nashville/wp-content/uploads/sites/3/2018/05/BandB_NASH-41.jpg",
+    logo_url: "https://images.squarespace-cdn.com/content/v1/5a8f0595e45a7c670a287ba7/1519672592186-XV7L19IM35ZAJ2JY51BJ/be_Nash_logo.png",
     categories: [
       { alias: "farm-to-table", title: "Farm to Table" },
       { alias: "mediterranean", title: "Mediterranean" }
@@ -165,6 +169,7 @@ const mockRestaurants: ApiRestaurant[] = [
     name: "Folk",
     description: "Artisanal pizzas and seasonal small plates in a bright, airy space.",
     image_url: "https://static.spacecrafted.com/fc949565f8c041de82d47246772f381d/i/ee3d0f74b16649a99ed0895b65a3e97f/1/GCuCv726gZycFxatRCb2ix/Folk_20221207_SM_36.jpg",
+    logo_url: "https://images.squarespace-cdn.com/content/v1/57cbe08bff7c504d60b4ea51/1642710631058-V5MJSGKYW3YPH0HX3HF9/Folk_Final_Logo.png",
     categories: [
       { alias: "pizza", title: "Pizza" },
       { alias: "american", title: "American" }
@@ -184,6 +189,7 @@ const mockRestaurants: ApiRestaurant[] = [
     name: "Henrietta Red",
     description: "Seafood-focused, seasonal menu with an exceptional raw bar.",
     image_url: "https://images.squarespace-cdn.com/content/v1/586cfd48bebafb9f84b7cef6/1585084099200-M50KD0NRXIFNQOKDZNF9/Henrietta+Red+Exterior.JPG",
+    logo_url: "https://images.squarespace-cdn.com/content/v1/586cfd48bebafb9f84b7cef6/1489079016732-W7D9CDJ8VE2DTYBB5VSQ/Henrietta-Red-Logo-Final-09.15.16-B%402x.png",
     categories: [
       { alias: "seafood", title: "Seafood" },
       { alias: "american", title: "American" }
@@ -203,6 +209,7 @@ const mockRestaurants: ApiRestaurant[] = [
     name: "Lockeland Table",
     description: "Community-focused eatery serving wood-fired pizzas and Southern-inspired dishes.",
     image_url: "https://lockelandtable.com/wp-content/uploads/2020/09/AEE81243-D493-45C8-9F55-A11022BDDD73.jpeg",
+    logo_url: "https://lockelandtable.com/wp-content/uploads/2022/09/LockelandTable_Logo.png",
     categories: [
       { alias: "pizza", title: "Pizza" },
       { alias: "southern", title: "Southern" },
@@ -296,3 +303,4 @@ const mockRestaurants: ApiRestaurant[] = [
     neighborhoods: ["gulch"]
   }
 ];
+
