@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { QuizResult } from "@/utils/quizData";
+import { useState, useEffect } from "react";
 
 interface RestaurantCardProps {
   restaurant: QuizResult;
@@ -11,6 +12,44 @@ interface RestaurantCardProps {
 
 const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
   const hasReservationLinks = restaurant.resyLink || restaurant.openTableLink;
+  const [imageSrc, setImageSrc] = useState<string | null>(restaurant.logoUrl || restaurant.imageUrl || null);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Function to generate a fallback image URL based on the restaurant website
+  const generateWebsiteImageUrl = (website: string | undefined): string | null => {
+    if (!website) return null;
+    
+    try {
+      const url = new URL(website);
+      return `https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${url.origin}&size=128`;
+    } catch (error) {
+      console.error("Invalid URL:", website);
+      return null;
+    }
+  };
+  
+  // Load a fallback image if the primary image fails
+  const handleImageError = () => {
+    if (restaurant.logoUrl && imageSrc === restaurant.logoUrl && restaurant.imageUrl) {
+      // If logo fails, try the restaurant image
+      console.log(`Logo failed for ${restaurant.name}, trying restaurant image`);
+      setImageSrc(restaurant.imageUrl);
+    } else if (restaurant.website) {
+      // If both logo and image fail or aren't available, try website favicon
+      console.log(`Images failed for ${restaurant.name}, trying website favicon`);
+      const websiteImage = generateWebsiteImageUrl(restaurant.website);
+      setImageSrc(websiteImage);
+    } else {
+      // If all else fails, set to null to show a placeholder
+      setImageSrc(null);
+    }
+  };
+  
+  useEffect(() => {
+    // Reset image source and loading state when restaurant changes
+    setImageSrc(restaurant.logoUrl || restaurant.imageUrl || null);
+    setIsLoading(true);
+  }, [restaurant]);
   
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-md">
@@ -20,33 +59,28 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         </div>
       )}
       
-      {restaurant.logoUrl ? (
-        <div className="relative h-48 w-full overflow-hidden bg-white flex items-center justify-center p-4">
+      <div className="relative h-48 w-full overflow-hidden bg-white flex items-center justify-center p-4">
+        {imageSrc ? (
           <img 
-            src={restaurant.logoUrl} 
-            alt={`${restaurant.name} logo`} 
-            className="max-h-full max-w-full object-contain"
-            onError={(e) => {
-              console.error(`Failed to load logo for ${restaurant.name}:`, restaurant.logoUrl);
-              // Fallback to imageUrl if logo fails to load
-              if (restaurant.imageUrl) {
-                (e.target as HTMLImageElement).src = restaurant.imageUrl;
-              }
-            }}
-          />
-        </div>
-      ) : restaurant.imageUrl && (
-        <div className="relative h-48 w-full overflow-hidden">
-          <img 
-            src={restaurant.imageUrl} 
+            src={imageSrc} 
             alt={restaurant.name} 
-            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+            className="max-h-full max-w-full object-contain"
+            onLoad={() => setIsLoading(false)}
+            onError={handleImageError}
           />
-          <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs px-2 py-1">
-            Exterior photo
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full w-full text-gray-400">
+            <div className="text-lg font-serif">{restaurant.name}</div>
+            <div className="text-sm mt-2">{restaurant.neighborhood}</div>
           </div>
-        </div>
-      )}
+        )}
+        
+        {isLoading && (
+          <div className="absolute inset-0 bg-white flex items-center justify-center">
+            <div className="animate-pulse bg-gray-200 h-24 w-36 rounded"></div>
+          </div>
+        )}
+      </div>
       
       <CardHeader>
         <CardTitle className="font-serif text-xl">{restaurant.name}</CardTitle>
