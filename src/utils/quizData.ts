@@ -1,3 +1,4 @@
+
 import { CasualIcon, ElegantIcon, TrendyIcon, UniqueIcon } from "@/utils/atmosphere-icons";
 
 export interface QuizOption {
@@ -26,6 +27,7 @@ export interface QuizResult {
   priceRange: string;
   description: string;
   imageUrl?: string;
+  logoUrl?: string;
   features?: string[];
   website?: string;
   isAlternative?: boolean;
