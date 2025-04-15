@@ -48,7 +48,8 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
               <Skeleton className="h-48 w-full" />
               <div className="p-6">
                 <Skeleton className="h-6 w-3/4 mb-4" />
-                <Skeleton className="h-4 w-1/2 mb-8" />
+                <Skeleton className="h-4 w-1/2 mb-2" />
+                <Skeleton className="h-4 w-3/4 mb-8" />
                 <Skeleton className="h-20 w-full mb-4" />
                 <div className="flex gap-2">
                   <Skeleton className="h-8 w-20" />
