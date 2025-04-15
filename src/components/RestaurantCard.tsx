@@ -87,6 +87,9 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         <CardDescription>
           {restaurant.neighborhood} • {restaurant.cuisine} • {restaurant.priceRange}
         </CardDescription>
+        {restaurant.address && (
+          <p className="text-sm text-muted-foreground mt-1">{restaurant.address}</p>
+        )}
       </CardHeader>
       
       <CardContent>

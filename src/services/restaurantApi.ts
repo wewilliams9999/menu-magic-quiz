@@ -119,7 +119,8 @@ export const mapApiRestaurantToQuizResult = (restaurant: ApiRestaurant): QuizRes
     priceRange: restaurant.priceRange || priceMap[restaurant.price] || "$$",
     neighborhood: neighborhood,
     cuisine: restaurant.cuisine || cuisine,
-    instagramLink: restaurant.instagram_url
+    instagramLink: restaurant.instagram_url,
+    address: `${restaurant.location.address1}, ${restaurant.location.city}, ${restaurant.location.state} ${restaurant.location.zip_code}`
   };
 };
 

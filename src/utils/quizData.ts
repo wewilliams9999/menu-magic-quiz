@@ -25,6 +25,7 @@ export interface QuizResult {
   neighborhood: string;
   priceRange: string;
   description: string;
+  address?: string;
   imageUrl?: string;
   logoUrl?: string;
   features?: string[];
