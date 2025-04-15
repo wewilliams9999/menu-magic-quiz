@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Navigation, AlertCircle } from "lucide-react";
@@ -37,18 +36,15 @@ const DistanceSelector = ({
   const [userInitiatedLocationRequest, setUserInitiatedLocationRequest] = useState(false);
   const [locationToastShown, setLocationToastShown] = useState(false);
   
-  // Use the location services hook with toasts disabled
   const { 
     userLocation: location, 
     isLocating, 
     getUserLocation: getLocation 
   } = useLocationServices(initialUserLocation, false);
 
-  // Effect to notify parent when location is obtained
   useEffect(() => {
     if (location && userInitiatedLocationRequest && onLocationShared) {
       onLocationShared();
-      // Show toast here instead, but only once
       if (!locationToastShown) {
         toast.success("Your location has been found");
         setLocationToastShown(true);
@@ -111,7 +107,6 @@ const DistanceSelector = ({
                 </div>
               </motion.div>}
             
-            {/* Only show distance options after location is shared */}
             {location && (
               <>
                 <div className="mb-6">
@@ -128,7 +123,7 @@ const DistanceSelector = ({
                         variant="outline" 
                         className={`flex-1 min-w-[60px] border border-gray-200 dark:border-gray-700 rounded-md px-2 py-3 ${selectedDistance === distance ? "bg-nashville-accent/20 border-nashville-accent text-nashville-accent dark:border-nashville-accent dark:text-nashville-accent" : ""}`}
                       >
-                        {distance} mi
+                        Up to {distance} mi
                       </ToggleGroupItem>
                     ))}
                   </ToggleGroup>
