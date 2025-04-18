@@ -123,7 +123,7 @@ const DistanceSelector = ({
                         variant="outline" 
                         className={`flex-1 min-w-[60px] border border-gray-200 dark:border-gray-700 rounded-md px-2 py-3 ${selectedDistance === distance ? "bg-nashville-accent/20 border-nashville-accent text-nashville-accent dark:border-nashville-accent dark:text-nashville-accent" : ""}`}
                       >
-                        Up to {distance} mi
+                        {distance} mi
                       </ToggleGroupItem>
                     ))}
                   </ToggleGroup>
