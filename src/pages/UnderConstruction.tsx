@@ -1,6 +1,7 @@
 
 import { Wrench } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const UnderConstruction = () => {
   return (
@@ -32,9 +33,16 @@ const UnderConstruction = () => {
         <p className="text-gray-700 dark:text-gray-300 mb-4">
           We are working hard to bring you an awesome experience. Please check back soon!
         </p>
+        <p className="text-gray-900 dark:text-gray-200">
+          <Link to="/" className="text-yellow-500 hover:underline font-medium">
+            Click here for a preview
+          </Link>
+          , but some features aren't working yet.
+        </p>
       </div>
     </motion.div>
   );
 };
 
 export default UnderConstruction;
+
