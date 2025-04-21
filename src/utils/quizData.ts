@@ -112,7 +112,7 @@ export const quizQuestions: QuizQuestion[] = [
   {
     id: "neighborhood",
     questionText: "Which neighborhoods would you like to explore?",
-    question: "neighborhoods",
+    question: "Which neighborhoods would you like to explore?",
     type: "multipleChoice",
     options: neighborhoodOptions,
     multiSelect: true,
