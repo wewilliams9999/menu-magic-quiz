@@ -1,5 +1,5 @@
 
-import { wrench } from "lucide-react";
+import { Wrench } from "lucide-react";
 import { motion } from "framer-motion";
 
 const UnderConstruction = () => {
@@ -26,6 +26,7 @@ const UnderConstruction = () => {
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 9.75v-1.5A3.75 3.75 0 0010.5 4.5H9a3 3 0 00-3 3v3.75a3 3 0 003 3h3.75a3 3 0 013 3v.75a3 3 0 003-3v-3a3.75 3.75 0 00-3.75-3.75z" />
           </motion.svg>
+          {/* Alternatively, you could use the icon component directly: <Wrench className="w-16 h-16 text-yellow-400 animate-spin" /> */}
         </div>
         <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-gray-100">Under Construction</h1>
         <p className="text-gray-700 dark:text-gray-300 mb-4">
