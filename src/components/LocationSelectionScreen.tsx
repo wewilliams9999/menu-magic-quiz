@@ -4,11 +4,15 @@ import { MapPin, Navigation, Map } from "lucide-react";
 import { toast } from "sonner";
 import NeighborhoodMap from "./NeighborhoodMap";
 import { useLocationServices } from "./map/useLocationServices";
+
 interface LocationSelectionScreenProps {
   onAnswer: (questionId: string, answerId: string) => void;
+  onUserLocationUpdate?: (coords: { latitude: number; longitude: number }) => void;
 }
+
 const LocationSelectionScreen = ({
-  onAnswer
+  onAnswer,
+  onUserLocationUpdate
 }: LocationSelectionScreenProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [locationToastShown, setLocationToastShown] = useState(false);
@@ -35,8 +39,17 @@ const LocationSelectionScreen = ({
     if (userLocation && selectedOption === "location" && !locationToastShown) {
       toast.success("Your location has been found");
       setLocationToastShown(true);
+      
+      // Pass the user location to the parent component
+      if (onUserLocationUpdate) {
+        onUserLocationUpdate({
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude
+        });
+      }
     }
-  }, [userLocation, selectedOption, locationToastShown]);
+  }, [userLocation, selectedOption, locationToastShown, onUserLocationUpdate]);
+
   const handleOptionSelect = (value: string) => {
     setSelectedOption(value);
     if (value === "location") {
@@ -46,6 +59,7 @@ const LocationSelectionScreen = ({
       onAnswer("locationMethod", value);
     }
   };
+
   return <motion.div initial={{
     opacity: 0,
     y: 20
@@ -100,4 +114,5 @@ const LocationSelectionScreen = ({
         </div>}
     </motion.div>;
 };
+
 export default LocationSelectionScreen;

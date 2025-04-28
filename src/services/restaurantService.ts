@@ -1,23 +1,39 @@
-
 import { QuizResult } from "@/utils/quizData";
 
-// Define the API URL - replace with your actual API endpoint
-const API_URL = "https://api.example.com/restaurants";
+// Update this to point to your API proxy or secure endpoint
+// NEVER expose your API key directly in frontend code
+const API_URL = "https://api.example.com/restaurants"; // This will be replaced in production
 
 export interface RestaurantApiParams {
   neighborhoods?: string[];
-  cuisine?: string[];  // Changed from string to string[] to match the updated params
+  cuisine?: string[];
   price?: string[];
   atmosphere?: string;
   preferences?: string[];
   distance?: number;
+  userLocation?: {
+    latitude: number;
+    longitude: number;
+  };
 }
 
 /**
- * Fetches restaurant data from the API
+ * Fetches restaurant data from the Google Places API via a secure proxy
+ * NOTE: In production, this should call a secure API endpoint that doesn't expose your API key
  */
 export const fetchRestaurants = async (params: RestaurantApiParams): Promise<QuizResult[]> => {
   try {
+    console.log("Fetching restaurants with params:", params);
+    
+    // In production, you would make a call to your secure backend API here
+    // which would then make the Google Places API call with your API key
+    
+    // For development/testing, we're using fallback data
+    console.log("Using fallback data for now. Connect to a secure backend to use live API data.");
+    return getFallbackRestaurants();
+    
+    // The code below would be used when you have a secure API endpoint:
+    /*
     // Convert params to query string
     const queryParams = new URLSearchParams();
     
@@ -26,7 +42,6 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     }
     
     if (params.cuisine && params.cuisine.length > 0) {
-      // Update to handle multiple cuisines
       params.cuisine.forEach(c => queryParams.append('cuisine', c));
     }
     
@@ -46,6 +61,11 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
       queryParams.append('distance', params.distance.toString());
     }
     
+    if (params.userLocation) {
+      queryParams.append('latitude', params.userLocation.latitude.toString());
+      queryParams.append('longitude', params.userLocation.longitude.toString());
+    }
+    
     const queryString = queryParams.toString();
     const url = queryString ? `${API_URL}?${queryString}` : API_URL;
     
@@ -57,11 +77,12 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     
     const data = await response.json();
     return data.results || [];
+    */
     
   } catch (error) {
     console.error("Error fetching restaurant data:", error);
-    // Return empty array on error
-    return [];
+    // Return fallback data on error
+    return getFallbackRestaurants();
   }
 };
 
@@ -115,4 +136,72 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       instagramLink: "https://www.instagram.com/theoptimistnashville"
     }
   ];
+};
+
+/**
+ * Maps Google Places API restaurant data to our QuizResult format
+ * This will be used when integrating with the actual Google Places API
+ */
+export const mapGooglePlacesToRestaurants = (places: any[]): QuizResult[] => {
+  return places.map(place => {
+    // Determine price range from price_level (0-4)
+    const priceMap: Record<number, string> = {
+      0: "$",
+      1: "$",
+      2: "$$",
+      3: "$$$",
+      4: "$$$$"
+    };
+    
+    // Extract neighborhood from address components if available
+    const neighborhood = "Downtown"; // Default - in production you'd extract this from address_components
+    
+    // Extract cuisine from types
+    const cuisineMap: Record<string, string> = {
+      "restaurant": "American",
+      "cafe": "Cafe",
+      "bar": "Bar",
+      "food": "American",
+      "meal_takeaway": "Fast Food",
+      "meal_delivery": "Delivery",
+      "bakery": "Bakery",
+      "italian_restaurant": "Italian",
+      "mexican_restaurant": "Mexican",
+      "chinese_restaurant": "Chinese",
+      "japanese_restaurant": "Japanese",
+      "thai_restaurant": "Thai",
+      "indian_restaurant": "Indian"
+      // Add more mappings as needed
+    };
+    
+    // Find a cuisine type that matches our known types
+    let cuisine = "American"; // Default
+    if (place.types && place.types.length > 0) {
+      for (const type of place.types) {
+        if (cuisineMap[type]) {
+          cuisine = cuisineMap[type];
+          break;
+        }
+      }
+    }
+    
+    return {
+      id: place.place_id,
+      name: place.name,
+      cuisine: cuisine,
+      neighborhood: neighborhood,
+      priceRange: place.price_level !== undefined ? priceMap[place.price_level] : "$$",
+      description: place.vicinity || "A wonderful place to eat in Nashville",
+      address: place.vicinity || place.formatted_address,
+      imageUrl: place.photos?.length > 0 
+        ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=YOUR_API_KEY_PLACEHOLDER` 
+        : undefined, // This would be replaced by your secure API
+      features: place.types?.filter(t => t !== "restaurant" && t !== "food" && t !== "establishment") || [],
+      website: place.website,
+      // Additional fields available through Place Details request
+      openTableLink: undefined, // Not directly available from Google Places
+      resyLink: undefined, // Not directly available from Google Places
+      instagramLink: undefined // Not directly available from Google Places
+    };
+  });
 };

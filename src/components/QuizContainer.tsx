@@ -16,6 +16,7 @@ const QuizContainer = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
   const [locationMode, setLocationMode] = useState(false);
+  const [userCoordinates, setUserCoordinates] = useState<{ latitude: number; longitude: number } | undefined>(undefined);
   
   // Get neighborhoods as string array for the API
   const neighborhoods = answers.neighborhood && Array.isArray(answers.neighborhood) 
@@ -48,6 +49,7 @@ const QuizContainer = () => {
     atmosphere: answers.atmosphere as string,
     preferences: preferences,
     distance: distance,
+    userLocation: userCoordinates
   });
 
   // Get the appropriate questions based on location mode
@@ -102,6 +104,12 @@ const QuizContainer = () => {
     }
   };
 
+  // New function to handle user location updates
+  const handleUserLocationUpdate = (coords: { latitude: number; longitude: number }) => {
+    setUserCoordinates(coords);
+    console.log("User coordinates set:", coords);
+  };
+
   const handleNextQuestion = () => {
     const questions = getQuestions();
     
@@ -148,6 +156,7 @@ const QuizContainer = () => {
           <LocationSelectionScreen 
             key="location" 
             onAnswer={handleAnswer}
+            onUserLocationUpdate={handleUserLocationUpdate}
           />
         )}
 
