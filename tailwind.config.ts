@@ -75,7 +75,21 @@ export default {
 					700: '#4d4d4d',
 					800: '#333333',
 					900: '#1a1a1a',
-					accent: '#e3bb7d'
+					accent: '#ff7800'
+				},
+				neon: {
+					orange: '#ff7800',
+					blue: '#0ef',
+					pink: '#f0e',
+					yellow: '#ff0',
+					red: '#f43f5e',
+				},
+				divebar: {
+					dark: '#121212',
+					brick: '#221f26',
+					accent: '#ff7800',
+					text: '#e0e0e0',
+					muted: '#a0a0a0',
 				}
 			},
 			borderRadius: {
@@ -111,6 +125,16 @@ export default {
 				pulse: {
 					'0%, 100%': { opacity: '1' },
 					'50%': { opacity: '0.5' }
+				},
+				flicker: {
+					'0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100%': {
+						opacity: '0.99',
+						filter: 'brightness(1)'
+					},
+					'20%, 21.999%, 63%, 63.999%, 65%, 69.999%': {
+						opacity: '0.4',
+						filter: 'brightness(0.8)'
+					}
 				}
 			},
 			animation: {
@@ -120,7 +144,11 @@ export default {
 				'fade-out': 'fadeOut 0.5s ease-out forwards',
 				'slide-in': 'slideIn 0.5s ease-out forwards',
 				'slide-out': 'slideOut 0.5s ease-out forwards',
-				'pulse': 'pulse 2s ease-in-out infinite'
+				'pulse': 'pulse 2s ease-in-out infinite',
+				'flicker': 'flicker 8s linear infinite'
+			},
+			backgroundImage: {
+				'brick-pattern': "url(\"data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%233f3f3f' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z'/%3E%3C/g%3E%3C/svg%3E\")"
 			}
 		}
 	},

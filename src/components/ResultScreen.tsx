@@ -45,15 +45,15 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
       className="w-full max-w-4xl mx-auto px-4"
     >
       <div className="text-center mb-10">
-        <div className="inline-flex items-center justify-center p-2 bg-nashville-accent/20 rounded-full mb-5">
-          <span className="text-nashville-accent text-2xl">✦</span>
+        <div className="inline-flex items-center justify-center p-2 bg-orange-500/20 rounded-full mb-5">
+          <span className="text-orange-500 text-2xl">✦</span>
         </div>
-        <h2 className="text-3xl md:text-4xl font-bold mb-3">
+        <h2 className="text-3xl md:text-4xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-300">
           {isSingleResult 
             ? "Your Nashville Restaurant Match" 
             : "Your Nashville Restaurant Matches"}
         </h2>
-        <p className="text-nashville-600 dark:text-nashville-400 max-w-md mx-auto">
+        <p className="text-zinc-400 max-w-md mx-auto">
           {isSingleResult
             ? "Based on your preferences, we think you'll enjoy this Nashville gem."
             : "Based on your preferences, we think you'll enjoy these Nashville gems."}
@@ -61,7 +61,7 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
         
         {/* Add reservation links explanation */}
         {results.some(r => r.resyLink || r.openTableLink) && (
-          <p className="text-sm text-nashville-500 mt-2">
+          <p className="text-sm text-zinc-500 mt-2">
             <span className="inline-flex items-center">
               <ExternalLink className="h-3 w-3 mr-1" />
               Reservation links available where offered
@@ -71,7 +71,7 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
         
         {/* Show result count info */}
         {results.length > 0 && !isSingleResult && (
-          <p className="text-sm text-nashville-500 mt-2">
+          <p className="text-sm text-zinc-500 mt-2">
             Showing {displayedResults.length} of {results.length} matches
           </p>
         )}
@@ -80,16 +80,16 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[1, 2, 3].map((_, i) => (
-            <div key={i} className="border rounded-lg overflow-hidden">
-              <Skeleton className="h-48 w-full" />
+            <div key={i} className="border border-zinc-800 rounded-lg overflow-hidden bg-zinc-900/50">
+              <Skeleton className="h-48 w-full bg-zinc-800/50" />
               <div className="p-6">
-                <Skeleton className="h-6 w-3/4 mb-4" />
-                <Skeleton className="h-4 w-1/2 mb-2" />
-                <Skeleton className="h-4 w-3/4 mb-8" />
-                <Skeleton className="h-20 w-full mb-4" />
+                <Skeleton className="h-6 w-3/4 mb-4 bg-zinc-800/50" />
+                <Skeleton className="h-4 w-1/2 mb-2 bg-zinc-800/50" />
+                <Skeleton className="h-4 w-3/4 mb-8 bg-zinc-800/50" />
+                <Skeleton className="h-20 w-full mb-4 bg-zinc-800/50" />
                 <div className="flex gap-2">
-                  <Skeleton className="h-8 w-20" />
-                  <Skeleton className="h-8 w-20" />
+                  <Skeleton className="h-8 w-20 bg-zinc-800/50" />
+                  <Skeleton className="h-8 w-20 bg-zinc-800/50" />
                 </div>
               </div>
             </div>
@@ -98,8 +98,8 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
       ) : results.length > 0 ? (
         <>
           {noExactMatches && (
-            <Alert className="mb-6 bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800">
-              <AlertDescription className="text-amber-800 dark:text-amber-300 text-center">
+            <Alert className="mb-6 bg-amber-950/20 border-amber-800/50">
+              <AlertDescription className="text-amber-300 text-center">
                 There are no exact matches for your criteria, but these are the closest to your preferences.
               </AlertDescription>
             </Alert>
@@ -117,7 +117,7 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
               <Button 
                 onClick={handleShowMore} 
                 variant="outline" 
-                className="gap-2"
+                className="gap-2 border-orange-500/30 text-orange-400 hover:bg-orange-950/30 hover:text-orange-300"
               >
                 Show More Results
                 <ChevronDown className="h-4 w-4" />
@@ -126,16 +126,16 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
           )}
         </>
       ) : (
-        <div className="text-center p-8 border rounded-lg bg-gray-50 dark:bg-gray-900/50">
-          <p className="text-lg mb-4">No exact matches found, but we have some alternatives for you!</p>
-          <p className="text-nashville-600 dark:text-nashville-400 mb-6">
+        <div className="text-center p-8 border border-zinc-800 rounded-lg bg-zinc-900/50">
+          <p className="text-lg mb-4 text-zinc-200">No exact matches found, but we have some alternatives for you!</p>
+          <p className="text-zinc-400 mb-6">
             Try adjusting your preferences for more options, or check out our curated selection of local favorites.
           </p>
         </div>
       )}
 
       <div className="mt-12 text-center">
-        <Button onClick={onReset} variant="outline" className="gap-2">
+        <Button onClick={onReset} variant="outline" className="gap-2 border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200">
           <ArrowLeft className="h-4 w-4" /> Start Over
         </Button>
       </div>
