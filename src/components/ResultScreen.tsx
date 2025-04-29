@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { QuizResult } from "@/utils/quizData";
 import { Skeleton } from "@/components/ui/skeleton";
 import RestaurantCard from "@/components/RestaurantCard";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ChevronDown, ExternalLink } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useState } from "react";
 
 interface ResultScreenProps {
   results: QuizResult[];
@@ -13,11 +14,27 @@ interface ResultScreenProps {
   isLoading?: boolean;
 }
 
+const INITIAL_DISPLAY_COUNT = 3;
+
 const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps) => {
+  // State to track how many restaurants to show
+  const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY_COUNT);
+  
   // Check if all results are alternatives
   const allAlternatives = results.length > 0 && results.every(result => result.isAlternative);
   const isSingleResult = results.length === 1;
   const noExactMatches = allAlternatives || results.length === 0;
+  
+  // Get the subset of results to display
+  const displayedResults = results.slice(0, displayCount);
+  
+  // Check if there are more results to show
+  const hasMoreResults = results.length > displayCount;
+  
+  // Function to handle showing more results
+  const handleShowMore = () => {
+    setDisplayCount(prev => prev + 3);
+  };
   
   return (
     <motion.div
@@ -51,11 +68,18 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
             </span>
           </p>
         )}
+        
+        {/* Show result count info */}
+        {results.length > 0 && !isSingleResult && (
+          <p className="text-sm text-nashville-500 mt-2">
+            Showing {displayedResults.length} of {results.length} matches
+          </p>
+        )}
       </div>
 
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {[1, 2, 3, 4].map((_, i) => (
+          {[1, 2, 3].map((_, i) => (
             <div key={i} className="border rounded-lg overflow-hidden">
               <Skeleton className="h-48 w-full" />
               <div className="p-6">
@@ -82,10 +106,24 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
           )}
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {results.map((result) => (
+            {displayedResults.map((result) => (
               <RestaurantCard key={result.id} restaurant={result} />
             ))}
           </div>
+          
+          {/* Show "More Results" button if there are more results to display */}
+          {hasMoreResults && (
+            <div className="mt-8 text-center">
+              <Button 
+                onClick={handleShowMore} 
+                variant="outline" 
+                className="gap-2"
+              >
+                Show More Results
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
         </>
       ) : (
         <div className="text-center p-8 border rounded-lg bg-gray-50 dark:bg-gray-900/50">
