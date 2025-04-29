@@ -141,7 +141,7 @@ const QuizContainer = () => {
   const currentQuestion = getQuestions()[currentQuestionIndex];
 
   return (
-    <div className="min-h-[80vh] flex flex-col justify-center">
+    <div className="min-h-[80vh] flex flex-col justify-center bg-gradient-to-b from-black to-gray-900 text-white p-4">
       <AnimatePresence mode="wait">
         {currentScreen === "location" && (
           <LocationSelectionScreen 
