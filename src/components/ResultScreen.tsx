@@ -55,8 +55,8 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
           className="inline-flex items-center justify-center p-3 rounded-full mb-5"
         >
           <div className="relative">
-            <span className="text-orange-500 text-4xl">✦</span>
-            <div className="absolute inset-0 blur-md text-orange-500">
+            <span className="text-red-500 text-4xl">✦</span>
+            <div className="absolute inset-0 blur-md text-red-500">
               <span className="text-4xl">✦</span>
             </div>
           </div>
@@ -66,7 +66,7 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.5 }}
-          className="text-3xl md:text-4xl font-bold mb-3 neon-text"
+          className="text-3xl md:text-4xl font-bold mb-3 text-red-500"
         >
           {isSingleResult 
             ? "Your Nashville Restaurant Match" 
@@ -152,7 +152,7 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
               <Button 
                 onClick={handleShowMore} 
                 variant="outline" 
-                className="gap-2 border-orange-500/30 text-orange-400 hover:bg-orange-950/30 hover:text-orange-300"
+                className="gap-2 border-red-500/30 text-red-400 hover:bg-red-950/30 hover:text-red-300"
               >
                 Show More Results
                 <ChevronDown className="h-4 w-4" />
