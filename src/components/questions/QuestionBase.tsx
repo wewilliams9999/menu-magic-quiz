@@ -65,25 +65,20 @@ const QuestionBase = ({
           <ChevronLeft className="mr-2 h-4 w-4" />
           Previous
         </Button>
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+        <Button 
+          onClick={onNext}
+          disabled={isNextDisabled}
+          className="bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none"
         >
-          <Button 
-            onClick={onNext}
-            disabled={isNextDisabled}
-            className="bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none"
-          >
-            {currentIndex === totalQuestions - 1 ? (
-              "See Results"
-            ) : (
-              <>
-                Next
-                <ChevronRight className="ml-2 h-4 w-4" />
-              </>
-            )}
-          </Button>
-        </motion.div>
+          {currentIndex === totalQuestions - 1 ? (
+            "See Results"
+          ) : (
+            <>
+              Next
+              <ChevronRight className="ml-2 h-4 w-4" />
+            </>
+          )}
+        </Button>
       </div>
 
       {children}
