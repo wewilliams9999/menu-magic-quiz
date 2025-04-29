@@ -6,7 +6,7 @@ export interface RestaurantApiParams {
   neighborhoods?: string[];
   cuisine?: string[];
   price?: string[];
-  atmosphere?: string;
+  atmosphere?: string | string[];
   preferences?: string[];
   distance?: number;
   userLocation?: {
