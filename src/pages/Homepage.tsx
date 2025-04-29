@@ -19,8 +19,7 @@ const Homepage = () => {
         }}
       />
       
-      {/* Dark overlay with further reduced opacity to make logo more visible */}
-      <div className="absolute inset-0 bg-black/45 z-0" />
+      {/* Dark overlay removed */}
       
       <motion.div 
         initial={{ opacity: 0 }} 
