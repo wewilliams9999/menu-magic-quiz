@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import RestaurantCard from "@/components/RestaurantCard";
 import { ArrowLeft, ChevronDown, ExternalLink } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface ResultScreenProps {
   results: QuizResult[];
@@ -19,6 +19,14 @@ const INITIAL_DISPLAY_COUNT = 3;
 const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps) => {
   // State to track how many restaurants to show
   const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY_COUNT);
+  
+  // Debug output to check results
+  useEffect(() => {
+    console.log("Results in ResultScreen:", results);
+    if (results.length > 0) {
+      console.log("First result sample:", results[0]);
+    }
+  }, [results]);
   
   // Check if all results are alternatives
   const allAlternatives = results.length > 0 && results.every(result => result.isAlternative);

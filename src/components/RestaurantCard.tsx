@@ -50,9 +50,17 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
     setImageSrc(restaurant.logoUrl || restaurant.imageUrl || null);
     setIsLoading(true);
   }, [restaurant]);
+
+  // Debug output to check if links are present
+  console.log(`Restaurant ${restaurant.name} links:`, {
+    website: restaurant.website,
+    instagram: restaurant.instagramLink,
+    resy: restaurant.resyLink,
+    openTable: restaurant.openTableLink
+  });
   
   return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-md">
+    <Card className="overflow-hidden transition-all duration-300 hover:shadow-md hover:border-red-500/30">
       {restaurant.isAlternative && (
         <div className="bg-yellow-100 dark:bg-yellow-900/30 px-4 py-2 text-sm text-yellow-800 dark:text-yellow-300">
           Alternative suggestion based on your preferences
@@ -118,7 +126,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
       
       <CardFooter className="flex flex-wrap gap-2">
         {restaurant.website && (
-          <Button variant="outline" size="sm" asChild className="border-red-200 hover:border-red-300 hover:bg-red-50 text-red-600 dark:border-red-800 dark:hover:border-red-700 dark:hover:bg-red-950/30 dark:text-red-400">
+          <Button variant="outline" size="sm" asChild className="border-red-500 hover:border-red-600 hover:bg-red-50/50 text-red-600 dark:border-red-700 dark:hover:border-red-600 dark:hover:bg-red-950/30 dark:text-red-400">
             <a href={restaurant.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
               <span>Website</span>
               <ExternalLink className="h-3.5 w-3.5" />
@@ -127,7 +135,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         )}
         
         {restaurant.instagramLink && (
-          <Button variant="outline" size="sm" asChild className="border-red-200 hover:border-red-300 hover:bg-red-50 text-red-600 dark:border-red-800 dark:hover:border-red-700 dark:hover:bg-red-950/30 dark:text-red-400">
+          <Button variant="outline" size="sm" asChild className="border-red-500 hover:border-red-600 hover:bg-red-50/50 text-red-600 dark:border-red-700 dark:hover:border-red-600 dark:hover:bg-red-950/30 dark:text-red-400">
             <a href={restaurant.instagramLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
               <Instagram className="h-3.5 w-3.5" />
               <span>Instagram</span>
@@ -136,7 +144,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         )}
         
         {restaurant.resyLink && (
-          <Button variant="secondary" size="sm" asChild className="bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-900/40 dark:hover:bg-red-800/50 dark:text-red-300">
+          <Button variant="secondary" size="sm" asChild className="bg-red-600/20 hover:bg-red-600/30 text-red-700 dark:bg-red-600/20 dark:hover:bg-red-600/30 dark:text-red-300">
             <a href={restaurant.resyLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
               <span className="font-bold">R</span>
               <span>Resy</span>
@@ -146,7 +154,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         )}
         
         {restaurant.openTableLink && (
-          <Button variant="secondary" size="sm" asChild className="bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-900/40 dark:hover:bg-red-800/50 dark:text-red-300">
+          <Button variant="secondary" size="sm" asChild className="bg-red-600/20 hover:bg-red-600/30 text-red-700 dark:bg-red-600/20 dark:hover:bg-red-600/30 dark:text-red-300">
             <a href={restaurant.openTableLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
@@ -158,7 +166,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
           </Button>
         )}
         
-        {!hasReservationLinks && (
+        {!hasReservationLinks && restaurant.website && (
           <p className="text-xs text-red-500 italic">Call restaurant for reservations</p>
         )}
       </CardFooter>
