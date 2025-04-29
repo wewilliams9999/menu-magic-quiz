@@ -83,7 +83,21 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
       </div>
       
       <CardHeader>
-        <CardTitle className="font-serif text-xl">{restaurant.name}</CardTitle>
+        {restaurant.website ? (
+          <CardTitle className="font-serif text-xl">
+            <a 
+              href={restaurant.website} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-nashville-600 dark:hover:text-nashville-400 transition-colors flex items-center gap-1"
+            >
+              {restaurant.name}
+              <ExternalLink className="h-3.5 w-3.5 inline-flex ml-1 opacity-70" />
+            </a>
+          </CardTitle>
+        ) : (
+          <CardTitle className="font-serif text-xl">{restaurant.name}</CardTitle>
+        )}
         <CardDescription>
           {restaurant.neighborhood} • {restaurant.cuisine} • {restaurant.priceRange}
         </CardDescription>
