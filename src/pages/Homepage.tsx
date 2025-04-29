@@ -8,12 +8,13 @@ const Homepage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center dive-bar-bg text-white">
+    <div className="min-h-screen flex flex-col items-center justify-center logo-background text-white relative">
+      <div className="absolute inset-0 bg-black/75 z-0" />
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.2 }}
-        className="text-center max-w-2xl mx-auto px-4 py-12"
+        className="text-center max-w-2xl mx-auto px-4 py-12 z-10 relative"
       >
         <motion.div
           initial={{ y: -20, opacity: 0 }}
