@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Beer, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 const Homepage = () => {
   const navigate = useNavigate();
@@ -27,9 +27,13 @@ const Homepage = () => {
                 boxShadow: ["0 0 10px #ff7800", "0 0 20px #ff7800", "0 0 10px #ff7800"],
               }}
               transition={{ duration: 4, repeat: Infinity }}
-              className="rounded-full p-4 border border-orange-600/30 bg-black/30"
+              className="rounded-full p-1 border border-orange-600/30 bg-black/30"
             >
-              <Beer className="h-12 w-12 text-orange-500" />
+              <img 
+                src="/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png" 
+                alt="Nash Menus logo" 
+                className="h-32 w-32 object-contain"
+              />
             </motion.div>
           </div>
         </motion.div>
