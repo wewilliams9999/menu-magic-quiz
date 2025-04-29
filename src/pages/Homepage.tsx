@@ -23,6 +23,16 @@ const Homepage = () => {
           filter: 'contrast(1.2) brightness(1.1)'
         }}
       />
+      
+      {/* Subtle indication to click */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.7 }}
+        transition={{ delay: 1.5, duration: 1 }}
+        className="text-white text-xl z-10"
+      >
+        Click anywhere to continue
+      </motion.div>
     </div>
   );
 };

@@ -8,16 +8,9 @@ const WelcomePage = () => {
   const navigate = useNavigate();
   
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative">
-      {/* Logo Background with adjusted opacity */}
-      <div 
-        className="absolute inset-0 z-0 bg-center bg-cover bg-no-repeat"
-        style={{
-          backgroundImage: `url("/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png")`,
-          backgroundSize: 'cover',
-          filter: 'contrast(1.2) brightness(1.1)'
-        }}
-      />
+    <div className="min-h-screen flex flex-col items-center justify-center relative bg-black">
+      {/* Dark background instead of logo */}
+      <div className="absolute inset-0 z-0 bg-brick"></div>
       
       <motion.div 
         initial={{ opacity: 0 }} 
