@@ -121,7 +121,6 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
                 <Skeleton className="h-6 w-3/4 mb-4 bg-zinc-800/50" />
                 <Skeleton className="h-4 w-1/2 mb-2 bg-zinc-800/50" />
                 <Skeleton className="h-4 w-3/4 mb-8 bg-zinc-800/50" />
-                <Skeleton className="h-20 w-full mb-4 bg-zinc-800/50" />
                 <div className="flex gap-2">
                   <Skeleton className="h-8 w-20 bg-zinc-800/50" />
                   <Skeleton className="h-8 w-20 bg-zinc-800/50" />
@@ -162,7 +161,7 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
         </>
       ) : (
         <div className="text-center p-8 border border-zinc-800 rounded-lg bg-zinc-900/50">
-          <p className="text-lg mb-4 text-zinc-200">No exact matches found, but we have some alternatives for you!</p>
+          <p className="text-lg mb-4 text-zinc-200">No matches found for your preferences</p>
           <p className="text-zinc-400 mb-6">
             Try adjusting your preferences for more options, or check out our curated selection of local favorites.
           </p>
