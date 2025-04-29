@@ -14,7 +14,7 @@ const Homepage = () => {
       className="min-h-screen flex flex-col items-center justify-center relative cursor-pointer"
       onClick={handleClick}
     >
-      {/* Logo Background with adjusted opacity */}
+      {/* Logo Background with full visibility */}
       <div 
         className="absolute inset-0 z-0 bg-center bg-cover bg-no-repeat"
         style={{
@@ -23,16 +23,6 @@ const Homepage = () => {
           filter: 'contrast(1.2) brightness(1.1)'
         }}
       />
-      
-      {/* No text or buttons, just a subtle indication to click */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.7 }}
-        transition={{ delay: 1.5, duration: 1 }}
-        className="text-white text-xl z-10"
-      >
-        Click anywhere to continue
-      </motion.div>
     </div>
   );
 };
