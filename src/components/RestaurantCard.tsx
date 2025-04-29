@@ -1,6 +1,6 @@
 
 import { ExternalLink, Instagram } from "lucide-react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { QuizResult } from "@/utils/quizData";
@@ -11,7 +11,6 @@ interface RestaurantCardProps {
 }
 
 const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
-  const hasReservationLinks = restaurant.resyLink || restaurant.openTableLink;
   const [imageSrc, setImageSrc] = useState<string | null>(restaurant.logoUrl || restaurant.imageUrl || null);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -51,13 +50,18 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
     setIsLoading(true);
   }, [restaurant]);
 
-  // Debug output to check if links are present
-  console.log(`Restaurant ${restaurant.name} links:`, {
-    website: restaurant.website,
-    instagram: restaurant.instagramLink,
-    resy: restaurant.resyLink,
-    openTable: restaurant.openTableLink
-  });
+  // Debug log to check if links exist
+  useEffect(() => {
+    console.log(`Restaurant ${restaurant.name} links:`, {
+      website: restaurant.website,
+      instagram: restaurant.instagramLink,
+      resy: restaurant.resyLink,
+      openTable: restaurant.openTableLink
+    });
+  }, [restaurant]);
+  
+  // Check if any reservation links exist
+  const hasReservationLinks = restaurant.resyLink || restaurant.openTableLink;
   
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-md hover:border-red-500/30">
@@ -106,16 +110,14 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
             restaurant.name
           )}
         </CardTitle>
-        <CardDescription>
+        <div className="text-sm text-muted-foreground">
           {restaurant.neighborhood} • {restaurant.cuisine} • {restaurant.priceRange}
-        </CardDescription>
-        {restaurant.address && (
-          <p className="text-sm text-muted-foreground mt-1">{restaurant.address}</p>
-        )}
+          {restaurant.address && <div className="mt-1">{restaurant.address}</div>}
+        </div>
       </CardHeader>
       
       <CardContent>
-        <div className="flex flex-wrap gap-2 mt-2">
+        <div className="flex flex-wrap gap-2">
           {restaurant.features?.map((feature, index) => (
             <Badge key={index} variant="secondary" className="bg-red-100 dark:bg-red-800/30 text-red-700 dark:text-red-300">
               {feature}
@@ -124,7 +126,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         </div>
       </CardContent>
       
-      <CardFooter className="flex flex-wrap gap-2">
+      <CardFooter className="flex flex-wrap gap-2 justify-start">
         {restaurant.website && (
           <Button variant="outline" size="sm" asChild className="border-red-500 hover:border-red-600 hover:bg-red-50/50 text-red-600 dark:border-red-700 dark:hover:border-red-600 dark:hover:bg-red-950/30 dark:text-red-400">
             <a href={restaurant.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
@@ -167,7 +169,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         )}
         
         {!hasReservationLinks && restaurant.website && (
-          <p className="text-xs text-red-500 italic">Call restaurant for reservations</p>
+          <p className="text-xs text-red-500 italic mt-1">Call restaurant for reservations</p>
         )}
       </CardFooter>
     </Card>

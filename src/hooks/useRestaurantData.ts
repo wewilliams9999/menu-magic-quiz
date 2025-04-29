@@ -6,7 +6,7 @@ interface RestaurantDataParams {
   neighborhoods?: string[];
   cuisine?: string[];
   price?: string[];
-  atmosphere?: string;
+  atmosphere?: string | string[];
   preferences?: string[];
   distance?: number;
   userLocation?: {
@@ -32,6 +32,16 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         };
         
         const results = await fetchRestaurants(apiParams);
+        
+        // Log results for debugging
+        console.log(`Retrieved ${results.length} restaurants with links:`, 
+          results.map(r => ({ 
+            name: r.name, 
+            website: r.website, 
+            resy: r.resyLink, 
+            openTable: r.openTableLink 
+          }))
+        );
         
         // If we get no results, fall back to mock data
         if (results.length === 0) {
