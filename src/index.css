@@ -94,11 +94,13 @@
     box-shadow: 0 0 7px rgba(255, 120, 0, 0.7), 0 0 15px rgba(255, 120, 0, 0.5);
   }
   
+  /* Modified logo background to be more bold */
   .logo-background {
     background-image: url("/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    filter: contrast(1.2) brightness(1.1);
   }
   
   .dive-bar-bg {
