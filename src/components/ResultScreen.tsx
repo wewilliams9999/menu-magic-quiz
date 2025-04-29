@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { QuizResult } from "@/utils/quizData";
 import { Skeleton } from "@/components/ui/skeleton";
 import RestaurantCard from "@/components/RestaurantCard";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 
 interface ResultScreenProps {
   results: QuizResult[];
@@ -39,6 +39,16 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
             ? "Based on your preferences, we think you'll enjoy this Nashville gem."
             : "Based on your preferences, we think you'll enjoy these Nashville gems."}
         </p>
+        
+        {/* Add reservation links explanation */}
+        {results.some(r => r.resyLink || r.openTableLink) && (
+          <p className="text-sm text-nashville-500 mt-2">
+            <span className="inline-flex items-center">
+              <ExternalLink className="h-3 w-3 mr-1" />
+              Reservation links available where offered
+            </span>
+          </p>
+        )}
       </div>
 
       {isLoading ? (
