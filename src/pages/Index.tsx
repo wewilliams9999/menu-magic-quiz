@@ -1,8 +1,8 @@
 
-import UnderConstruction from "./UnderConstruction";
+import Homepage from "./Homepage";
 
 const Index = () => {
-  return <UnderConstruction />;
+  return <Homepage />;
 };
 
 export default Index;
