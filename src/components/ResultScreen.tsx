@@ -45,35 +45,67 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
       className="w-full max-w-4xl mx-auto px-4"
     >
       <div className="text-center mb-10">
-        <div className="inline-flex items-center justify-center p-2 bg-orange-500/20 rounded-full mb-5">
-          <span className="text-orange-500 text-2xl">✦</span>
-        </div>
-        <h2 className="text-3xl md:text-4xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-300">
+        <motion.div 
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="inline-flex items-center justify-center p-3 rounded-full mb-5"
+        >
+          <div className="relative">
+            <span className="text-orange-500 text-4xl">✦</span>
+            <div className="absolute inset-0 blur-md text-orange-500">
+              <span className="text-4xl">✦</span>
+            </div>
+          </div>
+        </motion.div>
+        
+        <motion.h2 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          className="text-3xl md:text-4xl font-bold mb-3 neon-text"
+        >
           {isSingleResult 
             ? "Your Nashville Restaurant Match" 
             : "Your Nashville Restaurant Matches"}
-        </h2>
-        <p className="text-zinc-400 max-w-md mx-auto">
+        </motion.h2>
+        
+        <motion.p 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+          className="text-zinc-400 max-w-md mx-auto"
+        >
           {isSingleResult
             ? "Based on your preferences, we think you'll enjoy this Nashville gem."
             : "Based on your preferences, we think you'll enjoy these Nashville gems."}
-        </p>
+        </motion.p>
         
         {/* Add reservation links explanation */}
         {results.some(r => r.resyLink || r.openTableLink) && (
-          <p className="text-sm text-zinc-500 mt-2">
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+            className="text-sm text-zinc-500 mt-2"
+          >
             <span className="inline-flex items-center">
               <ExternalLink className="h-3 w-3 mr-1" />
               Reservation links available where offered
             </span>
-          </p>
+          </motion.p>
         )}
         
         {/* Show result count info */}
         {results.length > 0 && !isSingleResult && (
-          <p className="text-sm text-zinc-500 mt-2">
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.5 }}
+            className="text-sm text-zinc-500 mt-2"
+          >
             Showing {displayedResults.length} of {results.length} matches
-          </p>
+          </motion.p>
         )}
       </div>
 
@@ -135,7 +167,11 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
       )}
 
       <div className="mt-12 text-center">
-        <Button onClick={onReset} variant="outline" className="gap-2 border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200">
+        <Button 
+          onClick={onReset} 
+          variant="outline" 
+          className="gap-2 border-zinc-700 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200"
+        >
           <ArrowLeft className="h-4 w-4" /> Start Over
         </Button>
       </div>

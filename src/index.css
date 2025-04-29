@@ -76,27 +76,27 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground dive-bar-bg;
   }
   
   /* Neon text effect */
   .neon-text {
     @apply text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-300;
-    text-shadow: 0 0 5px rgba(255, 120, 0, 0.5), 0 0 15px rgba(255, 120, 0, 0.3);
+    text-shadow: 0 0 5px rgba(255, 120, 0, 0.7), 0 0 15px rgba(255, 120, 0, 0.5), 0 0 25px rgba(255, 120, 0, 0.3);
   }
   
   .neon-box {
     @apply border-2 border-orange-500 rounded-lg;
-    box-shadow: 0 0 5px rgba(255, 120, 0, 0.5), 0 0 15px rgba(255, 120, 0, 0.3);
+    box-shadow: 0 0 7px rgba(255, 120, 0, 0.7), 0 0 15px rgba(255, 120, 0, 0.5), inset 0 0 10px rgba(255, 120, 0, 0.3);
   }
   
   .neon-glow {
-    box-shadow: 0 0 5px rgba(255, 120, 0, 0.5), 0 0 15px rgba(255, 120, 0, 0.3);
+    box-shadow: 0 0 7px rgba(255, 120, 0, 0.7), 0 0 15px rgba(255, 120, 0, 0.5);
   }
   
   .dive-bar-bg {
     background-color: #121212;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+    background-image: linear-gradient(rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.92)),
       url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%233f3f3f' fill-opacity='0.15' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 5V4zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
   }
 }
@@ -116,4 +116,48 @@
     background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)),
       url("data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%233f3f3f' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z'/%3E%3C/g%3E%3C/svg%3E");
   }
+  
+  /* Add a subtle scanline effect for CRT/dive bar vibes */
+  .scanlines {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .scanlines:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.05) 0.5%,
+      transparent 1%
+    );
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 10;
+  }
+  
+  /* Vintage photo filter */
+  .vintage-filter {
+    filter: sepia(0.2) brightness(0.9) contrast(1.1);
+  }
+  
+  /* Wood texture for backgrounds */
+  .wood-texture {
+    background-color: #2c1e15;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+      url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%233e2b1b' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+  }
+}
+
+/* Reset styles for App.css - no need to include all App.css code here*/
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
 }

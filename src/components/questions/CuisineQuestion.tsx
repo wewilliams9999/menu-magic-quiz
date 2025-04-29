@@ -26,24 +26,24 @@ const CuisineQuestion = ({ options, selectedAnswer, onSelect }: CuisineQuestionP
             onClick={() => onSelect(option.value)}
             className={`flex items-center p-4 rounded-lg cursor-pointer transition-all ${
               selectedAnswer === option.value 
-                ? "bg-gradient-to-r from-nashville-accent/20 to-nashville-accent/10 border-l-4 border-nashville-accent" 
-                : "bg-white/5 dark:bg-black/5 hover:bg-nashville-100/30 dark:hover:bg-nashville-800/30 border-l-4 border-transparent"
+                ? "bg-gradient-to-r from-orange-500/20 to-orange-500/5 border-l-4 border-orange-500" 
+                : "bg-divebar-dark/40 hover:bg-divebar-dark/60 border-l-4 border-transparent"
             }`}
           >
             <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 ${
               selectedAnswer === option.value
-                ? "bg-nashville-accent text-white"
-                : "bg-nashville-100 dark:bg-nashville-800 text-nashville-500 dark:text-nashville-400"
+                ? "bg-orange-500 text-divebar-dark"
+                : "bg-divebar-brick text-zinc-400"
             }`}>
               <Utensils className="w-5 h-5" />
             </div>
             <div className="flex-1">
-              <h3 className="font-medium text-xl">{option.text}</h3>
+              <h3 className="font-medium text-xl text-zinc-200">{option.text}</h3>
             </div>
             <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
               selectedAnswer === option.value
-                ? "border-nashville-accent bg-nashville-accent text-white"
-                : "border-nashville-300"
+                ? "border-orange-500 bg-orange-500/20 text-orange-400"
+                : "border-zinc-600"
             }`}>
               {selectedAnswer === option.value && (
                 <motion.div 

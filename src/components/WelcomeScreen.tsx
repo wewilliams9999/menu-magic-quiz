@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { SparklesIcon } from "lucide-react";
+import { Beer, Music } from "lucide-react";
 
 interface WelcomeScreenProps {
   onStart: () => void;
@@ -10,19 +10,25 @@ interface WelcomeScreenProps {
 const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className="flex flex-col items-center justify-center text-center gap-6 px-4 max-w-2xl mx-auto"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      className="relative flex flex-col items-center justify-center text-center gap-8 px-4 py-12 max-w-2xl mx-auto"
     >
+      <div className="absolute inset-0 z-[-1] bg-brick opacity-70"></div>
+      
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.5 }}
-        className="mb-2"
       >
-        <div className="inline-flex items-center justify-center p-3 bg-gradient-to-br from-nashville-accent/30 to-nashville-accent/10 rounded-full mb-5">
-          <SparklesIcon className="text-nashville-accent w-8 h-8" />
+        <div className="inline-flex items-center justify-center p-4 rounded-full mb-4">
+          <div className="relative">
+            <Beer className="text-neon-orange w-10 h-10 animate-pulse" />
+            <div className="absolute inset-0 blur-sm text-neon-orange animate-pulse">
+              <Beer className="w-10 h-10" />
+            </div>
+          </div>
         </div>
       </motion.div>
 
@@ -30,18 +36,27 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className="text-4xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-nashville-900 to-nashville-accent dark:from-white dark:to-nashville-accent"
+        className="text-4xl md:text-6xl font-bold tracking-tight neon-text"
       >
-        Find Your Perfect Nashville Restaurant
+        NASH MENUS
       </motion.h1>
+      
+      <motion.h2
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.5 }}
+        className="text-2xl md:text-3xl font-bold text-white/90"
+      >
+        Find Your Perfect Spot
+      </motion.h2>
 
       <motion.p
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7, duration: 0.5 }}
-        className="text-lg text-nashville-700 dark:text-nashville-300 max-w-md"
+        className="text-lg text-zinc-400 max-w-md"
       >
-        Answer a few quick questions about your preferences, and we'll match you with Nashville restaurants you'll love. No overthinking required!
+        Answer a few quick questions, and we'll match you with Nashville restaurants you'll love.
       </motion.p>
 
       <motion.div
@@ -56,8 +71,9 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
         >
           <Button
             onClick={onStart}
-            className="w-full bg-gradient-to-r from-nashville-accent to-nashville-accent/80 hover:from-nashville-accent/90 hover:to-nashville-accent/70 text-nashville-900 py-6 text-lg font-medium transition-all duration-300 shadow-lg hover:shadow-xl border-0"
+            className="w-full bg-transparent border-2 border-orange-500 text-orange-500 hover:bg-orange-500/10 py-6 text-lg font-medium transition-all duration-300 neon-box"
           >
+            <Music className="mr-2" />
             Start the Quiz
           </Button>
         </motion.div>
