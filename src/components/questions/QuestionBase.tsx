@@ -56,12 +56,11 @@ const QuestionBase = ({
         )}
       </div>
 
-      {/* Navigation buttons moved here, above the question content */}
+      {/* Navigation buttons with updated styling */}
       <div className="flex justify-between items-center mb-8">
         <Button 
           onClick={onPrevious}
-          variant="outline"
-          className="border-gray-600 hover:bg-gray-700 text-white"
+          className="bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300"
         >
           <ChevronLeft className="mr-2 h-4 w-4" />
           Previous
@@ -73,7 +72,7 @@ const QuestionBase = ({
           <Button 
             onClick={onNext}
             disabled={isNextDisabled}
-            className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-black font-medium transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none"
+            className="bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none"
           >
             {currentIndex === totalQuestions - 1 ? (
               "See Results"
