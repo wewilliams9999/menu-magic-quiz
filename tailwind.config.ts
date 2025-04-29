@@ -75,19 +75,19 @@ export default {
 					700: '#4d4d4d',
 					800: '#333333',
 					900: '#1a1a1a',
-					accent: '#ff7800'
+					accent: '#e53e3e'
 				},
 				neon: {
 					orange: '#ff7800',
+					red: '#e53e3e',
 					blue: '#0ef',
 					pink: '#f0e',
 					yellow: '#ff0',
-					red: '#f43f5e',
 				},
 				divebar: {
 					dark: '#121212',
 					brick: '#221f26',
-					accent: '#ff7800',
+					accent: '#e53e3e',
 					text: '#e0e0e0',
 					muted: '#a0a0a0',
 				}
@@ -139,11 +139,11 @@ export default {
 				neonPulse: {
 					'0%, 100%': { 
 						opacity: '1',
-						textShadow: '0 0 5px rgba(255, 120, 0, 0.7), 0 0 15px rgba(255, 120, 0, 0.5)' 
+						textShadow: '0 0 5px rgba(229, 62, 62, 0.7), 0 0 15px rgba(229, 62, 62, 0.5)' 
 					},
 					'50%': { 
 						opacity: '0.8',
-						textShadow: '0 0 10px rgba(255, 120, 0, 0.9), 0 0 20px rgba(255, 120, 0, 0.7)' 
+						textShadow: '0 0 10px rgba(229, 62, 62, 0.9), 0 0 20px rgba(229, 62, 62, 0.7)' 
 					},
 				}
 			},

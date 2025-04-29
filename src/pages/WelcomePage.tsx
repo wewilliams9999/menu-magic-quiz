@@ -22,7 +22,7 @@ const WelcomePage = () => {
           initial={{ y: -20, opacity: 0 }} 
           animate={{ y: 0, opacity: 1 }} 
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="text-4xl md:text-5xl font-bold mb-6 text-orange-500"
+          className="text-4xl md:text-5xl font-bold mb-6 text-red-500"
         >
           Nashville Restaurant Finder
         </motion.h1>
@@ -45,7 +45,7 @@ const WelcomePage = () => {
         >
           <Button 
             onClick={() => navigate("/quiz")} 
-            className="bg-transparent border-2 border-orange-500 text-orange-500 hover:bg-orange-500/10 px-8 py-6 text-lg neon-box"
+            className="bg-transparent border-2 border-red-500 text-red-500 hover:bg-red-500/10 px-8 py-6 text-lg neon-box"
           >
             <Music className="mr-2" />
             Start the Quiz

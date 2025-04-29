@@ -70,11 +70,11 @@ const LocationSelectionScreen = ({
       className="flex flex-col items-center justify-center max-w-2xl mx-auto text-center px-4"
     >
       <div className="mb-8">
-        <div className="inline-flex items-center justify-center p-3 bg-orange-500/30 rounded-full mb-4">
-          <MapPin className="text-orange-500 w-8 h-8" />
+        <div className="inline-flex items-center justify-center p-3 bg-red-500/30 rounded-full mb-4">
+          <MapPin className="text-red-500 w-8 h-8" />
         </div>
         
-        <h2 className="text-3xl md:text-4xl font-bold text-orange-500 mb-4">
+        <h2 className="text-3xl md:text-4xl font-bold text-red-500 mb-4">
           Find Your Perfect Nashville Restaurant
         </h2>
         <p className="text-white text-lg mb-8">
@@ -89,8 +89,8 @@ const LocationSelectionScreen = ({
           onClick={() => handleOptionSelect("location")} 
           className={`w-full py-4 px-6 rounded-lg flex items-center justify-center gap-3 text-lg font-medium transition-all duration-300 
             ${selectedOption === "location" 
-              ? "bg-orange-500 text-black shadow-lg" 
-              : "bg-orange-500/20 hover:bg-orange-500/30 text-white border border-orange-500/50"}`}
+              ? "bg-red-500 text-black shadow-lg" 
+              : "bg-red-500/20 hover:bg-red-500/30 text-white border border-red-500/50"}`}
           disabled={isLocating}
         >
           <Navigation className="w-5 h-5" />
@@ -103,8 +103,8 @@ const LocationSelectionScreen = ({
           onClick={() => handleOptionSelect("manual")} 
           className={`w-full py-4 px-6 rounded-lg flex items-center justify-center gap-3 text-lg font-medium transition-all duration-300 
             ${selectedOption === "manual" 
-              ? "bg-orange-500 text-black shadow-lg" 
-              : "bg-orange-500/20 hover:bg-orange-500/30 text-white border border-orange-500/50"}`}
+              ? "bg-red-500 text-black shadow-lg" 
+              : "bg-red-500/20 hover:bg-red-500/30 text-white border border-red-500/50"}`}
         >
           <Map className="w-5 h-5" />
           Choose Neighborhoods
@@ -112,7 +112,7 @@ const LocationSelectionScreen = ({
       </div>
       
       {selectedOption === "location" && userLocation && (
-        <div className="w-full max-w-2xl mt-4 bg-black/50 backdrop-blur-sm rounded-xl p-6 border border-orange-500/30 shadow-lg">
+        <div className="w-full max-w-2xl mt-4 bg-black/50 backdrop-blur-sm rounded-xl p-6 border border-red-500/30 shadow-lg">
           <h3 className="text-lg font-medium mb-3 text-white">Your Location</h3>
           <div className="h-[300px] rounded-lg overflow-hidden">
             <NeighborhoodMap 
