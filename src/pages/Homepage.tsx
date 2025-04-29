@@ -13,27 +13,7 @@ const Homepage = () => {
     }} transition={{
       duration: 1.2
     }} className="text-center max-w-2xl mx-auto px-4 py-12 z-10 relative">
-        <motion.div initial={{
-        y: -20,
-        opacity: 0
-      }} animate={{
-        y: 0,
-        opacity: 1
-      }} transition={{
-        delay: 0.3,
-        duration: 0.6
-      }} className="mb-6 relative">
-          <div className="relative inline-block">
-            <motion.div animate={{
-            boxShadow: ["0 0 10px #ff7800", "0 0 20px #ff7800", "0 0 10px #ff7800"]
-          }} transition={{
-            duration: 4,
-            repeat: Infinity
-          }} className="rounded-full p-1 border border-orange-600/30 bg-black/30">
-              
-            </motion.div>
-          </div>
-        </motion.div>
+        
 
         
 
