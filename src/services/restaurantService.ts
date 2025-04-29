@@ -1,8 +1,5 @@
 import { QuizResult } from "@/utils/quizData";
-
-// Update this to point to your API proxy or secure endpoint
-// NEVER expose your API key directly in frontend code
-const API_URL = "https://api.example.com/restaurants"; // This will be replaced in production
+import { supabase } from "@/integrations/supabase/client";
 
 export interface RestaurantApiParams {
   neighborhoods?: string[];
@@ -18,66 +15,29 @@ export interface RestaurantApiParams {
 }
 
 /**
- * Fetches restaurant data from the Google Places API via a secure proxy
- * NOTE: In production, this should call a secure API endpoint that doesn't expose your API key
+ * Fetches restaurant data from the Google Places API via our secure Edge Function
  */
 export const fetchRestaurants = async (params: RestaurantApiParams): Promise<QuizResult[]> => {
   try {
     console.log("Fetching restaurants with params:", params);
     
-    // In production, you would make a call to your secure backend API here
-    // which would then make the Google Places API call with your API key
+    // Call our Supabase Edge Function
+    const { data, error } = await supabase.functions.invoke('restaurants', {
+      body: params
+    });
     
-    // For development/testing, we're using fallback data
-    console.log("Using fallback data for now. Connect to a secure backend to use live API data.");
-    return getFallbackRestaurants();
-    
-    // The code below would be used when you have a secure API endpoint:
-    /*
-    // Convert params to query string
-    const queryParams = new URLSearchParams();
-    
-    if (params.neighborhoods && params.neighborhoods.length > 0) {
-      params.neighborhoods.forEach(n => queryParams.append('neighborhood', n));
+    if (error) {
+      console.error("Error calling restaurant API:", error);
+      throw new Error(error.message);
     }
     
-    if (params.cuisine && params.cuisine.length > 0) {
-      params.cuisine.forEach(c => queryParams.append('cuisine', c));
+    if (!data || !data.results) {
+      console.log("No results from API, using fallback data");
+      return getFallbackRestaurants();
     }
     
-    if (params.price && params.price.length > 0) {
-      params.price.forEach(p => queryParams.append('price', p));
-    }
-    
-    if (params.atmosphere) {
-      queryParams.append('atmosphere', params.atmosphere);
-    }
-    
-    if (params.preferences && params.preferences.length > 0) {
-      params.preferences.forEach(p => queryParams.append('preference', p));
-    }
-    
-    if (params.distance) {
-      queryParams.append('distance', params.distance.toString());
-    }
-    
-    if (params.userLocation) {
-      queryParams.append('latitude', params.userLocation.latitude.toString());
-      queryParams.append('longitude', params.userLocation.longitude.toString());
-    }
-    
-    const queryString = queryParams.toString();
-    const url = queryString ? `${API_URL}?${queryString}` : API_URL;
-    
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    return data.results || [];
-    */
+    console.log(`Received ${data.results.length} restaurant results`);
+    return data.results;
     
   } catch (error) {
     console.error("Error fetching restaurant data:", error);
