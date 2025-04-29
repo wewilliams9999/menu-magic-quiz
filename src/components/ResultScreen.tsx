@@ -31,6 +31,9 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
   // Check if there are more results to show
   const hasMoreResults = results.length > displayCount;
   
+  // Check if any restaurant has reservation links
+  const hasReservationLinks = results.some(r => r.resyLink || r.openTableLink);
+  
   // Function to handle showing more results
   const handleShowMore = () => {
     setDisplayCount(prev => prev + 3);
@@ -82,7 +85,7 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
         </motion.p>
         
         {/* Add reservation links explanation */}
-        {results.some(r => r.resyLink || r.openTableLink) && (
+        {hasReservationLinks && (
           <motion.p 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

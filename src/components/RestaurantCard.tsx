@@ -83,8 +83,8 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
       </div>
       
       <CardHeader>
-        {restaurant.website ? (
-          <CardTitle className="font-serif text-xl">
+        <CardTitle className="font-serif text-xl">
+          {restaurant.website ? (
             <a 
               href={restaurant.website} 
               target="_blank" 
@@ -94,10 +94,10 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
               {restaurant.name}
               <ExternalLink className="h-3.5 w-3.5 inline-flex ml-1 opacity-70" />
             </a>
-          </CardTitle>
-        ) : (
-          <CardTitle className="font-serif text-xl">{restaurant.name}</CardTitle>
-        )}
+          ) : (
+            restaurant.name
+          )}
+        </CardTitle>
         <CardDescription>
           {restaurant.neighborhood} • {restaurant.cuisine} • {restaurant.priceRange}
         </CardDescription>
@@ -140,6 +140,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         {restaurant.resyLink && (
           <Button variant="secondary" size="sm" asChild>
             <a href={restaurant.resyLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+              <span className="font-bold">R</span>
               <span>Resy</span>
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
@@ -149,6 +150,10 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         {restaurant.openTableLink && (
           <Button variant="secondary" size="sm" asChild>
             <a href={restaurant.openTableLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                <circle cx="12" cy="12" r="5"/>
+              </svg>
               <span>OpenTable</span>
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
