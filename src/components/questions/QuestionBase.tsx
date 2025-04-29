@@ -56,9 +56,8 @@ const QuestionBase = ({
         )}
       </div>
 
-      {children}
-
-      <div className="flex justify-between items-center mt-8">
+      {/* Navigation buttons moved here, above the question content */}
+      <div className="flex justify-between items-center mb-8">
         <Button 
           onClick={onPrevious}
           variant="outline"
@@ -87,6 +86,8 @@ const QuestionBase = ({
           </Button>
         </motion.div>
       </div>
+
+      {children}
     </motion.div>
   );
 };
