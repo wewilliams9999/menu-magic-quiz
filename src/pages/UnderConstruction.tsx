@@ -12,23 +12,21 @@ const UnderConstruction = () => {
       className="flex flex-col items-center justify-center min-h-screen p-6 text-center bg-gray-100 dark:bg-gray-900"
     >
       <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md w-full">
-        <div className="mb-4 flex justify-center">
-          <motion.svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-16 h-16 text-yellow-400"
-            initial={{ rotate: 0 }}
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-            aria-hidden="true"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 9.75v-1.5A3.75 3.75 0 0010.5 4.5H9a3 3 0 00-3 3v3.75a3 3 0 003 3h3.75a3 3 0 013 3v.75a3 3 0 003-3v-3a3.75 3.75 0 00-3.75-3.75z" />
-          </motion.svg>
-          {/* Alternatively, you could use the icon component directly: <Wrench className="w-16 h-16 text-yellow-400 animate-spin" /> */}
-        </div>
+        {/* Neon logo with enhanced hover glow */}
+        <motion.div 
+          className="mb-8 flex justify-center"
+          whileHover={{ scale: 1.05 }}
+        >
+          <div className="relative group">
+            <img 
+              src="/lovable-uploads/e94ad863-73fe-40fe-b484-e6644272add3.png" 
+              alt="Nash Menus Neon Logo" 
+              className="w-64 h-auto transition-all duration-300"
+            />
+            <div className="absolute inset-0 rounded-full bg-orange-500/0 group-hover:bg-orange-500/20 blur-xl transition-all duration-500 group-hover:blur-2xl -z-10"></div>
+          </div>
+        </motion.div>
+
         <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-gray-100">Under Construction</h1>
         <p className="text-gray-700 dark:text-gray-300 mb-4">
           We are working hard to bring you an awesome experience. Please check back soon!
