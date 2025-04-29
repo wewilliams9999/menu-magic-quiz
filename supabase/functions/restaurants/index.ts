@@ -187,13 +187,28 @@ Deno.serve(async (req) => {
       if (place.rating >= 4.5) features.push("Highly Rated");
       if (place.user_ratings_total > 500) features.push("Popular");
       
+      // Fix the description to avoid duplicating "Nashville" and properly capitalize cuisine
+      let description;
+      if (place.editorial_summary?.overview) {
+        description = place.editorial_summary.overview;
+      } else {
+        // Format the cuisine name with proper capitalization
+        const formattedCuisine = cuisine.charAt(0).toUpperCase() + cuisine.slice(1).toLowerCase();
+        // Only include the neighborhood if it's different from "Nashville"
+        if (neighborhood !== "Nashville") {
+          description = `${place.name} is a ${formattedCuisine.toLowerCase()} restaurant located in the ${neighborhood} area of Nashville.`;
+        } else {
+          description = `${place.name} is a ${formattedCuisine.toLowerCase()} restaurant located in Nashville.`;
+        }
+      }
+      
       return {
         id: place.place_id,
         name: place.name,
         cuisine: cuisine,
         neighborhood: neighborhood,
         priceRange: place.price_level !== undefined ? priceMap[place.price_level] : "$$",
-        description: place.editorial_summary?.overview || `${place.name} is a ${cuisine.toLowerCase()} restaurant located in ${neighborhood}, Nashville.`,
+        description: description,
         address: place.formatted_address || place.vicinity,
         imageUrl: place.photos?.length > 0 
           ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${apiKey}`
