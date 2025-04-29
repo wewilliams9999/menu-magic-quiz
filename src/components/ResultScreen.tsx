@@ -5,6 +5,7 @@ import { QuizResult } from "@/utils/quizData";
 import { Skeleton } from "@/components/ui/skeleton";
 import RestaurantCard from "@/components/RestaurantCard";
 import { ArrowLeft, ExternalLink } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface ResultScreenProps {
   results: QuizResult[];
@@ -16,6 +17,7 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
   // Check if all results are alternatives
   const allAlternatives = results.length > 0 && results.every(result => result.isAlternative);
   const isSingleResult = results.length === 1;
+  const noExactMatches = allAlternatives || results.length === 0;
   
   return (
     <motion.div
@@ -71,12 +73,12 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
         </div>
       ) : results.length > 0 ? (
         <>
-          {allAlternatives && (
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6 text-center">
-              <p className="text-yellow-800 dark:text-yellow-300">
-                We couldn't find exact matches for your criteria, but here are some great alternatives!
-              </p>
-            </div>
+          {noExactMatches && (
+            <Alert className="mb-6 bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800">
+              <AlertDescription className="text-amber-800 dark:text-amber-300 text-center">
+                There are no exact matches for your criteria, but these are the closest to your preferences.
+              </AlertDescription>
+            </Alert>
           )}
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
