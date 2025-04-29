@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import WelcomeScreen from "./WelcomeScreen";
 import LocationSelectionScreen from "./LocationSelectionScreen";
 import QuizQuestion from "./QuizQuestion";
 import ResultScreen from "./ResultScreen";
@@ -12,7 +11,7 @@ import { useRestaurantData } from "@/hooks/useRestaurantData";
 type AnswerValue = string | string[] | number;
 
 const QuizContainer = () => {
-  const [currentScreen, setCurrentScreen] = useState<"welcome" | "location" | "quiz" | "result">("welcome");
+  const [currentScreen, setCurrentScreen] = useState<"location" | "quiz" | "result">("location");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerValue>>({});
   const [locationMode, setLocationMode] = useState(false);
@@ -75,10 +74,6 @@ const QuizContainer = () => {
     return filteredQuestions;
   };
 
-  const handleStart = () => {
-    setCurrentScreen("location");
-  };
-
   const handleAnswer = (questionId: string, answerId: AnswerValue) => {
     setAnswers((prev) => ({
       ...prev,
@@ -136,7 +131,7 @@ const QuizContainer = () => {
   };
 
   const handleReset = () => {
-    setCurrentScreen("welcome");
+    setCurrentScreen("location");
     setCurrentQuestionIndex(0);
     setAnswers({});
     setLocationMode(false);
@@ -148,10 +143,6 @@ const QuizContainer = () => {
   return (
     <div className="min-h-[80vh] flex flex-col justify-center">
       <AnimatePresence mode="wait">
-        {currentScreen === "welcome" && (
-          <WelcomeScreen key="welcome" onStart={handleStart} />
-        )}
-
         {currentScreen === "location" && (
           <LocationSelectionScreen 
             key="location" 
