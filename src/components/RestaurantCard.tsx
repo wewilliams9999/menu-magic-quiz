@@ -63,7 +63,11 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
   const hasReservationLinks = restaurant.resyLink || restaurant.openTableLink;
   
   return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-md hover:border-red-500/30">
+    <Card 
+      className="overflow-hidden transition-all duration-300 hover:shadow-md hover:border-red-500/30"
+      itemScope
+      itemType="https://schema.org/Restaurant"
+    >
       {restaurant.isAlternative && (
         <div className="bg-yellow-100 dark:bg-yellow-900/30 px-4 py-2 text-sm text-yellow-800 dark:text-yellow-300">
           Alternative suggestion based on your preferences
@@ -74,15 +78,16 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         {imageSrc ? (
           <img 
             src={imageSrc} 
-            alt={restaurant.name} 
+            alt={`${restaurant.name} - Nashville Restaurant in ${restaurant.neighborhood}`} 
             className="max-h-full max-w-full object-contain"
             onLoad={() => setIsLoading(false)}
             onError={handleImageError}
+            itemProp="image"
           />
         ) : (
           <div className="flex flex-col items-center justify-center h-full w-full text-gray-400">
-            <div className="text-lg font-serif">{restaurant.name}</div>
-            <div className="text-sm mt-2">{restaurant.neighborhood}</div>
+            <div className="text-lg font-serif" itemProp="name">{restaurant.name}</div>
+            <div className="text-sm mt-2" itemProp="areaServed">{restaurant.neighborhood}</div>
           </div>
         )}
         
@@ -101,23 +106,33 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
               target="_blank" 
               rel="noopener noreferrer"
               className="hover:text-red-600 dark:hover:text-red-400 transition-colors flex items-center gap-1"
-              aria-label={`Visit ${restaurant.name} website`}
+              aria-label={`Visit ${restaurant.name} website - Nashville Restaurant in ${restaurant.neighborhood}`}
+              itemProp="url"
             >
-              {restaurant.name}
+              <span itemProp="name">{restaurant.name}</span>
               <ExternalLink className="h-3.5 w-3.5 inline-flex ml-1 opacity-70" aria-hidden="true" />
             </a>
           ) : (
-            restaurant.name
+            <span itemProp="name">{restaurant.name}</span>
           )}
         </CardTitle>
         <div className="text-sm text-muted-foreground">
-          {restaurant.neighborhood} • {restaurant.cuisine} • {restaurant.priceRange}
-          {restaurant.address && <div className="mt-1 microdata-address" itemProp="address">{restaurant.address}</div>}
+          <span itemProp="areaServed">{restaurant.neighborhood}</span> • 
+          <span itemProp="servesCuisine">{restaurant.cuisine}</span> • 
+          <span itemProp="priceRange">{restaurant.priceRange}</span>
+          {restaurant.address && (
+            <div className="mt-1" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
+              <span itemProp="streetAddress">{restaurant.address}</span>
+              <meta itemProp="addressLocality" content="Nashville" />
+              <meta itemProp="addressRegion" content="TN" />
+              <meta itemProp="addressCountry" content="US" />
+            </div>
+          )}
         </div>
       </CardHeader>
       
       <CardContent>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2" itemProp="keywords">
           {restaurant.features?.map((feature, index) => (
             <Badge key={index} variant="secondary" className="bg-red-100 dark:bg-red-800/30 text-red-700 dark:text-red-300">
               {feature}
@@ -134,7 +149,8 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
               target="_blank" 
               rel="noopener noreferrer" 
               className="flex items-center gap-1"
-              aria-label={`Visit ${restaurant.name} website`}
+              aria-label={`Visit ${restaurant.name} website - Nashville restaurant`}
+              itemProp="url"
             >
               <span>Website</span>
               <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
@@ -149,7 +165,8 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
               target="_blank" 
               rel="noopener noreferrer" 
               className="flex items-center gap-1"
-              aria-label={`${restaurant.name} on Instagram`}
+              aria-label={`${restaurant.name} on Instagram - Nashville restaurant`}
+              itemProp="sameAs"
             >
               <Instagram className="h-3.5 w-3.5" aria-hidden="true" />
               <span>Instagram</span>
@@ -164,7 +181,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
               target="_blank" 
               rel="noopener noreferrer" 
               className="flex items-center gap-1"
-              aria-label={`Make reservation for ${restaurant.name} on Resy`}
+              aria-label={`Make reservation for ${restaurant.name} on Resy - Nashville restaurant`}
             >
               <span className="font-bold">R</span>
               <span>Resy</span>
@@ -180,7 +197,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
               target="_blank" 
               rel="noopener noreferrer" 
               className="flex items-center gap-1"
-              aria-label={`Make reservation for ${restaurant.name} on OpenTable`}
+              aria-label={`Make reservation for ${restaurant.name} on OpenTable - Nashville restaurant`}
             >
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
@@ -195,6 +212,11 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         {!hasReservationLinks && restaurant.website && (
           <p className="text-xs text-red-500 italic mt-1 w-full">Call restaurant for reservations</p>
         )}
+        
+        <meta itemProp="telephone" content={restaurant.phone || "Not available"} />
+        <meta itemProp="description" content={`${restaurant.name} is a ${restaurant.priceRange} ${restaurant.cuisine} restaurant in the ${restaurant.neighborhood} area of Nashville.`} />
+        <meta itemProp="geo" content={`Nashville, TN`} />
+        <meta name="keywords" content={`Nashville restaurants, Nashville menus, ${restaurant.cuisine} restaurant Nashville, ${restaurant.neighborhood} restaurants Nashville, Best Nashville restaurants`} />
       </CardFooter>
     </Card>
   );
