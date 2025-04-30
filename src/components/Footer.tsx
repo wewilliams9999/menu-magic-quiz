@@ -26,14 +26,14 @@ const Footer = () => {
                 className="border-red-500 hover:border-red-600 hover:bg-red-50/10 text-red-400 dark:border-red-700 dark:hover:border-red-600 dark:hover:bg-red-950/30 dark:text-red-400"
               >
                 <a 
-                  href="https://www.instagram.com/nashmenus/" 
+                  href="https://www.instagram.com/nashvillemenus/" 
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Nash Menus on Instagram"
                   className="flex items-center gap-2"
                 >
                   <Instagram className="h-4 w-4" />
-                  <span>@nashmenus</span>
+                  <span>@nashvillemenus</span>
                 </a>
               </Button>
             </div>
