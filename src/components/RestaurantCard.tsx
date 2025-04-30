@@ -1,4 +1,3 @@
-
 import { ExternalLink, Instagram } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -102,9 +101,10 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
               target="_blank" 
               rel="noopener noreferrer"
               className="hover:text-red-600 dark:hover:text-red-400 transition-colors flex items-center gap-1"
+              aria-label={`Visit ${restaurant.name} website`}
             >
               {restaurant.name}
-              <ExternalLink className="h-3.5 w-3.5 inline-flex ml-1 opacity-70" />
+              <ExternalLink className="h-3.5 w-3.5 inline-flex ml-1 opacity-70" aria-hidden="true" />
             </a>
           ) : (
             restaurant.name
@@ -112,7 +112,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         </CardTitle>
         <div className="text-sm text-muted-foreground">
           {restaurant.neighborhood} • {restaurant.cuisine} • {restaurant.priceRange}
-          {restaurant.address && <div className="mt-1">{restaurant.address}</div>}
+          {restaurant.address && <div className="mt-1 microdata-address" itemProp="address">{restaurant.address}</div>}
         </div>
       </CardHeader>
       
@@ -129,17 +129,29 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
       <CardFooter className="flex flex-wrap gap-2 justify-start mt-2">
         {restaurant.website && (
           <Button variant="outline" size="sm" asChild className="border-red-500 hover:border-red-600 hover:bg-red-50/50 text-red-600 dark:border-red-700 dark:hover:border-red-600 dark:hover:bg-red-950/30 dark:text-red-400">
-            <a href={restaurant.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+            <a 
+              href={restaurant.website} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex items-center gap-1"
+              aria-label={`Visit ${restaurant.name} website`}
+            >
               <span>Website</span>
-              <ExternalLink className="h-3.5 w-3.5" />
+              <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
             </a>
           </Button>
         )}
         
         {restaurant.instagramLink && (
           <Button variant="outline" size="sm" asChild className="border-red-500 hover:border-red-600 hover:bg-red-50/50 text-red-600 dark:border-red-700 dark:hover:border-red-600 dark:hover:bg-red-950/30 dark:text-red-400">
-            <a href={restaurant.instagramLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
-              <Instagram className="h-3.5 w-3.5" />
+            <a 
+              href={restaurant.instagramLink} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex items-center gap-1"
+              aria-label={`${restaurant.name} on Instagram`}
+            >
+              <Instagram className="h-3.5 w-3.5" aria-hidden="true" />
               <span>Instagram</span>
             </a>
           </Button>
@@ -147,23 +159,35 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         
         {restaurant.resyLink && (
           <Button variant="secondary" size="sm" asChild className="bg-red-600/20 hover:bg-red-600/30 text-red-700 dark:bg-red-600/20 dark:hover:bg-red-600/30 dark:text-red-300">
-            <a href={restaurant.resyLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+            <a 
+              href={restaurant.resyLink} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex items-center gap-1"
+              aria-label={`Make reservation for ${restaurant.name} on Resy`}
+            >
               <span className="font-bold">R</span>
               <span>Resy</span>
-              <ExternalLink className="h-3.5 w-3.5" />
+              <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
             </a>
           </Button>
         )}
         
         {restaurant.openTableLink && (
           <Button variant="secondary" size="sm" asChild className="bg-red-600/20 hover:bg-red-600/30 text-red-700 dark:bg-red-600/20 dark:hover:bg-red-600/30 dark:text-red-300">
-            <a href={restaurant.openTableLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
-              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+            <a 
+              href={restaurant.openTableLink} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex items-center gap-1"
+              aria-label={`Make reservation for ${restaurant.name} on OpenTable`}
+            >
+              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
                 <circle cx="12" cy="12" r="5"/>
               </svg>
               <span>OpenTable</span>
-              <ExternalLink className="h-3.5 w-3.5" />
+              <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
             </a>
           </Button>
         )}
