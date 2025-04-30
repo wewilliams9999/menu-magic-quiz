@@ -126,7 +126,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         </div>
       </CardContent>
       
-      <CardFooter className="flex flex-wrap gap-2 justify-start">
+      <CardFooter className="flex flex-wrap gap-2 justify-start mt-2">
         {restaurant.website && (
           <Button variant="outline" size="sm" asChild className="border-red-500 hover:border-red-600 hover:bg-red-50/50 text-red-600 dark:border-red-700 dark:hover:border-red-600 dark:hover:bg-red-950/30 dark:text-red-400">
             <a href={restaurant.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
@@ -169,7 +169,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         )}
         
         {!hasReservationLinks && restaurant.website && (
-          <p className="text-xs text-red-500 italic mt-1">Call restaurant for reservations</p>
+          <p className="text-xs text-red-500 italic mt-1 w-full">Call restaurant for reservations</p>
         )}
       </CardFooter>
     </Card>

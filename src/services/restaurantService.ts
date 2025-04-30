@@ -39,15 +39,37 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     
     // Add the missing links if they don't exist
     const enhancedResults = data.results.map(result => {
-      // For demo purposes, add missing website links to API results
+      // Always ensure we have a website link
       if (!result.website) {
-        result.website = `https://www.google.com/search?q=${encodeURIComponent(result.name + " " + result.neighborhood)}`;
+        result.website = `https://www.google.com/search?q=${encodeURIComponent(result.name + " " + result.neighborhood + " Nashville")}`;
+      }
+      
+      // Add mock reservation links to some restaurants (for demo purposes)
+      if (!result.resyLink && Math.random() > 0.5) {
+        result.resyLink = `https://resy.com/cities/bna/venues/${result.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+      }
+      
+      if (!result.openTableLink && !result.resyLink && Math.random() > 0.5) {
+        result.openTableLink = `https://www.opentable.com/r/${result.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+      }
+      
+      // Add Instagram link if missing
+      if (!result.instagramLink && Math.random() > 0.3) {
+        result.instagramLink = `https://www.instagram.com/${result.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
       }
       
       return result;
     });
     
-    console.log(`Received ${enhancedResults.length} restaurant results`);
+    console.log(`Received ${enhancedResults.length} restaurant results with links:`, 
+      enhancedResults.map(r => ({ 
+        name: r.name, 
+        website: r.website ? 'Yes' : 'No',
+        resy: r.resyLink ? 'Yes' : 'No', 
+        openTable: r.openTableLink ? 'Yes' : 'No' 
+      }))
+    );
+    
     return enhancedResults;
     
   } catch (error) {
@@ -73,7 +95,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       features: ["Farm-to-table", "Historic setting", "Seasonal menu"],
       website: "https://husknashville.com",
       resyLink: "https://resy.com/cities/bna/venues/husk-nashville",
-      openTableLink: "https://www.opentable.com/r/husk-nashville",
+      openTableLink: null,
       instagramLink: "https://www.instagram.com/husknashville"
     },
     {
@@ -89,6 +111,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       features: ["House-made pasta", "Craft cocktails", "Industrial chic"],
       website: "https://www.rolfanddaughters.com",
       resyLink: "https://resy.com/cities/bna/venues/rolf-and-daughters",
+      openTableLink: null,
       instagramLink: "https://www.instagram.com/rolfanddaughters"
     },
     {
@@ -103,6 +126,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       logoUrl: "https://images.squarespace-cdn.com/content/v1/5ef25f8a509c313cb73a9b20/1592942166899-8X5QI1WCY01LGG9HZCPC/Optimist+Logo+BW.png",
       features: ["Fresh seafood", "Craft cocktails", "Upscale casual"],
       website: "https://theoptimistrestaurant.com",
+      resyLink: null,
       openTableLink: "https://www.opentable.com/r/the-optimist-nashville",
       instagramLink: "https://www.instagram.com/theoptimistnashville"
     },
@@ -119,6 +143,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       features: ["Wood-fired pizza", "Vegetarian options", "Weekend brunch"],
       website: "https://www.folkrestaurant.com",
       resyLink: "https://resy.com/cities/bna/venues/folk",
+      openTableLink: null,
       instagramLink: "https://www.instagram.com/folknashville"
     },
     {
@@ -134,6 +159,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       features: ["Raw bar", "Seasonal menu", "Craft cocktails"],
       website: "https://www.henriettared.com",
       resyLink: "https://resy.com/cities/bna/venues/henrietta-red",
+      openTableLink: null,
       instagramLink: "https://www.instagram.com/henrietta_red"
     }
   ];
@@ -186,12 +212,19 @@ export const mapGooglePlacesToRestaurants = (places: any[]): QuizResult[] => {
       }
     }
     
-    // Generate mock reservation links for demo purposes
+    // Generate reservation links for demo purposes
     const mockResyLink = Math.random() > 0.5 ? 
-      `https://resy.com/cities/bna/venues/${place.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}` : undefined;
+      `https://resy.com/cities/bna/venues/${place.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}` : null;
     
     const mockOpenTableLink = !mockResyLink && Math.random() > 0.5 ? 
-      `https://www.opentable.com/r/${place.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}` : undefined;
+      `https://www.opentable.com/r/${place.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}` : null;
+    
+    // Always ensure there's a website link
+    const websiteLink = place.website || `https://www.google.com/search?q=${encodeURIComponent(place.name + " Nashville")}`;
+    
+    // Create Instagram link for some restaurants
+    const instagramLink = Math.random() > 0.3 ? 
+      `https://www.instagram.com/${place.name.toLowerCase().replace(/[^a-z0-9]/g, '')}` : null;
     
     return {
       id: place.place_id,
@@ -205,10 +238,10 @@ export const mapGooglePlacesToRestaurants = (places: any[]): QuizResult[] => {
         ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=AIzaSyAkMyPslG3eTA9uW33qWHVs0o9zEtJdYp4` 
         : undefined,
       features: place.types?.filter(t => t !== "restaurant" && t !== "food" && t !== "establishment") || [],
-      website: place.website || `https://www.google.com/search?q=${encodeURIComponent(place.name)}`,
+      website: websiteLink,
       resyLink: mockResyLink,
       openTableLink: mockOpenTableLink,
-      instagramLink: place.name ? `https://www.instagram.com/${place.name.toLowerCase().replace(/[^a-z0-9]/g, '')}` : undefined
+      instagramLink: instagramLink
     };
   });
 };
