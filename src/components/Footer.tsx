@@ -62,10 +62,10 @@ const Footer = () => {
               Have suggestions or want your restaurant featured?
             </p>
             <a 
-              href="mailto:info@nashmenus.com" 
+              href="mailto:Nashvillemenus@gmail.com" 
               className="text-sm text-red-400 hover:text-red-300 transition-colors inline-flex items-center gap-1"
             >
-              info@nashmenus.com
+              Nashvillemenus@gmail.com
               <ExternalLink className="h-3 w-3" />
             </a>
           </div>
