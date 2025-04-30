@@ -131,6 +131,18 @@ export const neighborhoodPositions: Record<string, {
     top: "60%",
     mobileLeft: "65%",
     mobileTop: "62%"
+  },
+  "inglewood": {
+    left: "65%",
+    top: "30%",
+    mobileLeft: "68%",
+    mobileTop: "28%"
+  },
+  "antioch": {
+    left: "68%",
+    top: "75%",
+    mobileLeft: "72%",
+    mobileTop: "80%"
   }
 };
 
