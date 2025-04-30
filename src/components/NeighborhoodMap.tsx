@@ -9,6 +9,7 @@ import NeighborhoodBubble from "./map/NeighborhoodBubble";
 import UserLocationMarker from "./map/UserLocationMarker";
 import DistanceRadiusCircle from "./map/DistanceRadiusCircle";
 import { useLocationServices } from "./map/useLocationServices";
+import { motion } from "framer-motion";
 
 interface NeighborhoodMapProps {
   selectedNeighborhoods: string[];
@@ -63,24 +64,43 @@ const NeighborhoodMap = ({
     }
   }, [initialUserLocation, userLocation, setUserLocation]);
 
-  return <div className="space-y-2">
-      {!initialUserLocation && useUserLocation && !locationEnabled && <div className="flex justify-end mb-2">
-          
-        </div>}
+  return (
+    <motion.div 
+      className="space-y-2"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+    >
+      {!initialUserLocation && useUserLocation && !locationEnabled && (
+        <div className="flex justify-end mb-2">
+          {/* Location button content would go here if needed */}
+        </div>
+      )}
       
-      <MapBackground>
-        {/* Distance radius circle - render BEFORE user marker so marker appears on top */}
-        {distanceMode && userLocation && distanceRadius && (
-          <DistanceRadiusCircle userLocation={userLocation} radiusMiles={distanceRadius} />
-        )}
-        
-        {/* Neighborhood bubbles */}
-        {options.map((option, index) => <NeighborhoodBubble key={option.id} option={option} index={index} isSelected={selectedNeighborhoods.includes(option.value)} onSelect={onSelect} />)}
-        
-        {/* User location marker - rendered LAST to appear on top */}
-        {userLocation && <UserLocationMarker userLocation={userLocation} />}
-      </MapBackground>
-    </div>;
+      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+        <MapBackground>
+          {/* Distance radius circle - render BEFORE user marker so marker appears on top */}
+          {distanceMode && userLocation && distanceRadius && (
+            <DistanceRadiusCircle userLocation={userLocation} radiusMiles={distanceRadius} />
+          )}
+          
+          {/* Neighborhood bubbles with staggered animation */}
+          {options.map((option, index) => (
+            <NeighborhoodBubble 
+              key={option.id} 
+              option={option} 
+              index={index} 
+              isSelected={selectedNeighborhoods.includes(option.value)} 
+              onSelect={onSelect} 
+            />
+          ))}
+          
+          {/* User location marker - rendered LAST to appear on top */}
+          {userLocation && <UserLocationMarker userLocation={userLocation} />}
+        </MapBackground>
+      </div>
+    </motion.div>
+  );
 };
 
 export default NeighborhoodMap;

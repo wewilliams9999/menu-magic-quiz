@@ -3,6 +3,7 @@ import { useState } from "react";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { QuizOption } from "@/utils/quizData";
 import { neighborhoodPositions } from "@/utils/mapCoordinates";
+import { motion } from "framer-motion";
 
 interface NeighborhoodBubbleProps {
   option: QuizOption;
@@ -22,32 +23,33 @@ const NeighborhoodBubble = ({
   
   if (!position) return null;
   
-  // Array of background colors for the bubbles
-  const bubbleColors = [
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800", 
-    "bg-white/90 text-gray-800"
+  // Array of gradient backgrounds for the bubbles to create visual variety
+  const bubbleGradients = [
+    "bg-gradient-to-r from-red-500/80 to-orange-400/80 text-white", 
+    "bg-gradient-to-r from-orange-500/80 to-amber-400/80 text-white", 
+    "bg-gradient-to-r from-amber-500/80 to-yellow-400/80 text-gray-800",
+    "bg-gradient-to-r from-yellow-500/80 to-lime-400/80 text-gray-800",
+    "bg-gradient-to-r from-lime-500/80 to-green-400/80 text-white",
+    "bg-gradient-to-r from-green-500/80 to-emerald-400/80 text-white",
+    "bg-gradient-to-r from-emerald-500/80 to-teal-400/80 text-white",
+    "bg-gradient-to-r from-teal-500/80 to-cyan-400/80 text-white"
   ];
   
-  const getBubbleColor = (index: number) => {
-    return bubbleColors[index % bubbleColors.length];
+  const getBubbleGradient = (index: number) => {
+    return bubbleGradients[index % bubbleGradients.length];
   };
-  
+
+  // Use framer-motion for smooth animations
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <button 
+          <motion.button 
             className={`absolute z-10 transform -translate-x-1/2 -translate-y-1/2 
-              ${getBubbleColor(index)}
-              px-2.5 py-1 rounded-full border backdrop-blur-sm
-              ${isSelected ? 'border-nashville-accent shadow-md' : 'border-gray-300 dark:border-gray-600'}
-              transition-colors duration-200`} 
+              ${isSelected ? getBubbleGradient(index) : 'bg-white/90 backdrop-blur-sm text-gray-800'}
+              px-3 py-1.5 rounded-full 
+              ${isSelected ? 'shadow-md ring-2 ring-white/30' : 'border border-gray-200 shadow-sm hover:shadow'}
+              transition-all duration-300 ease-in-out`} 
             style={{
               left: position.left,
               top: position.top
@@ -55,17 +57,48 @@ const NeighborhoodBubble = ({
             onClick={() => onSelect(option.value)} 
             onMouseEnter={() => setIsHovered(true)} 
             onMouseLeave={() => setIsHovered(false)}
+            whileHover={{ 
+              scale: 1.05,
+              transition: { duration: 0.2 }
+            }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ 
+              opacity: 1, 
+              scale: 1,
+              boxShadow: isSelected ? '0 4px 12px rgba(0,0,0,0.15)' : '0 2px 4px rgba(0,0,0,0.05)'
+            }}
+            transition={{ 
+              type: "spring", 
+              stiffness: 400, 
+              damping: 17,
+              delay: index * 0.03
+            }}
           >
-            <div className="flex items-center gap-1.5">
-              {isSelected && <div className="w-2 h-2 rounded-full bg-nashville-accent"></div>}
-              <span className={`text-xs font-medium whitespace-nowrap ${isSelected ? 'font-semibold' : ''}`}>
+            <motion.div 
+              className="flex items-center gap-1.5"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1 }}
+            >
+              {isSelected && (
+                <motion.div 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="w-2 h-2 rounded-full bg-white"
+                ></motion.div>
+              )}
+              <span className={`text-xs font-medium whitespace-nowrap ${isSelected ? 'font-bold' : ''}`}>
                 {option.text}
               </span>
-            </div>
-          </button>
+            </motion.div>
+          </motion.button>
         </TooltipTrigger>
-        <TooltipContent className="bg-white/90 backdrop-blur-sm border-gray-200 text-gray-700">
-          <p>{option.text}</p>
+        <TooltipContent 
+          side="top"
+          className="bg-black/80 text-white backdrop-blur-md border-gray-800 shadow-xl"
+        >
+          <p className="font-medium">{option.text}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
