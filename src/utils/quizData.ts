@@ -34,6 +34,7 @@ export interface QuizResult {
   resyLink?: string;
   openTableLink?: string;
   instagramLink?: string;
+  phone?: string;
 }
 
 export const locationMethodOptions: QuizOption[] = [
