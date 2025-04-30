@@ -10,6 +10,8 @@ import UserLocationMarker from "./map/UserLocationMarker";
 import DistanceRadiusCircle from "./map/DistanceRadiusCircle";
 import { useLocationServices } from "./map/useLocationServices";
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface NeighborhoodMapProps {
   selectedNeighborhoods: string[];
@@ -34,6 +36,8 @@ const NeighborhoodMap = ({
   initialUserLocation = null
 }: NeighborhoodMapProps) => {
   const [hoveredBubble, setHoveredBubble] = useState<string | null>(null);
+  const isMobile = useIsMobile();
+  
   const {
     userLocation,
     setUserLocation,
@@ -91,7 +95,8 @@ const NeighborhoodMap = ({
               option={option} 
               index={index} 
               isSelected={selectedNeighborhoods.includes(option.value)} 
-              onSelect={onSelect} 
+              onSelect={onSelect}
+              isMobile={isMobile}
             />
           ))}
           
@@ -99,6 +104,30 @@ const NeighborhoodMap = ({
           {userLocation && <UserLocationMarker userLocation={userLocation} />}
         </MapBackground>
       </div>
+      
+      {/* On mobile, add a horizontal scroll area with neighborhood chips for easier selection */}
+      {isMobile && options.length > 0 && (
+        <div className="pt-3">
+          <ScrollArea className="w-full whitespace-nowrap pb-2">
+            <div className="flex space-x-2 px-1">
+              {options.map((option) => (
+                <Button
+                  key={option.id}
+                  size="sm"
+                  variant={selectedNeighborhoods.includes(option.value) ? "default" : "outline"}
+                  className={`
+                    rounded-full text-xs h-7 px-3
+                    ${selectedNeighborhoods.includes(option.value) ? 'bg-red-500 hover:bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300'}
+                  `}
+                  onClick={() => onSelect(option.value)}
+                >
+                  {option.text}
+                </Button>
+              ))}
+            </div>
+          </ScrollArea>
+        </div>
+      )}
     </motion.div>
   );
 };

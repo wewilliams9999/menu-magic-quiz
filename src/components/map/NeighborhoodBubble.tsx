@@ -10,13 +10,15 @@ interface NeighborhoodBubbleProps {
   index: number;
   isSelected: boolean;
   onSelect: (value: string) => void;
+  isMobile?: boolean;
 }
 
 const NeighborhoodBubble = ({ 
   option, 
   index, 
   isSelected, 
-  onSelect 
+  onSelect,
+  isMobile = false
 }: NeighborhoodBubbleProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const position = neighborhoodPositions[option.value];
@@ -39,7 +41,19 @@ const NeighborhoodBubble = ({
     return bubbleGradients[index % bubbleGradients.length];
   };
 
-  // Use framer-motion for smooth animations
+  // Use mobile positions when on mobile to reduce clumping
+  const bubblePosition = {
+    left: position.left,
+    top: position.top,
+    mobileLeft: position.mobileLeft || position.left,
+    mobileTop: position.mobileTop || position.top
+  };
+
+  // Dynamic sizing based on device
+  const bubbleSize = isMobile ? 
+    (isSelected ? "scale-100" : "scale-90") : 
+    (isSelected ? "scale-105" : "scale-100");
+
   return (
     <TooltipProvider>
       <Tooltip>
@@ -47,25 +61,27 @@ const NeighborhoodBubble = ({
           <motion.button 
             className={`absolute z-10 transform -translate-x-1/2 -translate-y-1/2 
               ${isSelected ? getBubbleGradient(index) : 'bg-white/90 backdrop-blur-sm text-gray-800'}
-              px-3 py-1.5 rounded-full 
+              px-2 py-1 md:px-3 md:py-1.5 rounded-full 
               ${isSelected ? 'shadow-md ring-2 ring-white/30' : 'border border-gray-200 shadow-sm hover:shadow'}
               transition-all duration-300 ease-in-out`} 
             style={{
-              left: position.left,
-              top: position.top
+              left: isMobile ? bubblePosition.mobileLeft : bubblePosition.left,
+              top: isMobile ? bubblePosition.mobileTop : bubblePosition.top,
+              fontSize: isMobile ? '10px' : 'inherit',
+              minWidth: isMobile ? '60px' : 'auto'
             }} 
             onClick={() => onSelect(option.value)} 
             onMouseEnter={() => setIsHovered(true)} 
             onMouseLeave={() => setIsHovered(false)}
             whileHover={{ 
-              scale: 1.05,
+              scale: isSelected ? 1.05 : 1.02,
               transition: { duration: 0.2 }
             }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ 
               opacity: 1, 
-              scale: 1,
+              scale: isSelected ? 1.05 : 1,
               boxShadow: isSelected ? '0 4px 12px rgba(0,0,0,0.15)' : '0 2px 4px rgba(0,0,0,0.05)'
             }}
             transition={{ 
@@ -76,7 +92,7 @@ const NeighborhoodBubble = ({
             }}
           >
             <motion.div 
-              className="flex items-center gap-1.5"
+              className="flex items-center gap-1"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.1 }}
@@ -85,10 +101,10 @@ const NeighborhoodBubble = ({
                 <motion.div 
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="w-2 h-2 rounded-full bg-white"
+                  className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-white"
                 ></motion.div>
               )}
-              <span className={`text-xs font-medium whitespace-nowrap ${isSelected ? 'font-bold' : ''}`}>
+              <span className={`text-[10px] md:text-xs font-medium whitespace-nowrap ${isSelected ? 'font-bold' : ''}`}>
                 {option.text}
               </span>
             </motion.div>

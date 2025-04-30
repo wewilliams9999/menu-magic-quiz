@@ -1,12 +1,28 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { ZoomIn, ZoomOut } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface MapBackgroundProps {
   children: React.ReactNode;
 }
 
 const MapBackground: React.FC<MapBackgroundProps> = ({ children }) => {
+  const isMobile = useIsMobile();
+  const [scale, setScale] = useState(1);
+  
+  // Increase scale level (zoom in)
+  const zoomIn = () => {
+    setScale(prev => Math.min(prev + 0.2, 1.8));
+  };
+  
+  // Decrease scale level (zoom out)
+  const zoomOut = () => {
+    setScale(prev => Math.max(prev - 0.2, 0.8));
+  };
+
   return (
     <div className="relative w-full overflow-hidden rounded-xl">
       <div className="relative bg-white dark:bg-gray-900 aspect-[4/3] md:aspect-[16/9] overflow-hidden">
@@ -52,8 +68,15 @@ const MapBackground: React.FC<MapBackgroundProps> = ({ children }) => {
           </div>
         </motion.div>
 
-        {/* Children components (bubbles, markers etc) */}
-        <div className="absolute inset-0 z-10">
+        {/* Children components (bubbles, markers etc) with scaling */}
+        <div 
+          className="absolute inset-0 z-10 overflow-hidden"
+          style={{ 
+            transform: `scale(${scale})`,
+            transformOrigin: 'center center',
+            transition: 'transform 0.3s ease'
+          }}
+        >
           {children}
         </div>
         
@@ -64,6 +87,28 @@ const MapBackground: React.FC<MapBackgroundProps> = ({ children }) => {
         <div className="absolute bottom-3 right-3 text-sm font-bold text-gray-400/30 dark:text-gray-600/30 pointer-events-none">
           NASHVILLE
         </div>
+
+        {/* Zoom controls for mobile */}
+        {isMobile && (
+          <div className="absolute bottom-3 left-3 z-20 flex flex-col gap-1">
+            <Button 
+              size="icon" 
+              variant="secondary" 
+              className="w-8 h-8 rounded-full bg-red-500/70 backdrop-blur-md hover:bg-red-600 text-white"
+              onClick={zoomIn}
+            >
+              <ZoomIn size={16} />
+            </Button>
+            <Button 
+              size="icon" 
+              variant="secondary"
+              className="w-8 h-8 rounded-full bg-red-500/70 backdrop-blur-md hover:bg-red-600 text-white"
+              onClick={zoomOut}
+            >
+              <ZoomOut size={16} />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
