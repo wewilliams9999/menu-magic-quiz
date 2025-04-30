@@ -8,6 +8,7 @@ import Homepage from "./pages/Homepage";
 import WelcomePage from "./pages/WelcomePage";
 import NotFound from "./pages/NotFound";
 import QuizContainer from "./components/QuizContainer";
+import Footer from "./components/Footer";
 
 const queryClient = new QueryClient();
 
@@ -16,14 +17,19 @@ const App = () => (
     <TooltipProvider>
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/home" element={<Homepage />} />
-          <Route path="/welcome" element={<WelcomePage />} />
-          <Route path="/quiz" element={<QuizContainer />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="flex flex-col min-h-screen">
+          <div className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/home" element={<Homepage />} />
+              <Route path="/welcome" element={<WelcomePage />} />
+              <Route path="/quiz" element={<QuizContainer />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
+          <Footer />
+        </div>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
