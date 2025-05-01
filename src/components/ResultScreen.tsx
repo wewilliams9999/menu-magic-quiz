@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { QuizResult } from "@/utils/quizData";
@@ -41,6 +40,9 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
   
   // Check if any restaurant has reservation links
   const hasReservationLinks = results.some(r => r.resyLink || r.openTableLink);
+  
+  // Check if any restaurant has map coordinates for map links
+  const hasMapLinks = results.some(r => r.coordinates || r.address);
   
   // Function to handle showing more results
   const handleShowMore = () => {
@@ -107,12 +109,27 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
           </motion.p>
         )}
         
+        {/* Add map links explanation */}
+        {hasMapLinks && (
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.5 }}
+            className="text-sm text-zinc-500 mt-2"
+          >
+            <span className="inline-flex items-center">
+              <ExternalLink className="h-3 w-3 mr-1" />
+              View locations in Google Maps or Apple Maps
+            </span>
+          </motion.p>
+        )}
+        
         {/* Show result count info */}
         {results.length > 0 && !isSingleResult && (
           <motion.p 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.5 }}
+            transition={{ delay: 1.0, duration: 0.5 }}
             className="text-sm text-zinc-500 mt-2"
           >
             Showing {displayedResults.length} of {results.length} matches

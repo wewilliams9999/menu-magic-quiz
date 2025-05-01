@@ -43,6 +43,14 @@ Deno.serve(async (req) => {
     // Map the Google Places API response to our app's format
     const restaurants = mapGooglePlacesToRestaurants(data.results, apiKey);
     
+    // Log coordinates for debugging
+    console.log('Restaurants with coordinates:', 
+      restaurants.map(r => ({ 
+        name: r.name, 
+        coordinates: r.coordinates 
+      }))
+    );
+    
     return new Response(
       JSON.stringify({ results: restaurants }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

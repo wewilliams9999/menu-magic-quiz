@@ -1,4 +1,3 @@
-
 import { GooglePlaceResult, Restaurant } from './types.ts';
 
 // Maps for different data transformations
@@ -41,77 +40,86 @@ export const featureMap: Record<string, string> = {
   "romantic": "Romantic",
 };
 
-// Map Google Places API results to our app's restaurant format
-export function mapGooglePlacesToRestaurants(places: GooglePlaceResult[], apiKey: string): Restaurant[] {
-  return places.map((place) => {
-    // Extract neighborhood from address components if available
-    let neighborhood = "Nashville";
-    if (place.plus_code && place.plus_code.compound_code) {
-      const addressParts = place.plus_code.compound_code.split(',');
-      if (addressParts.length > 0) {
-        neighborhood = addressParts[0].replace(/^[^ ]+ /, '');  // Remove the plus code
-      }
-    }
+// Map Google Places API results to our Restaurant format
+export function mapGooglePlacesToRestaurants(places: any[], apiKey: string) {
+  return places.map(place => {
+    // Map price level to price range
+    const priceLevel = place.price_level || 2; // Default to 2 ($$) if not specified
+    const priceRange = "$".repeat(priceLevel);
     
-    // Determine cuisine type from place types
-    let cuisine = "American"; // Default
-    if (place.types && place.types.length > 0) {
-      for (const type of place.types) {
-        if (cuisineMap[type]) {
-          cuisine = cuisineMap[type];
-          break;
-        }
-      }
-    }
-    
-    // Build feature tags from place details
-    const features: string[] = [];
-    
-    if (place.types) {
-      for (const type of place.types) {
-        if (featureMap[type]) {
-          features.push(featureMap[type]);
-        }
-      }
-    }
-    
-    // Add some additional features based on the place details
-    if (place.rating && place.rating >= 4.5) features.push("Highly Rated");
-    if (place.user_ratings_total && place.user_ratings_total > 500) features.push("Popular");
-    
-    // Create description
-    let description;
-    if (place.editorial_summary?.overview) {
-      description = place.editorial_summary.overview;
-    } else {
-      // Format the cuisine name with proper capitalization
-      const formattedCuisine = cuisine.charAt(0).toUpperCase() + cuisine.slice(1).toLowerCase();
-      // Only include the neighborhood if it's different from "Nashville"
-      if (neighborhood !== "Nashville") {
-        description = `${place.name} is a ${formattedCuisine.toLowerCase()} restaurant located in the ${neighborhood} area of Nashville.`;
-      } else {
-        description = `${place.name} is a ${formattedCuisine.toLowerCase()} restaurant located in Nashville.`;
-      }
+    // Map the rest of the Google Places data to our Restaurant format
+    let coordinates;
+    if (place.geometry && place.geometry.location) {
+      coordinates = {
+        latitude: place.geometry.location.lat,
+        longitude: place.geometry.location.lng
+      };
     }
     
     return {
       id: place.place_id,
       name: place.name,
-      cuisine: cuisine,
-      neighborhood: neighborhood,
-      priceRange: place.price_level !== undefined ? priceRangeMap[place.price_level] : "$$",
-      description: description,
-      address: place.formatted_address || place.vicinity,
-      imageUrl: place.photos?.length > 0 
-        ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${apiKey}`
-        : undefined,
-      features: features.length > 0 ? features : ["Nashville Restaurant"],
+      cuisine: getCuisineFromTypes(place.types),
+      neighborhood: extractNeighborhood(place),
+      priceRange,
+      description: place.editorial_summary?.overview || 
+        `${place.name} is a ${priceRange} restaurant in Nashville.`,
+      address: place.vicinity || place.formatted_address,
+      imageUrl: getPhotoUrl(place, apiKey),
+      features: extractFeatures(place),
       website: place.website,
-      // These fields would require additional API calls to fill
-      logoUrl: undefined,
-      openTableLink: undefined,
-      resyLink: undefined,
-      instagramLink: undefined
+      coordinates,
+      // Note: We don't have direct reservation links from Google Places
+      // Those would need to be added separately or matched with other data sources
     };
   });
+}
+
+// Helper functions
+function getCuisineFromTypes(types: string[]): string {
+  let cuisine = "American"; // Default
+  if (types && types.length > 0) {
+    for (const type of types) {
+      if (cuisineMap[type]) {
+        cuisine = cuisineMap[type];
+        break;
+      }
+    }
+  }
+  return cuisine;
+}
+
+function extractNeighborhood(place: GooglePlaceResult): string {
+  let neighborhood = "Nashville";
+  if (place.plus_code && place.plus_code.compound_code) {
+    const addressParts = place.plus_code.compound_code.split(',');
+    if (addressParts.length > 0) {
+      neighborhood = addressParts[0].replace(/^[^ ]+ /, '');  // Remove the plus code
+    }
+  }
+  return neighborhood;
+}
+
+function getPhotoUrl(place: GooglePlaceResult, apiKey: string): string | undefined {
+  return place.photos?.length > 0 
+    ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${apiKey}`
+    : undefined;
+}
+
+function extractFeatures(place: GooglePlaceResult): string[] {
+  const features: string[] = [];
+  
+  if (place.types) {
+    for (const type of place.types) {
+      if (featureMap[type]) {
+        features.push(featureMap[type]);
+      }
+    }
+  }
+  
+  // Add some additional features based on the place details
+  if (place.rating && place.rating >= 4.5) features.push("Highly Rated");
+  if (place.user_ratings_total && place.user_ratings_total > 500) features.push("Popular");
+  
+  return features;
 }

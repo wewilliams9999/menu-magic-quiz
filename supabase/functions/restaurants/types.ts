@@ -1,5 +1,4 @@
 
-
 // Types for the restaurant search functionality
 export interface RestaurantParams {
   neighborhoods?: string[];
@@ -29,6 +28,11 @@ export interface Restaurant {
   openTableLink?: string;
   resyLink?: string;
   instagramLink?: string;
+  // Optional coordinates for map links
+  coordinates?: {
+    latitude: number;
+    longitude: number;
+  };
 }
 
 export interface GooglePlaceResult {
@@ -44,5 +48,10 @@ export interface GooglePlaceResult {
   plus_code?: { compound_code: string };
   editorial_summary?: { overview: string };
   website?: string;
+  geometry?: {
+    location: {
+      lat: number;
+      lng: number;
+    }
+  };
 }
-
