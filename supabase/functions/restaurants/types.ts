@@ -1,10 +1,11 @@
 
+
 // Types for the restaurant search functionality
 export interface RestaurantParams {
   neighborhoods?: string[];
   cuisine?: string[];
   price?: string[];
-  atmosphere?: string;
+  atmosphere?: string | string[];
   preferences?: string[];
   distance?: number;
   userLocation?: {
@@ -44,3 +45,4 @@ export interface GooglePlaceResult {
   editorial_summary?: { overview: string };
   website?: string;
 }
+

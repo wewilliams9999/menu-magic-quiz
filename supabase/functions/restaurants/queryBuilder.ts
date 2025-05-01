@@ -20,8 +20,17 @@ export function buildGooglePlacesApiQuery(params: RestaurantParams, apiKey: stri
     query += ` ${params.preferences.join(' ')}`;
   }
   
-  if (params.atmosphere) {
-    query += ` ${params.atmosphere}`;
+  // Add atmosphere only if it's not "anything"
+  if (params.atmosphere && params.atmosphere !== 'anything' && params.atmosphere.toString() !== 'anything') {
+    if (Array.isArray(params.atmosphere)) {
+      // Filter out "anything" if it's in the array
+      const filteredAtmosphere = params.atmosphere.filter(atm => atm !== 'anything');
+      if (filteredAtmosphere.length > 0) {
+        query += ` ${filteredAtmosphere.join(' ')}`;
+      }
+    } else {
+      query += ` ${params.atmosphere}`;
+    }
   }
   
   // Build URL with parameters

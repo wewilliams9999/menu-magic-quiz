@@ -157,6 +157,12 @@ export const quizQuestions: QuizQuestion[] = [
     type: "multipleChoice",
     options: [
       {
+        id: "atmosphere-0",
+        text: "Anything - No Preference",
+        value: "anything",
+        icon: null
+      },
+      {
         id: "atmosphere-1",
         text: "Casual",
         value: "casual",
@@ -184,3 +190,4 @@ export const quizQuestions: QuizQuestion[] = [
     multiSelect: true,
   },
 ];
+
