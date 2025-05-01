@@ -1,4 +1,3 @@
-
 import { QuizResult } from "@/utils/quizData";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -191,6 +190,7 @@ export const mapGooglePlacesToRestaurants = (places: any[]): QuizResult[] => {
       "food": "American",
       "meal_takeaway": "Fast Food",
       "meal_delivery": "Delivery",
+      "fast_food": "Fast Food",
       "bakery": "Bakery",
       "italian_restaurant": "Italian",
       "mexican_restaurant": "Mexican",

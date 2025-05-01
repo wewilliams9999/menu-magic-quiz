@@ -1,4 +1,3 @@
-
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { corsHeaders } from '../_shared/cors.ts';
 
@@ -138,6 +137,7 @@ Deno.serve(async (req) => {
         "food": "American",
         "meal_takeaway": "Fast Food",
         "meal_delivery": "Delivery",
+        "fast_food": "Fast Food", 
         "bakery": "Bakery",
         "italian_restaurant": "Italian",
         "mexican_restaurant": "Mexican",
