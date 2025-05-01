@@ -1,4 +1,3 @@
-
 import { CasualIcon, ElegantIcon, TrendyIcon, UniqueIcon } from "@/utils/atmosphere-icons";
 
 export interface QuizOption {
@@ -25,17 +24,21 @@ export interface QuizResult {
   cuisine: string;
   neighborhood: string;
   priceRange: string;
-  description: string;
+  description?: string;
   address?: string;
   imageUrl?: string;
   logoUrl?: string;
   features?: string[];
   website?: string;
-  isAlternative?: boolean;
-  resyLink?: string;
-  openTableLink?: string;
-  instagramLink?: string;
   phone?: string;
+  openTableLink?: string;
+  resyLink?: string;
+  instagramLink?: string;
+  isAlternative?: boolean;
+  coordinates?: {
+    latitude: number;
+    longitude: number;
+  };
 }
 
 export const locationMethodOptions: QuizOption[] = [
@@ -190,4 +193,3 @@ export const quizQuestions: QuizQuestion[] = [
     multiSelect: true,
   },
 ];
-
