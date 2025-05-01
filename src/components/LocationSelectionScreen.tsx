@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Navigation, Map } from "lucide-react";
-import { toast } from "sonner";
 import NeighborhoodMap from "./NeighborhoodMap";
 import { useLocationServices } from "./map/useLocationServices";
 
@@ -16,7 +15,6 @@ const LocationSelectionScreen = ({
   onUserLocationUpdate
 }: LocationSelectionScreenProps) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [locationToastShown, setLocationToastShown] = useState(false);
   const {
     userLocation,
     isLocating,
@@ -35,13 +33,10 @@ const LocationSelectionScreen = ({
     }
   }, [selectedOption]);
 
-  // Effect to show toast when location is found
+  // Effect to update parent component when location is found
   useEffect(() => {
-    if (userLocation && selectedOption === "location" && !locationToastShown) {
-      toast.success("Your location has been found");
-      setLocationToastShown(true);
-      
-      // Pass the user location to the parent component
+    if (userLocation && selectedOption === "location") {
+      // Pass the user location to the parent component without showing toast
       if (onUserLocationUpdate) {
         onUserLocationUpdate({
           latitude: userLocation.latitude,
@@ -49,7 +44,7 @@ const LocationSelectionScreen = ({
         });
       }
     }
-  }, [userLocation, selectedOption, locationToastShown, onUserLocationUpdate]);
+  }, [userLocation, selectedOption, onUserLocationUpdate]);
 
   const handleOptionSelect = (value: string) => {
     setSelectedOption(value);
