@@ -25,9 +25,20 @@ export function buildGooglePlacesApiQuery(params: RestaurantParams, apiKey: stri
     if (Array.isArray(params.atmosphere)) {
       // Filter out "anything" if it's in the array
       const filteredAtmosphere = params.atmosphere.filter(atm => atm !== 'anything');
+      
+      // Special handling for "quiet" - we specifically want to add this to the query
+      // as it's an important attribute that might appear in descriptions
+      if (filteredAtmosphere.includes('quiet')) {
+        query += ' quiet';
+        // Remove 'quiet' after adding it separately to avoid duplication
+        filteredAtmosphere.splice(filteredAtmosphere.indexOf('quiet'), 1);
+      }
+      
       if (filteredAtmosphere.length > 0) {
         query += ` ${filteredAtmosphere.join(' ')}`;
       }
+    } else if (params.atmosphere === 'quiet') {
+      query += ' quiet';
     } else {
       query += ` ${params.atmosphere}`;
     }

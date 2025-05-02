@@ -1,4 +1,4 @@
-import { CasualIcon, ElegantIcon, TrendyIcon, UniqueIcon } from "@/utils/atmosphere-icons";
+import { CasualIcon, ElegantIcon, TrendyIcon, UniqueIcon, QuietIcon } from "@/utils/atmosphere-icons";
 
 export interface QuizOption {
   id: string;
@@ -189,6 +189,12 @@ export const quizQuestions: QuizQuestion[] = [
         text: "Unique",
         value: "unique",
         icon: UniqueIcon
+      },
+      {
+        id: "atmosphere-5",
+        text: "Quiet",
+        value: "quiet",
+        icon: QuietIcon
       }
     ],
     multiSelect: true,

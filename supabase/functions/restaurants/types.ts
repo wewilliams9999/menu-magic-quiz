@@ -28,6 +28,7 @@ export interface Restaurant {
   openTableLink?: string;
   resyLink?: string;
   instagramLink?: string;
+  phone?: string;
   // Optional coordinates for map links
   coordinates?: {
     latitude: number;
