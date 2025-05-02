@@ -33,6 +33,7 @@ export interface QuizResult {
   resyLink?: string | null;
   openTableLink?: string | null;
   instagramLink?: string | null;
+  phone?: string | null;
   isAlternative?: boolean;
   coordinates?: {
     latitude: number;
