@@ -23,7 +23,8 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
       resy: restaurant.resyLink,
       openTable: restaurant.openTableLink,
       coordinates: restaurant.coordinates,
-      distance: restaurant.distanceFromUser ? `${restaurant.distanceFromUser.toFixed(1)} mi` : 'Unknown'
+      distance: restaurant.distanceFromUser ? `${restaurant.distanceFromUser.toFixed(1)} mi` : 'Unknown',
+      phone: restaurant.phone
     });
   }, [restaurant]);
   
