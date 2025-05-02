@@ -1,7 +1,6 @@
-
 import React from 'react';
 import AtmosphereOption from './AtmosphereOption';
-import { QuizOption } from '@/utils/quizData';
+import { QuizOption } from '@/utils/quiz/types';
 
 interface AtmosphereCardProps {
   option: QuizOption;

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import LocationSelectionScreen from "./LocationSelectionScreen";
 import QuizQuestion from "./QuizQuestion";
 import ResultScreen from "./ResultScreen";
-import { quizQuestions } from "@/utils/quizData";
+import { quizQuestions } from "@/utils/quiz";
 import { useRestaurantData } from "@/hooks/useRestaurantData";
 
 type AnswerValue = string | string[] | number;

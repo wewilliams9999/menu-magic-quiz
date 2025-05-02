@@ -1,7 +1,6 @@
-
 import { motion } from "framer-motion";
 import { Check, Utensils } from "lucide-react";
-import { QuizOption } from "@/utils/quizData";
+import { QuizOption } from "@/utils/quiz/types";
 
 interface CuisineQuestionProps {
   options: QuizOption[];

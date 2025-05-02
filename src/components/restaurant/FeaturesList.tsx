@@ -1,7 +1,6 @@
-
 import { CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { QuizResult } from "@/utils/quizData";
+import { QuizResult } from "@/utils/quiz/types";
 
 interface FeaturesListProps {
   features?: string[];

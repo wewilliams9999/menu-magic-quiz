@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { QuizQuestion as QuizQuestionType } from "@/utils/quizData";
+import { QuizQuestion as QuizQuestionType } from "@/utils/quiz/types";
 import QuestionBase from "./questions/QuestionBase";
 import CuisineQuestion from "./questions/CuisineQuestion";
 import StandardQuestion from "./questions/StandardQuestion";

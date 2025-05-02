@@ -1,5 +1,5 @@
 
-import { QuizResult } from "@/utils/quizData";
+import { QuizResult } from "@/utils/quiz/types";
 import RestaurantCard from "@/components/RestaurantCard";
 
 interface ResultsGridProps {

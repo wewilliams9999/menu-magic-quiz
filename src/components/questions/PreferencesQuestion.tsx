@@ -2,7 +2,7 @@
 import { Utensils, XCircle, Sparkles } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { QuizOption } from "@/utils/quizData";
+import { QuizOption } from "@/utils/quiz/types";
 import AtmosphereOption from "../AtmosphereOption";
 
 interface PreferencesQuestionProps {
