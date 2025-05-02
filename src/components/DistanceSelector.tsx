@@ -5,7 +5,6 @@ import { Navigation, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { toast } from "sonner";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useLocationServices } from "./map/useLocationServices";
 
@@ -35,7 +34,6 @@ const DistanceSelector = ({
   const distances = [3, 5, 10, 15, 30, 50];
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [userInitiatedLocationRequest, setUserInitiatedLocationRequest] = useState(false);
-  const [locationToastShown, setLocationToastShown] = useState(false);
   
   const {
     userLocation: location,
@@ -46,12 +44,9 @@ const DistanceSelector = ({
   useEffect(() => {
     if (location && userInitiatedLocationRequest && onLocationShared) {
       onLocationShared();
-      if (!locationToastShown) {
-        toast.success("Your location has been found");
-        setLocationToastShown(true);
-      }
+      // Remove toast notification completely
     }
-  }, [location, userInitiatedLocationRequest, onLocationShared, locationToastShown]);
+  }, [location, userInitiatedLocationRequest, onLocationShared]);
   
   const getUserLocation = () => {
     setPermissionDenied(false);

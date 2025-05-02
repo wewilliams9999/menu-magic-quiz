@@ -24,21 +24,21 @@ export interface QuizResult {
   cuisine: string;
   neighborhood: string;
   priceRange: string;
-  description?: string;
+  description: string;
   address?: string;
   imageUrl?: string;
   logoUrl?: string;
   features?: string[];
   website?: string;
-  phone?: string;
-  openTableLink?: string;
-  resyLink?: string;
-  instagramLink?: string;
+  resyLink?: string | null;
+  openTableLink?: string | null;
+  instagramLink?: string | null;
   isAlternative?: boolean;
   coordinates?: {
     latitude: number;
     longitude: number;
   };
+  distanceFromUser?: number;
 }
 
 export const locationMethodOptions: QuizOption[] = [

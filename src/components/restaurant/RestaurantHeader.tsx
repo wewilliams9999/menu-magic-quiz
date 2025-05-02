@@ -1,42 +1,50 @@
 
-import { ExternalLink } from "lucide-react";
-import { CardHeader, CardTitle } from "@/components/ui/card";
 import { QuizResult } from "@/utils/quizData";
+import { CardHeader } from "@/components/ui/card";
 
 interface RestaurantHeaderProps {
   restaurant: QuizResult;
 }
 
 const RestaurantHeader = ({ restaurant }: RestaurantHeaderProps) => {
+  // Format the distance to show one decimal place
+  const formattedDistance = restaurant.distanceFromUser 
+    ? `${restaurant.distanceFromUser.toFixed(1)} mi` 
+    : null;
+    
   return (
-    <CardHeader>
-      <CardTitle className="font-serif text-xl">
-        {restaurant.website ? (
-          <a 
-            href={restaurant.website} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hover:text-red-600 dark:hover:text-red-400 transition-colors flex items-center gap-1"
-            aria-label={`Visit ${restaurant.name} website - Nashville Restaurant in ${restaurant.neighborhood}`}
-            itemProp="url"
+    <CardHeader className="p-4 pb-2">
+      <div className="flex flex-wrap justify-between items-start">
+        <div>
+          <h3 
+            className="text-xl font-bold mb-1 text-red-500" 
+            itemProp="name"
           >
-            <span itemProp="name">{restaurant.name}</span>
-            <ExternalLink className="h-3.5 w-3.5 inline-flex ml-1 opacity-70" aria-hidden="true" />
-          </a>
-        ) : (
-          <span itemProp="name">{restaurant.name}</span>
-        )}
-      </CardTitle>
-      <div className="text-sm text-muted-foreground">
-        <span itemProp="areaServed">{restaurant.neighborhood}</span> • 
-        <span itemProp="servesCuisine">{restaurant.cuisine}</span> • 
-        <span itemProp="priceRange">{restaurant.priceRange}</span>
-        {restaurant.address && (
-          <div className="mt-1" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
-            <span itemProp="streetAddress">{restaurant.address}</span>
-            <meta itemProp="addressLocality" content="Nashville" />
-            <meta itemProp="addressRegion" content="TN" />
-            <meta itemProp="addressCountry" content="US" />
+            {restaurant.name}
+          </h3>
+          
+          <div className="text-sm text-zinc-400 mb-1" itemProp="servesCuisine">
+            {restaurant.cuisine} • {restaurant.priceRange}
+          </div>
+          
+          <div className="text-sm text-zinc-500" itemProp="address">
+            {restaurant.neighborhood}
+            {formattedDistance && (
+              <span className="ml-2">• <span className={restaurant.isAlternative ? "text-amber-400" : "text-zinc-400"}>
+                {formattedDistance}
+              </span></span>
+            )}
+          </div>
+        </div>
+        
+        {restaurant.logoUrl && (
+          <div className="w-12 h-12 overflow-hidden flex items-center justify-center bg-white/10 rounded-md">
+            <img 
+              src={restaurant.logoUrl} 
+              alt={`${restaurant.name} logo`} 
+              className="w-auto h-auto max-w-full max-h-full object-contain"
+              loading="lazy"
+            />
           </div>
         )}
       </div>

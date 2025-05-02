@@ -22,19 +22,22 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
       instagram: restaurant.instagramLink,
       resy: restaurant.resyLink,
       openTable: restaurant.openTableLink,
-      coordinates: restaurant.coordinates
+      coordinates: restaurant.coordinates,
+      distance: restaurant.distanceFromUser ? `${restaurant.distanceFromUser.toFixed(1)} mi` : 'Unknown'
     });
   }, [restaurant]);
   
   return (
     <Card 
-      className="overflow-hidden transition-all duration-300 hover:shadow-md hover:border-red-500/30"
+      className={`overflow-hidden transition-all duration-300 hover:shadow-md hover:border-red-500/30 ${
+        restaurant.isAlternative ? 'border-amber-500/30' : ''
+      }`}
       itemScope
       itemType="https://schema.org/Restaurant"
     >
       {restaurant.isAlternative && (
-        <div className="bg-yellow-100 dark:bg-yellow-900/30 px-4 py-2 text-sm text-yellow-800 dark:text-yellow-300">
-          Alternative suggestion based on your preferences
+        <div className="bg-amber-950/50 dark:bg-amber-900/30 px-4 py-2 text-sm text-amber-400">
+          Outside your distance preference but matches other criteria
         </div>
       )}
       

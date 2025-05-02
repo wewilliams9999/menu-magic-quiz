@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { QuizResult } from "@/utils/quizData";
@@ -29,6 +30,7 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
   
   // Check if all results are alternatives
   const allAlternatives = results.length > 0 && results.every(result => result.isAlternative);
+  const hasAlternatives = results.length > 0 && results.some(result => result.isAlternative);
   const isSingleResult = results.length === 1;
   const noExactMatches = allAlternatives || results.length === 0;
   
@@ -43,6 +45,9 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
   
   // Check if any restaurant has map coordinates for map links
   const hasMapLinks = results.some(r => r.coordinates || r.address);
+  
+  // Check if results include distance information
+  const hasDistanceInfo = results.some(r => r.distanceFromUser !== undefined);
   
   // Function to handle showing more results
   const handleShowMore = () => {
@@ -160,6 +165,14 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
             <Alert className="mb-6 bg-amber-950/20 border-amber-800/50">
               <AlertDescription className="text-amber-300 text-center">
                 There are no exact matches for your criteria, but these are the closest to your preferences.
+              </AlertDescription>
+            </Alert>
+          )}
+          
+          {hasAlternatives && !allAlternatives && hasDistanceInfo && (
+            <Alert className="mb-6 bg-blue-950/20 border-blue-800/50">
+              <AlertDescription className="text-blue-300 text-center">
+                Some restaurants are outside your specified distance but may match your other preferences.
               </AlertDescription>
             </Alert>
           )}
