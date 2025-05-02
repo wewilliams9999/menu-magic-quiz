@@ -27,10 +27,10 @@ const QuizContainer = () => {
     ? answers.preferences
     : (answers.preferences ? [answers.preferences as string] : []);
   
-  // Get price as string array for the API
-  const prices = answers.price && Array.isArray(answers.price)
-    ? answers.price
-    : (answers.price ? [answers.price as string] : []);
+  // Get price as string array for the API - handle both multi-select and single-select cases
+  const prices = answers.price 
+    ? (Array.isArray(answers.price) ? answers.price : [answers.price as string])
+    : [];
     
   // Get cuisine as string array for the API
   const cuisines = answers.cuisine && Array.isArray(answers.cuisine)

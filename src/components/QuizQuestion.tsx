@@ -99,7 +99,7 @@ const QuizQuestion = ({
       );
     }
     
-    if (isDietaryQuestion || isPriceQuestion || isAtmosphereQuestion || (isCuisineQuestion && isMultiSelect)) {
+    if (isDietaryQuestion || isAtmosphereQuestion || (isCuisineQuestion && isMultiSelect)) {
       return (
         <PreferencesQuestion 
           options={question.options} 
@@ -118,7 +118,8 @@ const QuizQuestion = ({
         />
       );
     }
-    
+
+    // Use StandardQuestion for price question or any other single-choice questions
     return (
       <StandardQuestion 
         options={question.options} 

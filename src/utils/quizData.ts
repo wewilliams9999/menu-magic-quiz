@@ -1,3 +1,4 @@
+
 import { CasualIcon, ElegantIcon, TrendyIcon, UniqueIcon, QuietIcon } from "@/utils/atmosphere-icons";
 
 export interface QuizOption {
@@ -96,10 +97,10 @@ export const cuisineOptions: QuizOption[] = [
 ];
 
 export const priceOptions: QuizOption[] = [
-  { id: "price-1", text: "Budget-Friendly ($)", value: "$" },
-  { id: "price-2", text: "Moderate ($$)", value: "$$" },
-  { id: "price-3", text: "Pricey ($$$)", value: "$$$" },
-  { id: "price-4", text: "Extravagant ($$$$)", value: "$$$$" },
+  { id: "price-1", text: "Budget-Friendly (under $15)", value: "$" },
+  { id: "price-2", text: "Moderate ($15-$30)", value: "$$" },
+  { id: "price-3", text: "Upscale ($30-$60)", value: "$$$" },
+  { id: "price-4", text: "Fine Dining ($60+)", value: "$$$$" },
 ];
 
 export const dietaryOptions: QuizOption[] = [
@@ -139,10 +140,10 @@ export const quizQuestions: QuizQuestion[] = [
     id: "price",
     questionText: "What's your preferred price range?",
     question: "What's your preferred price range?",
-    description: "Select all that apply",
-    type: "multipleChoice",
+    description: "Select one option",
+    type: "singleChoice",
     options: priceOptions,
-    multiSelect: true,
+    multiSelect: false,
   },
   {
     id: "preferences",
