@@ -24,16 +24,25 @@ const WelcomePage = () => {
           transition={{ delay: 0.3, duration: 0.8 }}
           className="text-4xl md:text-5xl font-bold mb-6 text-red-500"
         >
-          Nashville Restaurant Finder
+          Best Nashville Restaurants Finder
         </motion.h1>
 
         <motion.p 
           initial={{ y: 10, opacity: 0 }} 
           animate={{ y: 0, opacity: 1 }} 
           transition={{ delay: 0.7, duration: 0.6 }} 
-          className="mt-4 text-white mb-8 text-xl"
+          className="mt-4 text-white mb-4 text-xl"
         >
-          Answer a few quick questions, and we'll match you with Nashville restaurants you'll love.
+          Discover the best places to eat in Nashville with our personalized restaurant guide.
+        </motion.p>
+        
+        <motion.p 
+          initial={{ y: 10, opacity: 0 }} 
+          animate={{ y: 0, opacity: 1 }} 
+          transition={{ delay: 0.8, duration: 0.6 }} 
+          className="text-zinc-300 mb-8 text-lg"
+        >
+          Answer a few quick questions, and we'll match you with top Nashville restaurants perfect for dinner, lunch, or any occasion.
         </motion.p>
 
         <motion.div 
@@ -48,7 +57,7 @@ const WelcomePage = () => {
             className="bg-transparent border-2 border-red-500 text-red-500 hover:bg-red-500/10 px-8 py-6 text-lg neon-box"
           >
             <Music className="mr-2" />
-            Start the Quiz
+            Find My Perfect Nashville Restaurant
           </Button>
         </motion.div>
       </motion.div>
