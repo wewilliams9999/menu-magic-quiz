@@ -3,3 +3,6 @@ project_id = "vgbpfraisdnzilymqbky"
 
 [functions."*"]
 verify_jwt = false
+
+[functions.keep-alive]
+verify_jwt = false
