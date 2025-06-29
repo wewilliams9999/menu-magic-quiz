@@ -15,12 +15,13 @@ import ResetButton from "./results/ResetButton";
 interface ResultScreenProps {
   results: QuizResult[];
   onReset: () => void;
+  onRetry?: () => void;
   isLoading?: boolean;
 }
 
-const INITIAL_DISPLAY_COUNT = 3;
+const INITIAL_DISPLAY_COUNT = 6; // Increased from 3 to show more alternatives
 
-const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps) => {
+const ResultScreen = ({ results, onReset, onRetry, isLoading = false }: ResultScreenProps) => {
   // State to track how many restaurants to show
   const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY_COUNT);
   
@@ -29,6 +30,7 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
     console.log("Results in ResultScreen:", results);
     if (results.length > 0) {
       console.log("First result sample:", results[0]);
+      console.log("All results are alternatives:", results.every(r => r.isAlternative));
     }
   }, [results]);
   
@@ -83,6 +85,7 @@ const ResultScreen = ({ results, onReset, isLoading = false }: ResultScreenProps
             hasAlternatives={hasAlternatives}
             allAlternatives={allAlternatives}
             hasDistanceInfo={hasDistanceInfo}
+            onRetry={onRetry}
           />
           
           <ResultsGrid results={displayedResults} />

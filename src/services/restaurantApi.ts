@@ -2,7 +2,7 @@
 import { QuizResult } from "@/utils/quizData";
 import { supabase } from "@/integrations/supabase/client";
 import { RestaurantApiParams } from "./types";
-import { getFallbackRestaurants } from "./mockData";
+import { getFilteredFallbackRestaurants } from "./mockData";
 import { calculateDistance, enhanceAndSortResults } from "./restaurantUtils";
 
 /**
@@ -19,8 +19,12 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     
     if (error) {
       console.error("❌ Error calling restaurant API:", error);
-      console.log("📱 Falling back to mock data due to API error");
-      return getFallbackRestaurants();
+      console.log("📱 Falling back to filtered mock data due to API error");
+      return getFilteredFallbackRestaurants({
+        cuisine: params.cuisine,
+        price: params.price,
+        neighborhoods: params.neighborhoods
+      });
     }
     
     console.log("📡 Raw API response:", data);
@@ -28,21 +32,29 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     // Check if we got an error in the response
     if (data?.error) {
       console.error("❌ API returned error:", data.error);
-      console.log("📱 Using fallback data due to API error response");
-      return getFallbackRestaurants();
+      console.log("📱 Using filtered fallback data due to API error response");
+      return getFilteredFallbackRestaurants({
+        cuisine: params.cuisine,
+        price: params.price,
+        neighborhoods: params.neighborhoods
+      });
     }
     
     // Check if we have results
     if (!data || !data.results || data.results.length === 0) {
-      console.log("📭 No results from API, using fallback data");
+      console.log("📭 No results from API, using filtered fallback data");
       console.log("🔍 API response structure:", { 
         hasData: !!data, 
         hasResults: !!data?.results, 
         resultsLength: data?.results?.length 
       });
       
-      const fallbackResults = getFallbackRestaurants();
-      console.log(`📱 Using ${fallbackResults.length} fallback restaurants`);
+      const fallbackResults = getFilteredFallbackRestaurants({
+        cuisine: params.cuisine,
+        price: params.price,
+        neighborhoods: params.neighborhoods
+      });
+      console.log(`📱 Using ${fallbackResults.length} filtered fallback restaurants`);
       return fallbackResults;
     }
     
@@ -65,9 +77,13 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     
   } catch (error) {
     console.error("💥 Exception in fetchRestaurants:", error);
-    console.log("📱 Exception fallback: Using mock data");
+    console.log("📱 Exception fallback: Using filtered mock data");
     
-    const fallbackResults = getFallbackRestaurants();
+    const fallbackResults = getFilteredFallbackRestaurants({
+      cuisine: params.cuisine,
+      price: params.price,
+      neighborhoods: params.neighborhoods
+    });
     console.log(`📱 Exception fallback: Using ${fallbackResults.length} restaurants`);
     return fallbackResults;
   }

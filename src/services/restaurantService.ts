@@ -3,7 +3,7 @@
 // This ensures backward compatibility with existing code
 
 export { fetchRestaurants } from './restaurantApi';
-export { getFallbackRestaurants } from './mockData';
+export { getFallbackRestaurants, getFilteredFallbackRestaurants } from './mockData';
 export { calculateDistance } from './restaurantUtils';
 export { mapGooglePlacesToRestaurants } from './types';
 export type { RestaurantApiParams } from './types';

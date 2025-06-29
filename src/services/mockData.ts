@@ -1,7 +1,7 @@
 
 import { QuizResult } from "@/utils/quizData";
 
-// Fallback data in case the API fails
+// Enhanced fallback data with more variety and better categorization
 export const getFallbackRestaurants = (): QuizResult[] => {
   return [
     {
@@ -19,7 +19,8 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       resyLink: "https://resy.com/cities/bna/venues/husk-nashville",
       openTableLink: null,
       instagramLink: "https://www.instagram.com/husknashville",
-      phone: "(615) 256-6565"
+      phone: "(615) 256-6565",
+      isAlternative: true
     },
     {
       id: "2",
@@ -36,7 +37,8 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       resyLink: "https://resy.com/cities/bna/venues/rolf-and-daughters",
       openTableLink: null,
       instagramLink: "https://www.instagram.com/rolfanddaughters",
-      phone: "(615) 866-9897"
+      phone: "(615) 866-9897",
+      isAlternative: true
     },
     {
       id: "3",
@@ -53,7 +55,8 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       resyLink: null,
       openTableLink: "https://www.opentable.com/r/the-optimist-nashville",
       instagramLink: "https://www.instagram.com/theoptimistnashville",
-      phone: "(615) 618-2202"
+      phone: "(615) 618-2202",
+      isAlternative: true
     },
     {
       id: "4",
@@ -70,7 +73,8 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       resyLink: "https://resy.com/cities/bna/venues/folk",
       openTableLink: null,
       instagramLink: "https://www.instagram.com/folknashville",
-      phone: "(615) 610-2595"
+      phone: "(615) 610-2595",
+      isAlternative: true
     },
     {
       id: "5",
@@ -87,7 +91,100 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       resyLink: "https://resy.com/cities/bna/venues/henrietta-red",
       openTableLink: null,
       instagramLink: "https://www.instagram.com/henrietta_red",
-      phone: "(615) 490-8042"
+      phone: "(615) 490-8042",
+      isAlternative: true
+    },
+    {
+      id: "6",
+      name: "Geist Bar + Restaurant",
+      cuisine: "German",
+      neighborhood: "Germantown",
+      priceRange: "$$",
+      description: "Modern German cuisine with craft cocktails in a sleek, industrial setting.",
+      address: "311 Jefferson St, Nashville, TN 37208",
+      features: ["German cuisine", "Craft cocktails", "Modern atmosphere"],
+      website: "https://www.geistnashville.com",
+      resyLink: "https://resy.com/cities/bna/venues/geist-bar-restaurant",
+      instagramLink: "https://www.instagram.com/geistnashville",
+      phone: "(615) 203-7005",
+      isAlternative: true
+    },
+    {
+      id: "7",
+      name: "Lockeland Table",
+      cuisine: "Southern",
+      neighborhood: "East Nashville",
+      priceRange: "$$",
+      description: "Community-focused restaurant serving elevated Southern comfort food.",
+      address: "1520 Woodland St, Nashville, TN 37206",
+      features: ["Southern comfort", "Community focused", "Brunch"],
+      website: "https://lockelandtable.com",
+      instagramLink: "https://www.instagram.com/lockelandtable",
+      phone: "(615) 228-4864",
+      isAlternative: true
+    },
+    {
+      id: "8",
+      name: "Butchertown Hall",
+      cuisine: "BBQ",
+      neighborhood: "Germantown",
+      priceRange: "$$",
+      description: "Texas-style BBQ with live music in a spacious hall setting.",
+      address: "1416 4th Ave N, Nashville, TN 37208",
+      features: ["Texas BBQ", "Live music", "Large groups"],
+      website: "https://butchertownhall.com",
+      instagramLink: "https://www.instagram.com/butchertownhall",
+      phone: "(615) 454-3634",
+      isAlternative: true
     }
   ];
+};
+
+// Enhanced function to filter fallback restaurants based on user preferences
+export const getFilteredFallbackRestaurants = (params?: {
+  cuisine?: string[];
+  price?: string[];
+  neighborhoods?: string[];
+}): QuizResult[] => {
+  const allRestaurants = getFallbackRestaurants();
+  
+  if (!params) {
+    return allRestaurants;
+  }
+  
+  let filtered = allRestaurants;
+  
+  // Sort by preference matches
+  filtered = filtered.sort((a, b) => {
+    let scoreA = 0;
+    let scoreB = 0;
+    
+    // Score based on cuisine match
+    if (params.cuisine?.some(c => a.cuisine.toLowerCase().includes(c.toLowerCase()))) {
+      scoreA += 10;
+    }
+    if (params.cuisine?.some(c => b.cuisine.toLowerCase().includes(c.toLowerCase()))) {
+      scoreB += 10;
+    }
+    
+    // Score based on price match
+    if (params.price?.includes(a.priceRange)) {
+      scoreA += 5;
+    }
+    if (params.price?.includes(b.priceRange)) {
+      scoreB += 5;
+    }
+    
+    // Score based on neighborhood match
+    if (params.neighborhoods?.some(n => a.neighborhood.toLowerCase().includes(n.toLowerCase()))) {
+      scoreA += 3;
+    }
+    if (params.neighborhoods?.some(n => b.neighborhood.toLowerCase().includes(n.toLowerCase()))) {
+      scoreB += 3;
+    }
+    
+    return scoreB - scoreA; // Higher score first
+  });
+  
+  return filtered;
 };
