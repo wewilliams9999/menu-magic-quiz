@@ -20,6 +20,8 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
     queryKey: ['restaurants', params],
     queryFn: async () => {
       try {
+        console.log("useRestaurantData called with params:", params);
+        
         // Prepare API parameters
         const apiParams: RestaurantApiParams = {
           neighborhoods: params.neighborhoods,
@@ -31,21 +33,23 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
           userLocation: params.userLocation
         };
         
+        console.log("Calling fetchRestaurants with:", apiParams);
         const results = await fetchRestaurants(apiParams);
         
-        // Log results for debugging
-        console.log(`Retrieved ${results.length} restaurants with links:`, 
-          results.map(r => ({ 
-            name: r.name, 
-            website: r.website, 
-            resy: r.resyLink, 
-            openTable: r.openTableLink 
-          }))
-        );
+        console.log(`useRestaurantData received ${results.length} results`);
+        
+        // Enhanced logging for debugging
+        if (results.length > 0) {
+          console.log("Sample result:", {
+            name: results[0].name,
+            id: results[0].id,
+            isFromFallback: results[0].description?.includes('fallback') || results[0].description?.includes('mock')
+          });
+        }
         
         // If we get no results, fall back to mock data
         if (results.length === 0) {
-          console.log("No results from API, using fallback data");
+          console.log("No results returned, using fallback data");
           return getFallbackRestaurants();
         }
         
@@ -53,6 +57,7 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         
       } catch (error) {
         console.error("Error in useRestaurantData:", error);
+        console.log("Hook exception: falling back to mock data");
         // Fall back to mock data on error
         return getFallbackRestaurants();
       }
@@ -64,7 +69,8 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
       params.price?.length || 
       params.atmosphere
     ),
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 2, // Reduced to 2 minutes for better debugging
     refetchOnWindowFocus: false,
+    retry: 1, // Only retry once to avoid long delays
   });
 };
