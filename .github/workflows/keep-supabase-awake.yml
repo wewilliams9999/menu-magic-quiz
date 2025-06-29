@@ -1,0 +1,14 @@
+name: Keep Supabase Project Awake
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Every day at 8 AM UTC (3 AM CT)
+  workflow_dispatch:     # Allows manual run
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Curl Supabase Endpoint
+        run: |
+          curl -s --retry 3 https://vgbpfraisdnzilymqbky.supabase.co
