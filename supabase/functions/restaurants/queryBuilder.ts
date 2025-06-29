@@ -4,45 +4,48 @@ import { RestaurantParams } from './types.ts';
 // Build the Google Places API search URL
 export function buildGooglePlacesApiQuery(params: RestaurantParams, apiKey: string): URL {
   const endpoint = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
-  let query = 'restaurants in Nashville';
   
-  // Refine the search based on parameters
+  // Start with a broader, more reliable base query
+  let query = 'restaurants Nashville TN';
+  
+  // Only add specific neighborhoods if they're provided and not empty
   if (params.neighborhoods && params.neighborhoods.length > 0) {
-    query += ` ${params.neighborhoods.join(' ')}`;
+    // Filter out any empty or invalid neighborhood values
+    const validNeighborhoods = params.neighborhoods.filter(n => n && n.trim() !== '');
+    if (validNeighborhoods.length > 0) {
+      query += ` ${validNeighborhoods.join(' OR ')}`;
+    }
   }
   
+  // Add cuisine but be more flexible - don't add "anything"
   if (params.cuisine && params.cuisine.length > 0) {
-    query += ` ${params.cuisine.join(' ')}`;
+    const validCuisines = params.cuisine.filter(c => c && c !== 'anything' && c.trim() !== '');
+    if (validCuisines.length > 0) {
+      query += ` ${validCuisines.join(' OR ')}`;
+    }
   }
   
-  // Add cuisine types to query
+  // Skip preferences that are too generic
   if (params.preferences && params.preferences.length > 0) {
-    query += ` ${params.preferences.join(' ')}`;
+    const validPrefs = params.preferences.filter(p => p && p !== 'none' && p !== 'anything' && p.trim() !== '');
+    if (validPrefs.length > 0) {
+      query += ` ${validPrefs.join(' ')}`;
+    }
   }
   
-  // Add atmosphere only if it's not "anything"
-  if (params.atmosphere && params.atmosphere !== 'anything' && params.atmosphere.toString() !== 'anything') {
+  // Handle atmosphere more carefully
+  if (params.atmosphere && params.atmosphere !== 'anything') {
     if (Array.isArray(params.atmosphere)) {
-      // Filter out "anything" if it's in the array
-      const filteredAtmosphere = params.atmosphere.filter(atm => atm !== 'anything');
-      
-      // Special handling for "quiet" - we specifically want to add this to the query
-      // as it's an important attribute that might appear in descriptions
-      if (filteredAtmosphere.includes('quiet')) {
-        query += ' quiet';
-        // Remove 'quiet' after adding it separately to avoid duplication
-        filteredAtmosphere.splice(filteredAtmosphere.indexOf('quiet'), 1);
+      const validAtmosphere = params.atmosphere.filter(atm => atm !== 'anything' && atm.trim() !== '');
+      if (validAtmosphere.length > 0) {
+        query += ` ${validAtmosphere.join(' ')}`;
       }
-      
-      if (filteredAtmosphere.length > 0) {
-        query += ` ${filteredAtmosphere.join(' ')}`;
-      }
-    } else if (params.atmosphere === 'quiet') {
-      query += ' quiet';
-    } else {
+    } else if (params.atmosphere.trim() !== '') {
       query += ` ${params.atmosphere}`;
     }
   }
+  
+  console.log('Final search query:', query);
   
   // Build URL with parameters
   const url = new URL(endpoint);
@@ -55,32 +58,32 @@ export function buildGooglePlacesApiQuery(params: RestaurantParams, apiKey: stri
     // Convert miles to meters for the Google API
     const radiusInMeters = params.distance * 1609.34;
     url.searchParams.append('radius', radiusInMeters.toString());
+    console.log('Added location and radius:', params.userLocation, `${params.distance} miles`);
   }
   
-  // Optional price filtering
+  // Handle price filtering more conservatively
   if (params.price && params.price.length > 0) {
-    // Google's price levels are 0 (Free) to 4 (Very Expensive)
-    // Map our $ symbols to Google's numeric values
     const priceMapping: Record<string, string> = {
       '$': '1',
-      '$$': '2',
+      '$$': '2', 
       '$$$': '3',
       '$$$$': '4'
     };
     
-    // Get the numeric price levels
     const priceLevels = params.price
       .map(price => priceMapping[price])
       .filter(Boolean);
     
     if (priceLevels.length > 0) {
-      // Google API supports filtering by maxprice and minprice
-      // For simplicity, we'll use the min and max values from our selection
       const minPrice = Math.min(...priceLevels.map(Number));
       const maxPrice = Math.max(...priceLevels.map(Number));
       
-      url.searchParams.append('minprice', minPrice.toString());
-      url.searchParams.append('maxprice', maxPrice.toString());
+      // Only add price filters if they're reasonable
+      if (minPrice >= 1 && maxPrice <= 4) {
+        url.searchParams.append('minprice', minPrice.toString());
+        url.searchParams.append('maxprice', maxPrice.toString());
+        console.log('Added price filters:', minPrice, 'to', maxPrice);
+      }
     }
   }
   

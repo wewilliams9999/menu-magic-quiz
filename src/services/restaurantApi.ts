@@ -10,13 +10,7 @@ import { calculateDistance, enhanceAndSortResults } from "./restaurantUtils";
  */
 export const fetchRestaurants = async (params: RestaurantApiParams): Promise<QuizResult[]> => {
   try {
-    console.log("Fetching restaurants with params:", params);
-    
-    // Add more detailed logging
-    console.log("User location:", params.userLocation);
-    console.log("Neighborhoods:", params.neighborhoods);
-    console.log("Cuisine:", params.cuisine);
-    console.log("Price:", params.price);
+    console.log("🔍 Fetching restaurants with params:", JSON.stringify(params, null, 2));
     
     // Call our Supabase Edge Function
     const { data, error } = await supabase.functions.invoke('restaurants', {
@@ -24,47 +18,57 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     });
     
     if (error) {
-      console.error("Error calling restaurant API:", error);
-      console.log("Falling back to mock data due to API error");
+      console.error("❌ Error calling restaurant API:", error);
+      console.log("📱 Falling back to mock data due to API error");
       return getFallbackRestaurants();
     }
     
-    console.log("Raw API response:", data);
+    console.log("📡 Raw API response:", data);
     
+    // Check if we got an error in the response
+    if (data?.error) {
+      console.error("❌ API returned error:", data.error);
+      console.log("📱 Using fallback data due to API error response");
+      return getFallbackRestaurants();
+    }
+    
+    // Check if we have results
     if (!data || !data.results || data.results.length === 0) {
-      console.log("No results from API or empty results array, using fallback data");
-      console.log("API response structure:", { data, hasResults: !!data?.results, resultsLength: data?.results?.length });
+      console.log("📭 No results from API, using fallback data");
+      console.log("🔍 API response structure:", { 
+        hasData: !!data, 
+        hasResults: !!data?.results, 
+        resultsLength: data?.results?.length 
+      });
       
-      // Return fallback data but log this occurrence
       const fallbackResults = getFallbackRestaurants();
-      console.log(`Using ${fallbackResults.length} fallback restaurants`);
+      console.log(`📱 Using ${fallbackResults.length} fallback restaurants`);
       return fallbackResults;
     }
     
-    // Enhance results with links and distance calculations
+    // Process the results
     const enhancedResults = enhanceAndSortResults(data.results, params);
     
-    console.log(`Successfully processed ${enhancedResults.length} restaurant results:`, 
-      enhancedResults.map(r => ({ 
-        name: r.name, 
-        cuisine: r.cuisine,
-        neighborhood: r.neighborhood,
-        website: r.website ? 'Yes' : 'No',
-        resy: r.resyLink ? 'Yes' : 'No', 
-        openTable: r.openTableLink ? 'Yes' : 'No',
-        distance: r.distanceFromUser ? `${r.distanceFromUser.toFixed(1)} mi` : 'Unknown'
-      }))
-    );
+    console.log(`✅ Successfully processed ${enhancedResults.length} restaurant results`);
+    console.log("🏪 Restaurant details:", enhancedResults.map(r => ({ 
+      name: r.name, 
+      cuisine: r.cuisine,
+      neighborhood: r.neighborhood,
+      priceRange: r.priceRange,
+      hasWebsite: !!r.website,
+      hasResy: !!r.resyLink,
+      hasOpenTable: !!r.openTableLink,
+      distance: r.distanceFromUser ? `${r.distanceFromUser.toFixed(1)} mi` : 'Unknown'
+    })));
     
     return enhancedResults;
     
   } catch (error) {
-    console.error("Error fetching restaurant data:", error);
-    console.log("Exception occurred, falling back to mock data");
+    console.error("💥 Exception in fetchRestaurants:", error);
+    console.log("📱 Exception fallback: Using mock data");
     
-    // Return fallback data on any exception
     const fallbackResults = getFallbackRestaurants();
-    console.log(`Exception fallback: Using ${fallbackResults.length} restaurants`);
+    console.log(`📱 Exception fallback: Using ${fallbackResults.length} restaurants`);
     return fallbackResults;
   }
 };
