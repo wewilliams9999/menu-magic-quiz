@@ -40,37 +40,26 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
       });
     }
     
-    // Check if we have results - if we have very few results (1-2), supplement with fallback
-    if (!data || !data.results || data.results.length === 0) {
-      console.log("📭 No results from API, using filtered fallback data");
+    // Always supplement with fallback data if we have 5 or fewer results
+    if (!data || !data.results || data.results.length <= 5) {
+      console.log(`📊 Got ${data?.results?.length || 0} API results, supplementing with fallback data`);
       
-      const fallbackResults = getFilteredFallbackRestaurants({
-        cuisine: params.cuisine,
-        price: params.price,
-        neighborhoods: params.neighborhoods
-      });
-      console.log(`📱 Using ${fallbackResults.length} filtered fallback restaurants`);
-      return fallbackResults;
-    }
-    
-    // If we have very few API results, supplement with fallback data
-    if (data.results.length <= 2) {
-      console.log(`📊 Only ${data.results.length} API results, supplementing with fallback data`);
-      
-      const enhancedApiResults = enhanceAndSortResults(data.results, params);
+      const apiResults = data?.results ? enhanceAndSortResults(data.results, params) : [];
       const fallbackResults = getFilteredFallbackRestaurants({
         cuisine: params.cuisine,
         price: params.price,
         neighborhoods: params.neighborhoods
       });
       
-      // Mark API results as primary and fallback as alternatives
-      const combinedResults = [
-        ...enhancedApiResults,
-        ...fallbackResults.map(restaurant => ({ ...restaurant, isAlternative: true }))
-      ];
+      // If we have some API results, mark fallback as alternatives
+      // If we have no API results, don't mark fallback as alternatives (they're the primary results)
+      const enhancedFallback = apiResults.length > 0 
+        ? fallbackResults.map(restaurant => ({ ...restaurant, isAlternative: true }))
+        : fallbackResults;
       
-      console.log(`✅ Combined ${enhancedApiResults.length} API + ${fallbackResults.length} fallback results`);
+      const combinedResults = [...apiResults, ...enhancedFallback];
+      
+      console.log(`✅ Combined ${apiResults.length} API + ${fallbackResults.length} fallback results`);
       return combinedResults;
     }
     
