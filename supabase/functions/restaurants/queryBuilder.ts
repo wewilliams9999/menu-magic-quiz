@@ -61,7 +61,7 @@ export function buildGooglePlacesApiQuery(params: RestaurantParams, apiKey: stri
     console.log('Added location and radius:', params.userLocation, `${params.distance} miles`);
   }
   
-  // Handle price filtering more conservatively
+  // Handle price filtering more conservatively - only apply if we have multiple price levels
   if (params.price && params.price.length > 0) {
     const priceMapping: Record<string, string> = {
       '$': '1',
@@ -74,16 +74,21 @@ export function buildGooglePlacesApiQuery(params: RestaurantParams, apiKey: stri
       .map(price => priceMapping[price])
       .filter(Boolean);
     
-    if (priceLevels.length > 0) {
+    // Only add price filters if we have multiple price levels or if it's not the cheapest option
+    if (priceLevels.length > 1) {
       const minPrice = Math.min(...priceLevels.map(Number));
       const maxPrice = Math.max(...priceLevels.map(Number));
       
-      // Only add price filters if they're reasonable
-      if (minPrice >= 1 && maxPrice <= 4) {
-        url.searchParams.append('minprice', minPrice.toString());
-        url.searchParams.append('maxprice', maxPrice.toString());
-        console.log('Added price filters:', minPrice, 'to', maxPrice);
-      }
+      url.searchParams.append('minprice', minPrice.toString());
+      url.searchParams.append('maxprice', maxPrice.toString());
+      console.log('Added price filters:', minPrice, 'to', maxPrice);
+    } else if (priceLevels.length === 1 && priceLevels[0] !== '1') {
+      // Only apply single price filter if it's not the cheapest option (which is too restrictive)
+      url.searchParams.append('minprice', priceLevels[0]);
+      url.searchParams.append('maxprice', priceLevels[0]);
+      console.log('Added single price filter:', priceLevels[0]);
+    } else {
+      console.log('Skipping restrictive price filter for single $ option');
     }
   }
   

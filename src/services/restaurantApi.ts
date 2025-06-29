@@ -40,14 +40,9 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
       });
     }
     
-    // Check if we have results
+    // Check if we have results - if we have very few results (1-2), supplement with fallback
     if (!data || !data.results || data.results.length === 0) {
       console.log("📭 No results from API, using filtered fallback data");
-      console.log("🔍 API response structure:", { 
-        hasData: !!data, 
-        hasResults: !!data?.results, 
-        resultsLength: data?.results?.length 
-      });
       
       const fallbackResults = getFilteredFallbackRestaurants({
         cuisine: params.cuisine,
@@ -58,7 +53,28 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
       return fallbackResults;
     }
     
-    // Process the results
+    // If we have very few API results, supplement with fallback data
+    if (data.results.length <= 2) {
+      console.log(`📊 Only ${data.results.length} API results, supplementing with fallback data`);
+      
+      const enhancedApiResults = enhanceAndSortResults(data.results, params);
+      const fallbackResults = getFilteredFallbackRestaurants({
+        cuisine: params.cuisine,
+        price: params.price,
+        neighborhoods: params.neighborhoods
+      });
+      
+      // Mark API results as primary and fallback as alternatives
+      const combinedResults = [
+        ...enhancedApiResults,
+        ...fallbackResults.map(restaurant => ({ ...restaurant, isAlternative: true }))
+      ];
+      
+      console.log(`✅ Combined ${enhancedApiResults.length} API + ${fallbackResults.length} fallback results`);
+      return combinedResults;
+    }
+    
+    // Process the results normally
     const enhancedResults = enhanceAndSortResults(data.results, params);
     
     console.log(`✅ Successfully processed ${enhancedResults.length} restaurant results`);
