@@ -17,7 +17,7 @@ interface RestaurantDataParams {
 
 export const useRestaurantData = (params: RestaurantDataParams) => {
   return useQuery({
-    queryKey: ['restaurants', params],
+    queryKey: ['restaurants', params, Date.now()], // Add timestamp for cache busting
     queryFn: async () => {
       try {
         console.log("useRestaurantData called with params:", params);
@@ -40,11 +40,13 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         
         // Enhanced logging for debugging
         if (results.length > 0) {
-          console.log("Sample result:", {
-            name: results[0].name,
-            id: results[0].id,
-            isFromFallback: results[0].description?.includes('fallback') || results[0].description?.includes('mock')
-          });
+          console.log("Sample results:", results.slice(0, 3).map(r => ({
+            name: r.name,
+            id: r.id,
+            priceRange: r.priceRange,
+            isAlternative: r.isAlternative,
+            distanceFromUser: r.distanceFromUser
+          })));
         }
         
         // If we get no results, fall back to mock data
@@ -69,7 +71,7 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
       params.price?.length || 
       params.atmosphere
     ),
-    staleTime: 1000 * 60 * 2, // Reduced to 2 minutes for better debugging
+    staleTime: 0, // Always fetch fresh data to prevent caching issues
     refetchOnWindowFocus: false,
     retry: 1, // Only retry once to avoid long delays
   });

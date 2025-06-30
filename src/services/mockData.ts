@@ -1,10 +1,10 @@
 
 import { QuizResult } from "@/utils/quizData";
 
-// Enhanced fallback data with more budget-friendly options and better variety
+// Expanded fallback data with more budget-friendly options and better variety
 export const getFallbackRestaurants = (): QuizResult[] => {
   return [
-    // Budget-friendly options ($)
+    // Budget-friendly options ($) - Greatly expanded
     {
       id: "budget-1",
       name: "Prince's Hot Chicken Shack",
@@ -49,10 +49,119 @@ export const getFallbackRestaurants = (): QuizResult[] => {
     },
     {
       id: "budget-4",
+      name: "Krystal",
+      cuisine: "Fast Food",
+      neighborhood: "Multiple Locations",
+      priceRange: "$",
+      description: "Southern-style sliders and quick bites under $10.",
+      address: "Various locations throughout Nashville",
+      features: ["Sliders", "24/7", "Drive-thru"],
+      coordinates: { latitude: 36.1627, longitude: -86.7816 },
+      isAlternative: true
+    },
+    {
+      id: "budget-5",
+      name: "White Castle",
+      cuisine: "Fast Food",
+      neighborhood: "Multiple Locations", 
+      priceRange: "$",
+      description: "Iconic sliders and affordable late-night eats.",
+      address: "Multiple Nashville locations",
+      features: ["Sliders", "Late night", "Value meals"],
+      coordinates: { latitude: 36.1535, longitude: -86.7743 },
+      isAlternative: true
+    },
+    {
+      id: "budget-6",
+      name: "Taco Bell",
+      cuisine: "Mexican Fast Food",
+      neighborhood: "Multiple Locations",
+      priceRange: "$",
+      description: "Quick Mexican-inspired food with value menu options.",
+      address: "Various Nashville locations",
+      features: ["Value menu", "Drive-thru", "Late night"],
+      coordinates: { latitude: 36.1580, longitude: -86.7734 },
+      isAlternative: true
+    },
+    {
+      id: "budget-7",
+      name: "McDonald's",
+      cuisine: "Fast Food",
+      neighborhood: "Multiple Locations",
+      priceRange: "$",
+      description: "Classic fast food with dollar menu and value options.",
+      address: "Numerous Nashville locations",
+      features: ["Dollar menu", "McCafe", "24/7"],
+      coordinates: { latitude: 36.1612, longitude: -86.7775 },
+      isAlternative: true
+    },
+    {
+      id: "budget-8",
+      name: "Subway",
+      cuisine: "Sandwiches",
+      neighborhood: "Multiple Locations",
+      priceRange: "$",
+      description: "Fresh sandwiches and salads with daily deals.",
+      address: "Multiple Nashville locations",
+      features: ["$5 footlongs", "Fresh ingredients", "Healthy options"],
+      coordinates: { latitude: 36.1598, longitude: -86.7752 },
+      isAlternative: true
+    },
+    {
+      id: "budget-9",
+      name: "Wendy's",
+      cuisine: "Fast Food",
+      neighborhood: "Multiple Locations",
+      priceRange: "$",
+      description: "Fresh beef burgers and 4 for $4 deals.",
+      address: "Various Nashville locations",
+      features: ["4 for $4", "Fresh beef", "Frosty"],
+      coordinates: { latitude: 36.1556, longitude: -86.7690 },
+      isAlternative: true
+    },
+    {
+      id: "budget-10",
+      name: "KFC",
+      cuisine: "Fried Chicken",
+      neighborhood: "Multiple Locations",
+      priceRange: "$",
+      description: "Original recipe chicken with fill-up meals under $6.",
+      address: "Multiple Nashville locations", 
+      features: ["$5 Fill Up", "Original recipe", "Family meals"],
+      coordinates: { latitude: 36.1523, longitude: -86.7812 },
+      isAlternative: true
+    },
+    {
+      id: "budget-11",
+      name: "Little Caesars",
+      cuisine: "Pizza",
+      neighborhood: "Multiple Locations",
+      priceRange: "$",
+      description: "Hot-N-Ready pizzas for $5 and crazy bread.",
+      address: "Various Nashville locations",
+      features: ["$5 Hot-N-Ready", "Crazy bread", "No wait"],
+      coordinates: { latitude: 36.1489, longitude: -86.7665 },
+      isAlternative: true
+    },
+    {
+      id: "budget-12",
+      name: "Cookout",
+      cuisine: "American",
+      neighborhood: "Multiple Locations",
+      priceRange: "$",
+      description: "Burgers, BBQ, and milkshakes with combo trays under $6.",
+      address: "Several Nashville locations",
+      features: ["Combo trays", "40+ milkshakes", "Late night"],
+      coordinates: { latitude: 36.1445, longitude: -86.7756 },
+      isAlternative: true
+    },
+    // Moderate options ($$)
+    {
+      id: "moderate-1",
       name: "Pharmacy Burger Parlor",
       cuisine: "American",
       neighborhood: "East Nashville",
-      priceRange: "$",
+      priceRange: "$$",
       description: "Creative burgers and milkshakes in a retro pharmacy setting.",
       address: "731 McFerrin Ave, Nashville, TN 37206", 
       features: ["Craft burgers", "Milkshakes", "Unique atmosphere"],
@@ -61,34 +170,18 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       coordinates: { latitude: 36.1835, longitude: -86.7312 },
       isAlternative: true
     },
-    // Moderate options ($$)
     {
-      id: "moderate-1",
+      id: "moderate-2",
       name: "Folk",
       cuisine: "Pizza",
       neighborhood: "East Nashville",
       priceRange: "$$",
-      description: "Creative, wood-fired pizzas and vegetable dishes in a bright, stylish space.",
+      description: "Creative, wood-fired pizzas and vegetable dishes.",
       address: "823 Meridian St, Nashville, TN 37207",
       features: ["Wood-fired pizza", "Vegetarian options", "Weekend brunch"],
       website: "https://www.folkrestaurant.com",
-      resyLink: "https://resy.com/cities/bna/venues/folk",
       phone: "(615) 610-2595",
       coordinates: { latitude: 36.1886, longitude: -86.7434 },
-      isAlternative: true
-    },
-    {
-      id: "moderate-2",
-      name: "Lockeland Table",
-      cuisine: "Southern",
-      neighborhood: "East Nashville", 
-      priceRange: "$$",
-      description: "Community-focused restaurant serving elevated Southern comfort food.",
-      address: "1520 Woodland St, Nashville, TN 37206",
-      features: ["Southern comfort", "Community focused", "Brunch"],
-      website: "https://lockelandtable.com",
-      phone: "(615) 228-4864",
-      coordinates: { latitude: 36.1767, longitude: -86.7420 },
       isAlternative: true
     },
     {
@@ -112,11 +205,10 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       cuisine: "Southern",
       neighborhood: "Downtown",
       priceRange: "$$$",
-      description: "Locally sourced Southern dishes served in a historic mansion with a modern touch.",
+      description: "Locally sourced Southern dishes in a historic mansion.",
       address: "37 Rutledge St, Nashville, TN 37210",
       features: ["Farm-to-table", "Historic setting", "Seasonal menu"],
       website: "https://husknashville.com",
-      resyLink: "https://resy.com/cities/bna/venues/husk-nashville",
       phone: "(615) 256-6565",
       coordinates: { latitude: 36.1553, longitude: -86.7699 },
       isAlternative: true
@@ -124,7 +216,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
   ];
 };
 
-// Enhanced function to filter and sort fallback restaurants based on user preferences and location
+// Enhanced function with better randomization and location-aware filtering
 export const getFilteredFallbackRestaurants = (params?: {
   cuisine?: string[];
   price?: string[];
@@ -135,14 +227,18 @@ export const getFilteredFallbackRestaurants = (params?: {
   let restaurants = getFallbackRestaurants();
   
   if (!params) {
-    return restaurants;
+    // Randomize order to avoid showing the same restaurants every time
+    return shuffleArray(restaurants).slice(0, 12);
   }
+  
+  console.log('Filtering fallback restaurants with params:', params);
   
   // Filter by price range first to prioritize budget-friendly options
   if (params.price && params.price.length > 0) {
     const filtered = restaurants.filter(r => params.price!.includes(r.priceRange));
     if (filtered.length > 0) {
       restaurants = filtered;
+      console.log(`Filtered by price: ${restaurants.length} restaurants match ${params.price.join(', ')}`);
     }
   }
   
@@ -158,19 +254,26 @@ export const getFilteredFallbackRestaurants = (params?: {
         );
         return { ...restaurant, distanceFromUser: distance };
       }
-      return restaurant;
+      // For restaurants without coordinates, assign a reasonable distance for multiple location chains
+      const isChain = restaurant.neighborhood === "Multiple Locations";
+      return { 
+        ...restaurant, 
+        distanceFromUser: isChain ? 1.5 : undefined // Assume chains are typically within 1.5 miles
+      };
     });
     
     // Filter by distance and sort by proximity
     restaurants = restaurants
       .filter(r => !r.distanceFromUser || r.distanceFromUser <= params.distance!)
       .sort((a, b) => (a.distanceFromUser || 999) - (b.distanceFromUser || 999));
+    
+    console.log(`Filtered by distance (${params.distance} miles): ${restaurants.length} restaurants`);
   }
   
-  // Score and sort by preference matches
+  // Score and sort by preference matches, but maintain some randomization
   restaurants = restaurants.sort((a, b) => {
-    let scoreA = 0;
-    let scoreB = 0;
+    let scoreA = Math.random() * 2; // Add randomization factor
+    let scoreB = Math.random() * 2;
     
     // Higher score for exact price match
     if (params.price?.includes(a.priceRange)) scoreA += 10;
@@ -195,8 +298,21 @@ export const getFilteredFallbackRestaurants = (params?: {
     return scoreB - scoreA;
   });
   
-  return restaurants;
+  // Return a good variety, limiting to prevent overwhelming results
+  const result = restaurants.slice(0, 15);
+  console.log(`Final fallback results: ${result.length} restaurants`);
+  return result;
 };
+
+// Helper function to shuffle array for randomization
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 
 // Helper function to calculate distance between two points
 function calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {

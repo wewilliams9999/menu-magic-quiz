@@ -12,9 +12,15 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
   try {
     console.log("🔍 Fetching restaurants with params:", JSON.stringify(params, null, 2));
     
+    // Add timestamp to prevent caching issues
+    const requestParams = {
+      ...params,
+      timestamp: Date.now()
+    };
+    
     // Call our Supabase Edge Function
     const { data, error } = await supabase.functions.invoke('restaurants', {
-      body: params
+      body: requestParams
     });
     
     if (error) {
@@ -49,6 +55,18 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     if (data?.results && data.results.length > 0) {
       apiResults = enhanceAndSortResults(data.results, params);
       console.log(`✅ Processed ${apiResults.length} API results`);
+      
+      // Log sample API results for debugging
+      if (apiResults.length > 0) {
+        console.log("Sample API results:", apiResults.slice(0, 3).map(r => ({
+          name: r.name,
+          priceRange: r.priceRange,
+          coordinates: r.coordinates,
+          distance: r.distanceFromUser
+        })));
+      }
+    } else {
+      console.log("📊 No API results returned from Google Places");
     }
     
     // Always get location-aware fallback data
@@ -60,10 +78,12 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
       distance: params.distance
     });
     
-    // If we have good API results (>= 10), use them with some fallback supplements
-    if (apiResults.length >= 10) {
+    console.log(`📱 Got ${fallbackResults.length} fallback results`);
+    
+    // If we have good API results (>= 8), use them with minimal fallback supplements
+    if (apiResults.length >= 8) {
       const enhancedFallback = fallbackResults
-        .slice(0, 3) // Add just 3 fallback options
+        .slice(0, 2) // Add just 2 fallback options for variety
         .map(restaurant => ({ ...restaurant, isAlternative: true }));
       
       const combinedResults = [...apiResults, ...enhancedFallback];
@@ -71,10 +91,10 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
       return combinedResults;
     }
     
-    // If we have some API results but not many (1-9), supplement heavily with fallback
+    // If we have some API results but not many (1-7), supplement with fallback
     if (apiResults.length > 0) {
       const enhancedFallback = fallbackResults
-        .slice(0, 8) // Add up to 8 fallback options
+        .slice(0, 6) // Add up to 6 fallback options
         .map(restaurant => ({ ...restaurant, isAlternative: true }));
       
       const combinedResults = [...apiResults, ...enhancedFallback];
