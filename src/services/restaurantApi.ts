@@ -23,7 +23,9 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
       return getFilteredFallbackRestaurants({
         cuisine: params.cuisine,
         price: params.price,
-        neighborhoods: params.neighborhoods
+        neighborhoods: params.neighborhoods,
+        userLocation: params.userLocation,
+        distance: params.distance
       });
     }
     
@@ -36,58 +38,64 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
       return getFilteredFallbackRestaurants({
         cuisine: params.cuisine,
         price: params.price,
-        neighborhoods: params.neighborhoods
+        neighborhoods: params.neighborhoods,
+        userLocation: params.userLocation,
+        distance: params.distance
       });
     }
     
-    // Always supplement with fallback data if we have 5 or fewer results
-    if (!data || !data.results || data.results.length <= 5) {
-      console.log(`📊 Got ${data?.results?.length || 0} API results, supplementing with fallback data`);
-      
-      const apiResults = data?.results ? enhanceAndSortResults(data.results, params) : [];
-      const fallbackResults = getFilteredFallbackRestaurants({
-        cuisine: params.cuisine,
-        price: params.price,
-        neighborhoods: params.neighborhoods
-      });
-      
-      // If we have some API results, mark fallback as alternatives
-      // If we have no API results, don't mark fallback as alternatives (they're the primary results)
-      const enhancedFallback = apiResults.length > 0 
-        ? fallbackResults.map(restaurant => ({ ...restaurant, isAlternative: true }))
-        : fallbackResults;
+    // Process API results if we have them
+    let apiResults: QuizResult[] = [];
+    if (data?.results && data.results.length > 0) {
+      apiResults = enhanceAndSortResults(data.results, params);
+      console.log(`✅ Processed ${apiResults.length} API results`);
+    }
+    
+    // Always get location-aware fallback data
+    const fallbackResults = getFilteredFallbackRestaurants({
+      cuisine: params.cuisine,
+      price: params.price,
+      neighborhoods: params.neighborhoods,
+      userLocation: params.userLocation,
+      distance: params.distance
+    });
+    
+    // If we have good API results (>= 10), use them with some fallback supplements
+    if (apiResults.length >= 10) {
+      const enhancedFallback = fallbackResults
+        .slice(0, 3) // Add just 3 fallback options
+        .map(restaurant => ({ ...restaurant, isAlternative: true }));
       
       const combinedResults = [...apiResults, ...enhancedFallback];
-      
-      console.log(`✅ Combined ${apiResults.length} API + ${fallbackResults.length} fallback results`);
+      console.log(`✅ Combined ${apiResults.length} API + ${enhancedFallback.length} fallback results`);
       return combinedResults;
     }
     
-    // Process the results normally
-    const enhancedResults = enhanceAndSortResults(data.results, params);
+    // If we have some API results but not many (1-9), supplement heavily with fallback
+    if (apiResults.length > 0) {
+      const enhancedFallback = fallbackResults
+        .slice(0, 8) // Add up to 8 fallback options
+        .map(restaurant => ({ ...restaurant, isAlternative: true }));
+      
+      const combinedResults = [...apiResults, ...enhancedFallback];
+      console.log(`✅ Supplemented ${apiResults.length} API results with ${enhancedFallback.length} fallback results`);
+      return combinedResults;
+    }
     
-    console.log(`✅ Successfully processed ${enhancedResults.length} restaurant results`);
-    console.log("🏪 Restaurant details:", enhancedResults.map(r => ({ 
-      name: r.name, 
-      cuisine: r.cuisine,
-      neighborhood: r.neighborhood,
-      priceRange: r.priceRange,
-      hasWebsite: !!r.website,
-      hasResy: !!r.resyLink,
-      hasOpenTable: !!r.openTableLink,
-      distance: r.distanceFromUser ? `${r.distanceFromUser.toFixed(1)} mi` : 'Unknown'
-    })));
-    
-    return enhancedResults;
+    // If no API results, use fallback as primary results (not marked as alternatives)
+    console.log(`📊 No API results, using ${fallbackResults.length} location-aware fallback results as primary`);
+    return fallbackResults;
     
   } catch (error) {
     console.error("💥 Exception in fetchRestaurants:", error);
-    console.log("📱 Exception fallback: Using filtered mock data");
+    console.log("📱 Exception fallback: Using location-aware filtered mock data");
     
     const fallbackResults = getFilteredFallbackRestaurants({
       cuisine: params.cuisine,
       price: params.price,
-      neighborhoods: params.neighborhoods
+      neighborhoods: params.neighborhoods,
+      userLocation: params.userLocation,
+      distance: params.distance
     });
     console.log(`📱 Exception fallback: Using ${fallbackResults.length} restaurants`);
     return fallbackResults;

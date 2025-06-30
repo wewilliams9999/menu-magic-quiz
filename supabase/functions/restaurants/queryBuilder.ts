@@ -3,55 +3,77 @@ import { RestaurantParams } from './types.ts';
 
 // Build the Google Places API search URL
 export function buildGooglePlacesApiQuery(params: RestaurantParams, apiKey: string): URL {
-  const endpoint = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
+  const endpoint = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
   
-  // Start with a very broad, reliable base query
-  let query = 'restaurants Nashville TN';
-  
-  // Only add specific filters if we have strong preferences
-  // Skip neighborhoods entirely for location-based searches to get more variety
-  if (params.neighborhoods && params.neighborhoods.length > 0 && !params.userLocation) {
-    // Only add neighborhoods if not using location and we have specific ones
-    const validNeighborhoods = params.neighborhoods.filter(n => n && n.trim() !== '');
-    if (validNeighborhoods.length > 0 && validNeighborhoods.length <= 2) {
-      // Only add if we have 1-2 specific neighborhoods to avoid being too restrictive
-      query += ` ${validNeighborhoods.join(' OR ')}`;
-    }
-  }
-  
-  // Be very selective about adding cuisine - only if specific
-  if (params.cuisine && params.cuisine.length > 0) {
-    const validCuisines = params.cuisine.filter(c => 
-      c && 
-      c !== 'anything' && 
-      c !== 'american' && // Skip generic cuisines that don't help narrow results
-      c.trim() !== ''
-    );
-    if (validCuisines.length > 0 && validCuisines.length <= 2) {
-      // Only add 1-2 specific cuisines to avoid being too restrictive
-      query += ` ${validCuisines.slice(0, 2).join(' OR ')}`;
-    }
-  }
-  
-  // Skip preferences and atmosphere for broader results
-  console.log('Broad search query:', query);
-  
-  // Build URL with parameters
   const url = new URL(endpoint);
-  url.searchParams.append('query', query);
   url.searchParams.append('key', apiKey);
   
-  // Add location-based parameters if available
+  // Use location-based search if user location is provided
   if (params.userLocation && params.distance) {
     url.searchParams.append('location', `${params.userLocation.latitude},${params.userLocation.longitude}`);
     // Convert miles to meters for the Google API
     const radiusInMeters = params.distance * 1609.34;
     url.searchParams.append('radius', radiusInMeters.toString());
-    console.log('Added location and radius:', params.userLocation, `${params.distance} miles`);
+    url.searchParams.append('type', 'restaurant');
+    
+    console.log('Using location-based search:', {
+      location: `${params.userLocation.latitude},${params.userLocation.longitude}`,
+      radius: `${params.distance} miles (${radiusInMeters}m)`
+    });
+  } else {
+    // Fallback to text search for Nashville if no location
+    const fallbackEndpoint = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
+    const fallbackUrl = new URL(fallbackEndpoint);
+    fallbackUrl.searchParams.append('query', 'restaurants Nashville TN');
+    fallbackUrl.searchParams.append('key', apiKey);
+    console.log('No location provided, using text search fallback');
+    return fallbackUrl;
   }
   
-  // Skip price filtering entirely to get more results
-  console.log('Skipping price filters to get broader results');
+  // Add price level filtering based on user preferences
+  if (params.price && params.price.length > 0) {
+    // Map price ranges to Google Places price levels (0-4)
+    const priceLevels: number[] = [];
+    params.price.forEach(priceRange => {
+      switch (priceRange) {
+        case '$':
+          priceLevels.push(0, 1); // Free and inexpensive
+          break;
+        case '$$':
+          priceLevels.push(2); // Moderate
+          break;
+        case '$$$':
+          priceLevels.push(3); // Expensive
+          break;
+        case '$$$$':
+          priceLevels.push(4); // Very expensive
+          break;
+      }
+    });
+    
+    if (priceLevels.length > 0) {
+      // Use the lowest price level for filtering (Google API accepts single value)
+      const minPriceLevel = Math.min(...priceLevels);
+      const maxPriceLevel = Math.max(...priceLevels);
+      url.searchParams.append('minprice', minPriceLevel.toString());
+      url.searchParams.append('maxprice', maxPriceLevel.toString());
+      console.log('Added price filtering:', { minPriceLevel, maxPriceLevel });
+    }
+  }
   
+  // Add cuisine-based keyword if specified
+  if (params.cuisine && params.cuisine.length > 0) {
+    const validCuisines = params.cuisine.filter(c => 
+      c && 
+      c !== 'anything' && 
+      c.trim() !== ''
+    );
+    if (validCuisines.length > 0) {
+      url.searchParams.append('keyword', validCuisines[0]);
+      console.log('Added cuisine keyword:', validCuisines[0]);
+    }
+  }
+  
+  console.log('Final Google Places API URL:', url.toString());
   return url;
 }

@@ -42,6 +42,29 @@ Deno.serve(async (req) => {
     
     if (data.status !== 'OK' && data.status !== 'ZERO_RESULTS') {
       console.error('Google Places API status error:', data.status, data.error_message);
+      
+      // For specific errors, try a different approach
+      if (data.status === 'INVALID_REQUEST' && params.userLocation) {
+        console.log('Trying text search fallback due to invalid request...');
+        const fallbackUrl = new URL('https://maps.googleapis.com/maps/api/place/textsearch/json');
+        fallbackUrl.searchParams.append('query', 'restaurants near me Nashville TN');
+        fallbackUrl.searchParams.append('location', `${params.userLocation.latitude},${params.userLocation.longitude}`);
+        fallbackUrl.searchParams.append('radius', '4828'); // 3 miles in meters
+        fallbackUrl.searchParams.append('key', apiKey);
+        
+        const fallbackResponse = await fetch(fallbackUrl.toString());
+        const fallbackData = await fallbackResponse.json();
+        
+        if (fallbackData.results && fallbackData.results.length > 0) {
+          const restaurants = mapGooglePlacesToRestaurants(fallbackData.results, apiKey);
+          console.log('Fallback search successful:', restaurants.length, 'restaurants found');
+          return new Response(
+            JSON.stringify({ results: restaurants }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+      }
+      
       throw new Error(`Google Places API error: ${data.status} - ${data.error_message || 'Unknown error'}`);
     }
     
@@ -53,7 +76,8 @@ Deno.serve(async (req) => {
         name: r.name, 
         coordinates: r.coordinates,
         cuisine: r.cuisine,
-        priceRange: r.priceRange
+        priceRange: r.priceRange,
+        vicinity: r.address
       })));
       
       return new Response(
@@ -62,31 +86,32 @@ Deno.serve(async (req) => {
       );
     }
     
-    // If no results, try a fallback search with just "restaurants Nashville"
-    console.log('No results found, trying fallback search...');
-    const fallbackUrl = new URL('https://maps.googleapis.com/maps/api/place/textsearch/json');
-    fallbackUrl.searchParams.append('query', 'restaurants Nashville TN');
-    fallbackUrl.searchParams.append('key', apiKey);
-    
-    console.log('Fallback search URL:', fallbackUrl.toString());
-    
-    const fallbackResponse = await fetch(fallbackUrl.toString());
-    const fallbackData = await fallbackResponse.json();
-    
-    console.log(`Fallback search returned ${fallbackData.results?.length || 0} results`);
-    
-    if (fallbackData.results && fallbackData.results.length > 0) {
-      const restaurants = mapGooglePlacesToRestaurants(fallbackData.results, apiKey);
+    // If no results with location search, try broader text search
+    if (params.userLocation) {
+      console.log('No results from nearby search, trying text search fallback...');
+      const fallbackUrl = new URL('https://maps.googleapis.com/maps/api/place/textsearch/json');
+      fallbackUrl.searchParams.append('query', 'cheap restaurants Nashville TN');
+      fallbackUrl.searchParams.append('key', apiKey);
       
-      return new Response(
-        JSON.stringify({ results: restaurants }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      const fallbackResponse = await fetch(fallbackUrl.toString());
+      const fallbackData = await fallbackResponse.json();
+      
+      console.log(`Text search fallback returned ${fallbackData.results?.length || 0} results`);
+      
+      if (fallbackData.results && fallbackData.results.length > 0) {
+        const restaurants = mapGooglePlacesToRestaurants(fallbackData.results, apiKey);
+        
+        return new Response(
+          JSON.stringify({ results: restaurants }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
     }
     
-    // If even the fallback fails, return empty results
+    // If everything fails, return empty results to trigger fallback data
+    console.log('All search attempts failed, returning empty results for fallback handling');
     return new Response(
-      JSON.stringify({ results: [], message: 'No restaurants found matching your criteria' }),
+      JSON.stringify({ results: [], message: 'No restaurants found via API, using fallback data' }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
     
