@@ -31,13 +31,37 @@
     <!-- Favicon -->
     <link rel="icon" href="/lovable-uploads/2d3f2f26-4b6d-47fa-9ee5-0eb099679205.png" type="image/png">
     
-    <!-- Google Analytics -->
+    <!-- Privacy-Safe Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-XXXXXXXXXX');
+      
+      // Privacy-safe GA4 configuration
+      gtag('config', 'G-XXXXXXXXXX', {
+        // Privacy settings
+        anonymize_ip: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false,
+        cookie_flags: 'SameSite=Strict;Secure',
+        
+        // Disable location tracking
+        custom_map: {},
+        
+        // Basic tracking only
+        send_page_view: true,
+        
+        // Shorter cookie retention
+        cookie_expires: 60 * 60 * 24 * 30 // 30 days instead of default 2 years
+      });
+      
+      // Custom privacy-safe page view tracking
+      gtag('event', 'page_view', {
+        page_title: document.title,
+        page_location: window.location.origin + window.location.pathname, // Remove query params for privacy
+        anonymize_ip: true
+      });
     </script>
     
     <!-- Structured Data for Local Business -->
