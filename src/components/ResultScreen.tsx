@@ -11,6 +11,7 @@ import NoResultsMessage from "./results/NoResultsMessage";
 import ResultsGrid from "./results/ResultsGrid";
 import ShowMoreButton from "./results/ShowMoreButton";
 import ResetButton from "./results/ResetButton";
+import BannerAd from "./ads/BannerAd";
 
 interface ResultScreenProps {
   results: QuizResult[];
@@ -75,6 +76,11 @@ const ResultScreen = ({ results, onReset, onRetry, isLoading = false }: ResultSc
         results={results}
         displayedResults={displayedResults}
       />
+
+      {/* Add banner ad after header */}
+      {results.length > 0 && (
+        <BannerAd className="mb-8" />
+      )}
 
       {isLoading ? (
         <ResultLoadingSkeleton />
