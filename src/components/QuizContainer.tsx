@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -40,24 +39,21 @@ const QuizContainer = () => {
   // Get distance value for location-based search
   const distance = typeof answers.distance === 'number' ? answers.distance : undefined;
   
-  // Only trigger the query when we have enough data and are on the result screen
-  const shouldFetchData = currentScreen === "result" && (
-    (neighborhoods.length > 0) || 
-    (distance && userCoordinates) ||
-    cuisines.length > 0 || 
-    prices.length > 0
-  );
+  // Only trigger the query when we're on the result screen
+  const shouldFetchData = currentScreen === "result";
   
-  // Use the restaurant data hook
-  const { data: restaurantResults, isLoading, error } = useRestaurantData({
-    neighborhoods: neighborhoods.length > 0 ? neighborhoods : undefined,
-    cuisine: cuisines.length > 0 ? cuisines : undefined,
-    price: prices.length > 0 ? prices : undefined,
-    atmosphere: answers.atmosphere as string,
-    preferences: preferences.length > 0 ? preferences : undefined,
-    distance: distance,
-    userLocation: userCoordinates
-  });
+  // Use the restaurant data hook with conditional fetching
+  const { data: restaurantResults, isLoading, error } = useRestaurantData(
+    shouldFetchData ? {
+      neighborhoods: neighborhoods.length > 0 ? neighborhoods : undefined,
+      cuisine: cuisines.length > 0 ? cuisines : undefined,
+      price: prices.length > 0 ? prices : undefined,
+      atmosphere: answers.atmosphere as string,
+      preferences: preferences.length > 0 ? preferences : undefined,
+      distance: distance,
+      userLocation: userCoordinates
+    } : {}
+  );
 
   console.log("=== QUIZ CONTAINER DEBUG ===");
   console.log("Current screen:", currentScreen);
@@ -68,7 +64,7 @@ const QuizContainer = () => {
   console.log("Error:", error);
   console.log("=== END DEBUG ===");
 
-  // Get the appropriate questions based on location mode
+  // Get questions function
   const getQuestions = () => {
     // Filter out the locationMethod question since we already asked this in LocationSelectionScreen
     const filteredQuestions = quizQuestions.filter(q => q.id !== "locationMethod");
