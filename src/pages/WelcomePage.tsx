@@ -13,7 +13,7 @@ const WelcomePage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 relative">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-zinc-900 via-black to-zinc-900">
       {/* SEO-friendly content structure */}
       <div className="text-center max-w-4xl mx-auto">
         {/* Main heading for SEO */}
@@ -52,7 +52,7 @@ const WelcomePage = () => {
           <Button 
             onClick={handleStartQuiz}
             size="lg" 
-            className="bg-red-600 hover:bg-red-700 text-white px-12 py-6 text-xl font-semibold mb-8"
+            className="bg-red-600 hover:bg-red-700 text-white px-12 py-6 text-xl font-semibold mb-8 shadow-lg"
           >
             Find My Perfect Nashville Restaurant
           </Button>
@@ -69,19 +69,6 @@ const WelcomePage = () => {
             Trusted by Nashville locals and visitors • Updated restaurant recommendations
           </p>
         </motion.div>
-      </div>
-
-      {/* Background logo with improved accessibility */}
-      <div 
-        className="absolute inset-0 flex items-center justify-center z-[-1] opacity-20"
-        aria-hidden="true"
-      >
-        <div 
-          className="w-[80vmin] h-[80vmin] bg-center bg-contain bg-no-repeat"
-          style={{
-            backgroundImage: `url("/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png")`,
-          }}
-        />
       </div>
     </div>
   );
