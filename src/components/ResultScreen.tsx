@@ -21,7 +21,7 @@ interface ResultScreenProps {
   requestedDistance?: number; // Add this prop to pass the requested distance
 }
 
-const INITIAL_DISPLAY_COUNT = 6;
+const INITIAL_DISPLAY_COUNT = 3;
 
 const ResultScreen = ({ results, onReset, onRetry, isLoading = false, requestedDistance }: ResultScreenProps) => {
   const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY_COUNT);

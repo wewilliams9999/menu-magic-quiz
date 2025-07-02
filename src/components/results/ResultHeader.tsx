@@ -70,21 +70,6 @@ const ResultHeader = ({
         </motion.p>
       )}
       
-      {/* Add map links explanation */}
-      {hasMapLinks && (
-        <motion.p 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.5 }}
-          className="text-sm text-zinc-500 mt-2"
-        >
-          <span className="inline-flex items-center">
-            <ExternalLink className="h-3 w-3 mr-1" />
-            View locations in Google Maps or Apple Maps
-          </span>
-        </motion.p>
-      )}
-      
       {/* Show result count info */}
       {results.length > 0 && !isSingleResult && (
         <motion.p 
