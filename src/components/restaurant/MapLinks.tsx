@@ -8,17 +8,14 @@ interface MapLinksProps {
 }
 
 const MapLinks = ({ restaurant }: MapLinksProps) => {
-  // Generate map links for the restaurant
   const generateMapLinks = () => {
     const { name, address, coordinates } = restaurant;
     const encodedName = encodeURIComponent(name);
     let encodedAddress = address ? encodeURIComponent(address + ", Nashville, TN") : null;
     
-    // Default to Nashville's coordinates if none provided
     const lat = coordinates?.latitude || 36.1627;
     const lng = coordinates?.longitude || -86.7816;
     
-    // Generate Google Maps link
     let googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedName}`;
     if (encodedAddress) {
       googleMapsUrl += `+${encodedAddress}`;
@@ -26,7 +23,6 @@ const MapLinks = ({ restaurant }: MapLinksProps) => {
       googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
     }
     
-    // Generate Apple Maps link
     let appleMapsUrl = `https://maps.apple.com/?q=${encodedName}`;
     if (encodedAddress) {
       appleMapsUrl = `https://maps.apple.com/?address=${encodedAddress}&q=${encodedName}`;
@@ -40,32 +36,30 @@ const MapLinks = ({ restaurant }: MapLinksProps) => {
   const { googleMapsUrl, appleMapsUrl } = generateMapLinks();
 
   return (
-    <div className="flex gap-2 w-full">
-      {/* Get Directions - Google Maps */}
-      <Button variant="outline" size="sm" asChild className="border-blue-500 hover:border-blue-600 hover:bg-blue-50/50 text-blue-600 dark:border-blue-700 dark:hover:border-blue-600 dark:hover:bg-blue-950/30 dark:text-blue-400 font-medium flex-1">
+    <div className="flex gap-2">
+      <Button variant="outline" size="sm" asChild>
         <a 
           href={googleMapsUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="flex items-center justify-center gap-2"
-          aria-label={`Get directions to ${restaurant.name} via Google Maps - Nashville restaurant`}
+          className="flex items-center gap-2"
+          aria-label={`Get directions to ${restaurant.name}`}
         >
-          <Navigation className="h-4 w-4" aria-hidden="true" />
+          <Navigation className="h-4 w-4" />
           <span>Directions</span>
         </a>
       </Button>
       
-      {/* View on Map - Apple Maps */}
-      <Button variant="outline" size="sm" asChild className="border-gray-500 hover:border-gray-600 hover:bg-gray-50/50 text-gray-600 dark:border-gray-700 dark:hover:border-gray-600 dark:hover:bg-gray-800/30 dark:text-gray-400 flex-1">
+      <Button variant="outline" size="sm" asChild>
         <a 
           href={appleMapsUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="flex items-center justify-center gap-2"
-          aria-label={`View ${restaurant.name} on Apple Maps - Nashville restaurant`}
+          className="flex items-center gap-2"
+          aria-label={`View ${restaurant.name} on map`}
         >
-          <MapPin className="h-4 w-4" aria-hidden="true" />
-          <span>View Map</span>
+          <MapPin className="h-4 w-4" />
+          <span>Map</span>
         </a>
       </Button>
     </div>
