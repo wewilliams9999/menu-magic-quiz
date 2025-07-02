@@ -64,6 +64,43 @@ export function buildGooglePlacesApiQuery(params: RestaurantParams, apiKey: stri
     return url;
   }
   
+  // For neighborhood-based searches, use text search with specific locations
+  if (params.neighborhoods && params.neighborhoods.length > 0) {
+    const endpoint = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
+    const url = new URL(endpoint);
+    
+    // Build a more specific query with neighborhoods
+    const neighborhoods = params.neighborhoods.join(' OR ');
+    let query = `restaurants in ${neighborhoods} Nashville Tennessee`;
+    
+    // Add price-based terms to the text search
+    if (params.price && params.price.includes('$$')) {
+      query += ' moderate price';
+    } else if (params.price && params.price.includes('$')) {
+      query += ' cheap affordable';
+    } else if (params.price && params.price.includes('$$$')) {
+      query += ' upscale fine dining';
+    }
+    
+    // Add cuisine to text search if specified
+    if (params.cuisine && params.cuisine.length > 0) {
+      const validCuisines = params.cuisine.filter(c => 
+        c && c !== 'anything' && c.trim() !== ''
+      );
+      if (validCuisines.length > 0) {
+        query = `${validCuisines[0]} ${query}`;
+      }
+    }
+    
+    url.searchParams.append('query', query);
+    url.searchParams.append('key', apiKey);
+    
+    console.log('Neighborhood-based text search URL:', url.toString());
+    console.log('Search query:', query);
+    
+    return url;
+  }
+  
   // Fallback to text search with better query construction
   const fallbackEndpoint = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
   const fallbackUrl = new URL(fallbackEndpoint);
