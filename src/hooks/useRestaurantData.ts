@@ -62,25 +62,27 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         
         // Enhanced logging for debugging
         if (results && results.length > 0) {
-          console.log("Sample results:", results.slice(0, 3).map(r => ({
+          console.log("Final processed results:", results.slice(0, 3).map(r => ({
             name: r.name,
             id: r.id,
             priceRange: r.priceRange,
             isAlternative: r.isAlternative,
-            distanceFromUser: r.distanceFromUser
+            distanceFromUser: r.distanceFromUser,
+            hasCoordinates: !!r.coordinates
           })));
         }
         
-        // If we get no results, fall back to mock data
-        if (!results || results.length === 0) {
-          console.log("No results returned, using fallback data");
-          const fallbackData = getFallbackRestaurants();
-          console.log("Using fallback data:", fallbackData);
-          return fallbackData;
+        // Return results directly - they should already be properly formatted
+        if (results && results.length > 0) {
+          console.log("=== END RESTAURANT DATA HOOK ===");
+          return results;
         }
         
-        console.log("=== END RESTAURANT DATA HOOK ===");
-        return results;
+        // Final fallback if something went wrong
+        console.log("No results returned, using final fallback data");
+        const fallbackData = getFallbackRestaurants();
+        console.log("Final fallback data:", fallbackData);
+        return fallbackData;
         
       } catch (error) {
         console.error("Error in useRestaurantData:", error);

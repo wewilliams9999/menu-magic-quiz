@@ -3,7 +3,7 @@ import { QuizResult } from "@/utils/quizData";
 import { supabase } from "@/integrations/supabase/client";
 import { RestaurantApiParams } from "./types";
 import { getFilteredFallbackRestaurants } from "./mockData";
-import { calculateDistance, enhanceAndSortResults } from "./restaurantUtils";
+import { calculateDistance } from "./restaurantUtils";
 
 /**
  * Fetches restaurant data from the Google Places API via our secure Edge Function
@@ -53,16 +53,52 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     // Process API results if we have them
     let apiResults: QuizResult[] = [];
     if (data?.results && data.results.length > 0) {
-      apiResults = enhanceAndSortResults(data.results, params);
+      // Process each result properly
+      apiResults = data.results.map((result: any) => {
+        const processedResult: QuizResult = {
+          id: result.id || result.place_id || `api-${Math.random()}`,
+          name: result.name || 'Unknown Restaurant',
+          cuisine: result.cuisine || 'American',
+          neighborhood: result.neighborhood || 'Nashville',
+          priceRange: result.priceRange || '$$',
+          description: result.description || `${result.name} in Nashville`,
+          address: result.address,
+          imageUrl: result.imageUrl,
+          logoUrl: result.logoUrl,
+          features: result.features || [],
+          website: result.website,
+          resyLink: result.resyLink,
+          openTableLink: result.openTableLink,
+          instagramLink: result.instagramLink,
+          phone: result.phone,
+          coordinates: result.coordinates,
+          isAlternative: false // API results are not alternatives
+        };
+        
+        // Calculate distance if user location is provided
+        if (params.userLocation && result.coordinates) {
+          const distance = calculateDistance(
+            params.userLocation.latitude,
+            params.userLocation.longitude,
+            result.coordinates.latitude,
+            result.coordinates.longitude
+          );
+          processedResult.distanceFromUser = distance;
+        }
+        
+        return processedResult;
+      });
+      
       console.log(`✅ Processed ${apiResults.length} API results`);
       
       // Log sample API results for debugging
       if (apiResults.length > 0) {
-        console.log("Sample API results:", apiResults.slice(0, 3).map(r => ({
+        console.log("Sample processed API results:", apiResults.slice(0, 3).map(r => ({
           name: r.name,
           priceRange: r.priceRange,
           coordinates: r.coordinates,
-          distance: r.distanceFromUser
+          distance: r.distanceFromUser,
+          isAlternative: r.isAlternative
         })));
       }
     } else {
