@@ -20,7 +20,29 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
     queryKey: ['restaurants', params, Date.now()], // Add timestamp for cache busting
     queryFn: async () => {
       try {
+        console.log("=== RESTAURANT DATA HOOK ===");
         console.log("useRestaurantData called with params:", params);
+        
+        // Check if we have enough criteria to search
+        const hasNeighborhoods = params.neighborhoods && params.neighborhoods.length > 0;
+        const hasLocation = params.userLocation && params.distance;
+        const hasCuisine = params.cuisine && params.cuisine.length > 0;
+        const hasPrice = params.price && params.price.length > 0;
+        
+        console.log("Search criteria check:", {
+          hasNeighborhoods,
+          hasLocation,
+          hasCuisine,
+          hasPrice
+        });
+        
+        // If we don't have any search criteria, return fallback data
+        if (!hasNeighborhoods && !hasLocation && !hasCuisine && !hasPrice) {
+          console.log("No search criteria provided, using fallback data");
+          const fallbackData = getFallbackRestaurants();
+          console.log("Fallback data:", fallbackData);
+          return fallbackData;
+        }
         
         // Prepare API parameters
         const apiParams: RestaurantApiParams = {
@@ -36,10 +58,10 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         console.log("Calling fetchRestaurants with:", apiParams);
         const results = await fetchRestaurants(apiParams);
         
-        console.log(`useRestaurantData received ${results.length} results`);
+        console.log(`useRestaurantData received ${results?.length || 0} results`);
         
         // Enhanced logging for debugging
-        if (results.length > 0) {
+        if (results && results.length > 0) {
           console.log("Sample results:", results.slice(0, 3).map(r => ({
             name: r.name,
             id: r.id,
@@ -50,27 +72,26 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         }
         
         // If we get no results, fall back to mock data
-        if (results.length === 0) {
+        if (!results || results.length === 0) {
           console.log("No results returned, using fallback data");
-          return getFallbackRestaurants();
+          const fallbackData = getFallbackRestaurants();
+          console.log("Using fallback data:", fallbackData);
+          return fallbackData;
         }
         
+        console.log("=== END RESTAURANT DATA HOOK ===");
         return results;
         
       } catch (error) {
         console.error("Error in useRestaurantData:", error);
         console.log("Hook exception: falling back to mock data");
         // Fall back to mock data on error
-        return getFallbackRestaurants();
+        const fallbackData = getFallbackRestaurants();
+        console.log("Exception fallback data:", fallbackData);
+        return fallbackData;
       }
     },
-    enabled: !!(
-      (params.neighborhoods?.length || 
-       (params.distance && params.userLocation)) ||
-      params.cuisine?.length || 
-      params.price?.length || 
-      params.atmosphere
-    ),
+    enabled: true, // Always enable the query
     staleTime: 0, // Always fetch fresh data to prevent caching issues
     refetchOnWindowFocus: false,
     retry: 1, // Only retry once to avoid long delays

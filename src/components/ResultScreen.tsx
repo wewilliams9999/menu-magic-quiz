@@ -20,46 +20,76 @@ interface ResultScreenProps {
   isLoading?: boolean;
 }
 
-const INITIAL_DISPLAY_COUNT = 6; // Increased from 3 to show more alternatives
+const INITIAL_DISPLAY_COUNT = 6;
 
 const ResultScreen = ({ results, onReset, onRetry, isLoading = false }: ResultScreenProps) => {
-  // State to track how many restaurants to show
   const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY_COUNT);
   
   // Debug output to check results
   useEffect(() => {
-    console.log("Results in ResultScreen:", results);
-    if (results.length > 0) {
+    console.log("=== RESULT SCREEN DEBUG ===");
+    console.log("Results received:", results);
+    console.log("Results length:", results?.length || 0);
+    console.log("Is loading:", isLoading);
+    if (results && results.length > 0) {
       console.log("First result sample:", results[0]);
-      console.log("All results are alternatives:", results.every(r => r.isAlternative));
+      console.log("All results:", results.map(r => ({ name: r.name, id: r.id, cuisine: r.cuisine })));
     }
-  }, [results]);
+    console.log("=== END DEBUG ===");
+  }, [results, isLoading]);
+  
+  // Handle case where results is undefined or null
+  const safeResults = results || [];
   
   // Check if all results are alternatives
-  const allAlternatives = results.length > 0 && results.every(result => result.isAlternative);
-  const hasAlternatives = results.length > 0 && results.some(result => result.isAlternative);
-  const isSingleResult = results.length === 1;
-  const noExactMatches = allAlternatives || results.length === 0;
+  const allAlternatives = safeResults.length > 0 && safeResults.every(result => result.isAlternative);
+  const hasAlternatives = safeResults.length > 0 && safeResults.some(result => result.isAlternative);
+  const isSingleResult = safeResults.length === 1;
+  const noExactMatches = allAlternatives || safeResults.length === 0;
   
   // Get the subset of results to display
-  const displayedResults = results.slice(0, displayCount);
+  const displayedResults = safeResults.slice(0, displayCount);
   
   // Check if there are more results to show
-  const hasMoreResults = results.length > displayCount;
+  const hasMoreResults = safeResults.length > displayCount;
   
   // Check if any restaurant has reservation links
-  const hasReservationLinks = results.some(r => r.resyLink || r.openTableLink);
+  const hasReservationLinks = safeResults.some(r => r.resyLink || r.openTableLink);
   
   // Check if any restaurant has map coordinates for map links
-  const hasMapLinks = results.some(r => r.coordinates || r.address);
+  const hasMapLinks = safeResults.some(r => r.coordinates || r.address);
   
   // Check if results include distance information
-  const hasDistanceInfo = results.some(r => r.distanceFromUser !== undefined);
+  const hasDistanceInfo = safeResults.some(r => r.distanceFromUser !== undefined);
   
   // Function to handle showing more results
   const handleShowMore = () => {
     setDisplayCount(prev => prev + 3);
   };
+  
+  // Show loading state
+  if (isLoading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-4xl mx-auto px-4"
+      >
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-red-500">
+            Finding Your Perfect Nashville Restaurants...
+          </h1>
+          <p className="text-zinc-300 text-lg">
+            We're searching for the best matches based on your preferences.
+          </p>
+        </div>
+        <ResultLoadingSkeleton />
+        <ResetButton onReset={onReset} />
+      </motion.div>
+    );
+  }
   
   return (
     <motion.div
@@ -73,18 +103,16 @@ const ResultScreen = ({ results, onReset, onRetry, isLoading = false }: ResultSc
         isSingleResult={isSingleResult}
         hasReservationLinks={hasReservationLinks}
         hasMapLinks={hasMapLinks}
-        results={results}
+        results={safeResults}
         displayedResults={displayedResults}
       />
 
       {/* Add banner ad after header */}
-      {results.length > 0 && (
+      {safeResults.length > 0 && (
         <BannerAd className="mb-8" />
       )}
 
-      {isLoading ? (
-        <ResultLoadingSkeleton />
-      ) : results.length > 0 ? (
+      {safeResults.length > 0 ? (
         <>
           <ResultAlerts 
             noExactMatches={noExactMatches}
