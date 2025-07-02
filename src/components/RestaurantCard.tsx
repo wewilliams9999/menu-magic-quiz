@@ -46,7 +46,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
       <RestaurantHeader restaurant={restaurant} />
       <FeaturesList features={restaurant.features} />
       
-      <CardFooter className="flex flex-col gap-3 mt-2">
+      <CardFooter className="flex flex-wrap gap-2 justify-start mt-2">
         <RestaurantLinks restaurant={restaurant} />
         <MapLinks restaurant={restaurant} />
         
