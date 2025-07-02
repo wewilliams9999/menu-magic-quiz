@@ -39,63 +39,34 @@ const WelcomePage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg md:text-xl text-zinc-300 mb-8 leading-relaxed"
+          className="text-lg md:text-xl text-zinc-300 mb-12 leading-relaxed max-w-2xl mx-auto"
         >
-          Discover Nashville's top restaurants with our personalized guide. Whether you're craving hot chicken in Music City, fine dining in Green Hills, or hidden gems in East Nashville, we'll help you find the perfect spot based on your neighborhood, cuisine preferences, and budget.
+          Discover Nashville's top restaurants with our personalized guide. Answer a few quick questions and we'll match you with the perfect spot based on your preferences.
         </motion.p>
 
-        {/* Key features for SEO */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 text-left"
-        >
-          <div className="bg-zinc-900/50 p-6 rounded-lg border border-zinc-800">
-            <h3 className="text-xl font-semibold text-red-400 mb-3">By Neighborhood</h3>
-            <p className="text-zinc-300 text-sm">
-              Explore restaurants in Music City Center, The Gulch, Green Hills, Belle Meade, East Nashville, and more.
-            </p>
-          </div>
-          
-          <div className="bg-zinc-900/50 p-6 rounded-lg border border-zinc-800">
-            <h3 className="text-xl font-semibold text-red-400 mb-3">All Cuisines</h3>
-            <p className="text-zinc-300 text-sm">
-              From Southern comfort food to international cuisine, find Nashville restaurants serving every type of food.
-            </p>
-          </div>
-          
-          <div className="bg-zinc-900/50 p-6 rounded-lg border border-zinc-800">
-            <h3 className="text-xl font-semibold text-red-400 mb-3">Every Budget</h3>
-            <p className="text-zinc-300 text-sm">
-              Discover everything from budget-friendly Nashville eats to upscale fine dining experiences.
-            </p>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
         >
           <Button 
             onClick={handleStartQuiz}
             size="lg" 
-            className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 text-lg font-semibold"
+            className="bg-red-600 hover:bg-red-700 text-white px-12 py-6 text-xl font-semibold mb-8"
           >
             Find My Perfect Nashville Restaurant
           </Button>
         </motion.div>
 
-        {/* Additional SEO content */}
+        {/* Simple trust indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-          className="mt-16 text-center"
+          transition={{ duration: 1, delay: 0.8 }}
+          className="mt-12 text-center"
         >
           <p className="text-sm text-zinc-400">
-            Trusted by Nashville locals and visitors • Updated restaurant recommendations • Real-time availability
+            Trusted by Nashville locals and visitors • Updated restaurant recommendations
           </p>
         </motion.div>
       </div>
