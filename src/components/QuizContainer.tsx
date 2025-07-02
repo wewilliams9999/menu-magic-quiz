@@ -66,6 +66,9 @@ const QuizContainer = () => {
   // Ensure we always pass an array to ResultScreen
   const safeRestaurantResults = Array.isArray(restaurantResults) ? restaurantResults : [];
 
+  // Get the requested distance from answers
+  const requestedDistance = typeof answers.distance === 'number' ? answers.distance : undefined;
+
   return (
     <div className="min-h-[80vh] flex flex-col justify-center bg-gradient-to-b from-black to-gray-900 text-white p-4">
       <AnimatePresence mode="wait">
@@ -98,7 +101,8 @@ const QuizContainer = () => {
             results={safeRestaurantResults} 
             onReset={handleReset}
             onRetry={handleRetry}
-            isLoading={isLoading} 
+            isLoading={isLoading}
+            requestedDistance={requestedDistance}
           />
         )}
       </AnimatePresence>

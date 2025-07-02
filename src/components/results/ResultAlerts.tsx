@@ -9,6 +9,8 @@ interface ResultAlertsProps {
   allAlternatives: boolean;
   hasDistanceInfo: boolean;
   onRetry?: () => void;
+  results: any[]; // Add results prop to check actual distances
+  requestedDistance?: number; // Add requested distance prop
 }
 
 const ResultAlerts = ({ 
@@ -16,8 +18,17 @@ const ResultAlerts = ({
   hasAlternatives, 
   allAlternatives, 
   hasDistanceInfo,
-  onRetry
+  onRetry,
+  results,
+  requestedDistance
 }: ResultAlertsProps) => {
+  // Check if there are actually restaurants outside the requested distance
+  const hasRestaurantsOutsideDistance = results.some(result => 
+    result.distanceFromUser && 
+    requestedDistance && 
+    result.distanceFromUser > requestedDistance
+  );
+
   if (!noExactMatches && !hasAlternatives) {
     return null;
   }
@@ -50,7 +61,7 @@ const ResultAlerts = ({
         </Alert>
       )}
       
-      {hasAlternatives && !allAlternatives && hasDistanceInfo && (
+      {hasAlternatives && !allAlternatives && hasDistanceInfo && hasRestaurantsOutsideDistance && (
         <Alert className="mb-6 bg-blue-950/20 border-blue-800/50">
           <AlertDescription className="text-blue-300 text-center">
             Some restaurants are outside your specified distance but may match your other preferences.

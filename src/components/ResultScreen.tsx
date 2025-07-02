@@ -18,11 +18,12 @@ interface ResultScreenProps {
   onReset: () => void;
   onRetry?: () => void;
   isLoading?: boolean;
+  requestedDistance?: number; // Add this prop to pass the requested distance
 }
 
 const INITIAL_DISPLAY_COUNT = 6;
 
-const ResultScreen = ({ results, onReset, onRetry, isLoading = false }: ResultScreenProps) => {
+const ResultScreen = ({ results, onReset, onRetry, isLoading = false, requestedDistance }: ResultScreenProps) => {
   const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY_COUNT);
   
   // Debug output to check results
@@ -31,12 +32,19 @@ const ResultScreen = ({ results, onReset, onRetry, isLoading = false }: ResultSc
     console.log("Results received:", results);
     console.log("Results length:", results?.length || 0);
     console.log("Is loading:", isLoading);
+    console.log("Requested distance:", requestedDistance);
     if (results && results.length > 0) {
       console.log("First result sample:", results[0]);
-      console.log("All results:", results.map(r => ({ name: r.name, id: r.id, cuisine: r.cuisine })));
+      console.log("All results:", results.map(r => ({ 
+        name: r.name, 
+        id: r.id, 
+        cuisine: r.cuisine, 
+        distance: r.distanceFromUser,
+        isAlternative: r.isAlternative 
+      })));
     }
     console.log("=== END DEBUG ===");
-  }, [results, isLoading]);
+  }, [results, isLoading, requestedDistance]);
   
   // Handle case where results is undefined or null
   const safeResults = results || [];
@@ -120,6 +128,8 @@ const ResultScreen = ({ results, onReset, onRetry, isLoading = false }: ResultSc
             allAlternatives={allAlternatives}
             hasDistanceInfo={hasDistanceInfo}
             onRetry={onRetry}
+            results={safeResults}
+            requestedDistance={requestedDistance}
           />
           
           <ResultsGrid results={displayedResults} />
