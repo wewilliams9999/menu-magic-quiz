@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -42,24 +43,28 @@ const QuizContainer = () => {
   // Only trigger the query when we're on the result screen
   const shouldFetchData = currentScreen === "result";
   
+  // Prepare hook parameters
+  const hookParams = shouldFetchData ? {
+    neighborhoods: neighborhoods.length > 0 ? neighborhoods : undefined,
+    cuisine: cuisines.length > 0 ? cuisines : undefined,
+    price: prices.length > 0 ? prices : undefined,
+    atmosphere: answers.atmosphere as string,
+    preferences: preferences.length > 0 ? preferences : undefined,
+    distance: distance,
+    userLocation: userCoordinates
+  } : {};
+  
   // Use the restaurant data hook with conditional fetching
-  const { data: restaurantResults, isLoading, error } = useRestaurantData(
-    shouldFetchData ? {
-      neighborhoods: neighborhoods.length > 0 ? neighborhoods : undefined,
-      cuisine: cuisines.length > 0 ? cuisines : undefined,
-      price: prices.length > 0 ? prices : undefined,
-      atmosphere: answers.atmosphere as string,
-      preferences: preferences.length > 0 ? preferences : undefined,
-      distance: distance,
-      userLocation: userCoordinates
-    } : {}
-  );
+  const { data: restaurantResults, isLoading, error } = useRestaurantData(hookParams);
 
   console.log("=== QUIZ CONTAINER DEBUG ===");
   console.log("Current screen:", currentScreen);
   console.log("Should fetch data:", shouldFetchData);
+  console.log("Hook params:", hookParams);
   console.log("Answers:", answers);
+  console.log("Restaurant results type:", typeof restaurantResults);
   console.log("Restaurant results:", restaurantResults);
+  console.log("Restaurant results length:", restaurantResults?.length);
   console.log("Is loading:", isLoading);
   console.log("Error:", error);
   console.log("=== END DEBUG ===");
@@ -168,6 +173,9 @@ const QuizContainer = () => {
   // Get the current question
   const currentQuestion = getQuestions()[currentQuestionIndex];
 
+  // Ensure we always pass an array to ResultScreen
+  const safeRestaurantResults = Array.isArray(restaurantResults) ? restaurantResults : [];
+
   return (
     <div className="min-h-[80vh] flex flex-col justify-center bg-gradient-to-b from-black to-gray-900 text-white p-4">
       <AnimatePresence mode="wait">
@@ -197,7 +205,7 @@ const QuizContainer = () => {
         {currentScreen === "result" && (
           <ResultScreen 
             key="result" 
-            results={restaurantResults || []} 
+            results={safeRestaurantResults} 
             onReset={handleReset}
             onRetry={handleRetry}
             isLoading={isLoading} 

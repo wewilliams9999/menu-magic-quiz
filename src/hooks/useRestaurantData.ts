@@ -17,7 +17,7 @@ interface RestaurantDataParams {
 
 export const useRestaurantData = (params: RestaurantDataParams) => {
   return useQuery({
-    queryKey: ['restaurants', params, Date.now()], // Add timestamp for cache busting
+    queryKey: ['restaurants', JSON.stringify(params)], // Use JSON.stringify for better cache key
     queryFn: async () => {
       try {
         console.log("=== RESTAURANT DATA HOOK ===");
@@ -40,7 +40,7 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         if (!hasNeighborhoods && !hasLocation && !hasCuisine && !hasPrice) {
           console.log("No search criteria provided, using fallback data");
           const fallbackData = getFallbackRestaurants();
-          console.log("Fallback data:", fallbackData);
+          console.log("Fallback data returned:", fallbackData);
           return fallbackData;
         }
         
@@ -58,31 +58,13 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         console.log("Calling fetchRestaurants with:", apiParams);
         const results = await fetchRestaurants(apiParams);
         
-        console.log(`useRestaurantData received ${results?.length || 0} results`);
+        console.log(`useRestaurantData final results count: ${results?.length || 0}`);
+        console.log("useRestaurantData final results:", results);
         
-        // Enhanced logging for debugging
-        if (results && results.length > 0) {
-          console.log("Final processed results:", results.slice(0, 3).map(r => ({
-            name: r.name,
-            id: r.id,
-            priceRange: r.priceRange,
-            isAlternative: r.isAlternative,
-            distanceFromUser: r.distanceFromUser,
-            hasCoordinates: !!r.coordinates
-          })));
-        }
-        
-        // Return results directly - they should already be properly formatted
-        if (results && results.length > 0) {
-          console.log("=== END RESTAURANT DATA HOOK ===");
-          return results;
-        }
-        
-        // Final fallback if something went wrong
-        console.log("No results returned, using final fallback data");
-        const fallbackData = getFallbackRestaurants();
-        console.log("Final fallback data:", fallbackData);
-        return fallbackData;
+        // Ensure we always return an array
+        const finalResults = Array.isArray(results) ? results : [];
+        console.log("=== END RESTAURANT DATA HOOK ===");
+        return finalResults;
         
       } catch (error) {
         console.error("Error in useRestaurantData:", error);
