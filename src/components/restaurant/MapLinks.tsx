@@ -40,35 +40,35 @@ const MapLinks = ({ restaurant }: MapLinksProps) => {
   const { googleMapsUrl, appleMapsUrl } = generateMapLinks();
 
   return (
-    <>
+    <div className="flex gap-2 w-full">
       {/* Get Directions - Google Maps */}
-      <Button variant="outline" size="sm" asChild className="border-blue-500 hover:border-blue-600 hover:bg-blue-50/50 text-blue-600 dark:border-blue-700 dark:hover:border-blue-600 dark:hover:bg-blue-950/30 dark:text-blue-400 font-medium">
+      <Button variant="outline" size="sm" asChild className="border-blue-500 hover:border-blue-600 hover:bg-blue-50/50 text-blue-600 dark:border-blue-700 dark:hover:border-blue-600 dark:hover:bg-blue-950/30 dark:text-blue-400 font-medium flex-1">
         <a 
           href={googleMapsUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="flex items-center gap-2"
+          className="flex items-center justify-center gap-2"
           aria-label={`Get directions to ${restaurant.name} via Google Maps - Nashville restaurant`}
         >
           <Navigation className="h-4 w-4" aria-hidden="true" />
-          <span>Get Directions</span>
+          <span>Directions</span>
         </a>
       </Button>
       
       {/* View on Map - Apple Maps */}
-      <Button variant="outline" size="sm" asChild className="border-gray-500 hover:border-gray-600 hover:bg-gray-50/50 text-gray-600 dark:border-gray-700 dark:hover:border-gray-600 dark:hover:bg-gray-800/30 dark:text-gray-400">
+      <Button variant="outline" size="sm" asChild className="border-gray-500 hover:border-gray-600 hover:bg-gray-50/50 text-gray-600 dark:border-gray-700 dark:hover:border-gray-600 dark:hover:bg-gray-800/30 dark:text-gray-400 flex-1">
         <a 
           href={appleMapsUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="flex items-center gap-2"
+          className="flex items-center justify-center gap-2"
           aria-label={`View ${restaurant.name} on Apple Maps - Nashville restaurant`}
         >
           <MapPin className="h-4 w-4" aria-hidden="true" />
-          <span>View on Map</span>
+          <span>View Map</span>
         </a>
       </Button>
-    </>
+    </div>
   );
 };
 
