@@ -13,9 +13,9 @@ const WelcomePage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-zinc-900 via-black to-zinc-900">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-zinc-900 via-black to-zinc-900 relative">
       {/* SEO-friendly content structure */}
-      <div className="text-center max-w-4xl mx-auto">
+      <div className="text-center max-w-4xl mx-auto relative z-10">
         {/* Main heading for SEO */}
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
@@ -69,6 +69,19 @@ const WelcomePage = () => {
             Trusted by Nashville locals and visitors • Updated restaurant recommendations
           </p>
         </motion.div>
+      </div>
+
+      {/* Cute background logo - more subtle and better positioned */}
+      <div 
+        className="absolute inset-0 flex items-center justify-center z-0 opacity-10"
+        aria-hidden="true"
+      >
+        <div 
+          className="w-[60vmin] h-[60vmin] bg-center bg-contain bg-no-repeat"
+          style={{
+            backgroundImage: `url("/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png")`,
+          }}
+        />
       </div>
     </div>
   );
