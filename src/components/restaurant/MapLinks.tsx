@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Map, Navigation } from "lucide-react";
+import { Navigation, MapPin } from "lucide-react";
 import { QuizResult } from "@/utils/quizData";
 
 interface MapLinksProps {
@@ -41,31 +41,31 @@ const MapLinks = ({ restaurant }: MapLinksProps) => {
 
   return (
     <>
-      {/* Google Maps button */}
-      <Button variant="outline" size="sm" asChild className="border-blue-500 hover:border-blue-600 hover:bg-blue-50/50 text-blue-600 dark:border-blue-700 dark:hover:border-blue-600 dark:hover:bg-blue-950/30 dark:text-blue-400">
+      {/* Get Directions - Google Maps */}
+      <Button variant="outline" size="sm" asChild className="border-blue-500 hover:border-blue-600 hover:bg-blue-50/50 text-blue-600 dark:border-blue-700 dark:hover:border-blue-600 dark:hover:bg-blue-950/30 dark:text-blue-400 font-medium">
         <a 
           href={googleMapsUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="flex items-center gap-1"
-          aria-label={`View ${restaurant.name} on Google Maps - Nashville restaurant`}
+          className="flex items-center gap-2"
+          aria-label={`Get directions to ${restaurant.name} via Google Maps - Nashville restaurant`}
         >
-          <Map className="h-3.5 w-3.5" aria-hidden="true" />
-          <span>Google Maps</span>
+          <Navigation className="h-4 w-4" aria-hidden="true" />
+          <span>Get Directions</span>
         </a>
       </Button>
       
-      {/* Apple Maps button */}
+      {/* View on Map - Apple Maps */}
       <Button variant="outline" size="sm" asChild className="border-gray-500 hover:border-gray-600 hover:bg-gray-50/50 text-gray-600 dark:border-gray-700 dark:hover:border-gray-600 dark:hover:bg-gray-800/30 dark:text-gray-400">
         <a 
           href={appleMapsUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="flex items-center gap-1"
+          className="flex items-center gap-2"
           aria-label={`View ${restaurant.name} on Apple Maps - Nashville restaurant`}
         >
-          <Navigation className="h-3.5 w-3.5" aria-hidden="true" />
-          <span>Apple Maps</span>
+          <MapPin className="h-4 w-4" aria-hidden="true" />
+          <span>View on Map</span>
         </a>
       </Button>
     </>
