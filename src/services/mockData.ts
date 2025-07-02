@@ -1,4 +1,3 @@
-
 import { QuizResult } from "@/utils/quizData";
 
 // Expanded fallback data with more budget-friendly options and better variety
@@ -155,6 +154,104 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       coordinates: { latitude: 36.1445, longitude: -86.7756 },
       isAlternative: true
     },
+    // West Side Moderate Options ($$) - ADDED MORE
+    {
+      id: "west-1",
+      name: "Puckett's Grocery & Restaurant",
+      cuisine: "Southern",
+      neighborhood: "Belle Meade",
+      priceRange: "$$",
+      description: "Classic Southern comfort food in a charming grocery store setting.",
+      address: "4142 Harding Pike, Nashville, TN 37205",
+      features: ["Comfort food", "Live music", "Historic setting"],
+      website: "https://puckettsgrocery.com",
+      phone: "(615) 298-5573",
+      coordinates: { latitude: 36.1105, longitude: -86.8441 },
+      isAlternative: true
+    },
+    {
+      id: "west-2",
+      name: "The Loveless Cafe",
+      cuisine: "Southern",
+      neighborhood: "Bellevue",
+      priceRange: "$$",
+      description: "Famous for biscuits and country ham, a Nashville institution since 1951.",
+      address: "8400 Highway 100, Nashville, TN 37221",
+      features: ["Famous biscuits", "Country ham", "Nashville institution"],
+      website: "https://lovelesscafe.com",
+      phone: "(615) 646-9700",
+      coordinates: { latitude: 36.0668, longitude: -86.9127 },
+      isAlternative: true
+    },
+    {
+      id: "west-3",
+      name: "Firebirds Wood Fired Grill",
+      cuisine: "American",
+      neighborhood: "Green Hills",
+      priceRange: "$$",
+      description: "Wood-fired steaks and fresh seafood in an upscale casual atmosphere.",
+      address: "2120 Abbott Martin Rd, Nashville, TN 37215",
+      features: ["Wood-fired grill", "Steaks", "Seafood"],
+      website: "https://firebirdsrestaurants.com",
+      phone: "(615) 577-2356",
+      coordinates: { latitude: 36.1063, longitude: -86.8147 },
+      isAlternative: true
+    },
+    {
+      id: "west-4",
+      name: "Whiskey Kitchen",
+      cuisine: "American",
+      neighborhood: "Green Hills",
+      priceRange: "$$",
+      description: "Elevated Southern cuisine with an extensive whiskey selection.",
+      address: "118 12th Ave S, Nashville, TN 37203",
+      features: ["Whiskey selection", "Southern cuisine", "Rooftop"],
+      website: "https://whiskeykitchen.com",
+      phone: "(615) 254-3029",
+      coordinates: { latitude: 36.1063, longitude: -86.8147 },
+      isAlternative: true
+    },
+    {
+      id: "west-5",
+      name: "Tavern",
+      cuisine: "American",
+      neighborhood: "West End",
+      priceRange: "$$",
+      description: "Modern American fare with a focus on local ingredients.",
+      address: "1904 Broadway, Nashville, TN 37203",
+      features: ["Local ingredients", "Modern American", "Craft cocktails"],
+      website: "https://tavernashville.com",
+      phone: "(615) 320-8580",
+      coordinates: { latitude: 36.1508, longitude: -86.8014 },
+      isAlternative: true
+    },
+    {
+      id: "west-6",
+      name: "Mesquite Chop House",
+      cuisine: "Steakhouse",
+      neighborhood: "Bellevue",
+      priceRange: "$$",
+      description: "Quality steaks and seafood in a relaxed atmosphere.",
+      address: "7804 Highway 70 S, Nashville, TN 37221",
+      features: ["Steaks", "Seafood", "Full bar"],
+      phone: "(615) 646-4002",
+      coordinates: { latitude: 36.0962, longitude: -86.8758 },
+      isAlternative: true
+    },
+    {
+      id: "west-7",
+      name: "Sunset Grill",
+      cuisine: "American",
+      neighborhood: "Belle Meade",
+      priceRange: "$$",
+      description: "Eclectic menu with globally-inspired dishes and great atmosphere.",
+      address: "2001 Belcourt Ave, Nashville, TN 37212",
+      features: ["Eclectic menu", "Global cuisine", "Great atmosphere"],
+      website: "https://sunsetgrill.com",
+      phone: "(615) 386-3663",
+      coordinates: { latitude: 36.1343, longitude: -86.8169 },
+      isAlternative: true
+    },
     // Moderate options ($$)
     {
       id: "moderate-1",
@@ -233,11 +330,46 @@ export const getFilteredFallbackRestaurants = (params?: {
   
   console.log('Filtering fallback restaurants with params:', params);
   
-  // Filter by price range first to prioritize budget-friendly options
-  if (params.price && params.price.length > 0) {
-    const filtered = restaurants.filter(r => params.price!.includes(r.priceRange));
+  // IMPROVED NEIGHBORHOOD FILTERING - more flexible matching
+  if (params.neighborhoods && params.neighborhoods.length > 0) {
+    const filtered = restaurants.filter(restaurant => {
+      return params.neighborhoods!.some(selectedNeighborhood => {
+        const restaurantNeighborhood = restaurant.neighborhood.toLowerCase();
+        const selectedLower = selectedNeighborhood.toLowerCase();
+        
+        // Direct match
+        if (restaurantNeighborhood.includes(selectedLower)) return true;
+        
+        // Handle common variations
+        const neighborhoodMappings: { [key: string]: string[] } = {
+          'bellevue': ['bellevue'],
+          'belle-meade': ['belle meade', 'bellemeade'],
+          'green-hills': ['green hills', 'greenhills'],
+          'west-end': ['west end', 'westend'],
+          'east': ['east nashville'],
+          'downtown': ['downtown', 'gulch', 'music row'],
+          '12south': ['12 south', 'twelve south']
+        };
+        
+        // Check if selected neighborhood maps to restaurant neighborhood
+        const mappedNeighborhoods = neighborhoodMappings[selectedLower] || [];
+        return mappedNeighborhoods.some(mapped => restaurantNeighborhood.includes(mapped));
+      });
+    });
+    
     if (filtered.length > 0) {
       restaurants = filtered;
+      console.log(`Filtered by neighborhoods: ${restaurants.length} restaurants match`, params.neighborhoods);
+    } else {
+      console.log('No exact neighborhood matches found, keeping all restaurants for variety');
+    }
+  }
+  
+  // Filter by price range
+  if (params.price && params.price.length > 0) {
+    const priceFiltered = restaurants.filter(r => params.price!.includes(r.priceRange));
+    if (priceFiltered.length > 0) {
+      restaurants = priceFiltered;
       console.log(`Filtered by price: ${restaurants.length} restaurants match ${params.price.join(', ')}`);
     }
   }
@@ -287,12 +419,22 @@ export const getFilteredFallbackRestaurants = (params?: {
       scoreB += 5;
     }
     
-    // Score for neighborhood match
-    if (params.neighborhoods?.some(n => a.neighborhood.toLowerCase().includes(n.toLowerCase()))) {
-      scoreA += 3;
+    // Higher score for neighborhood match
+    if (params.neighborhoods?.some(n => {
+      const restaurantNeighborhood = a.neighborhood.toLowerCase();
+      const selectedLower = n.toLowerCase();
+      return restaurantNeighborhood.includes(selectedLower) || 
+             selectedLower.includes(restaurantNeighborhood);
+    })) {
+      scoreA += 8; // Higher weight for neighborhood matches
     }
-    if (params.neighborhoods?.some(n => b.neighborhood.toLowerCase().includes(n.toLowerCase()))) {
-      scoreB += 3;
+    if (params.neighborhoods?.some(n => {
+      const restaurantNeighborhood = b.neighborhood.toLowerCase();
+      const selectedLower = n.toLowerCase();
+      return restaurantNeighborhood.includes(selectedLower) || 
+             selectedLower.includes(restaurantNeighborhood);
+    })) {
+      scoreB += 8;
     }
     
     return scoreB - scoreA;
@@ -301,6 +443,7 @@ export const getFilteredFallbackRestaurants = (params?: {
   // Return a good variety, limiting to prevent overwhelming results
   const result = restaurants.slice(0, 15);
   console.log(`Final fallback results: ${result.length} restaurants`);
+  console.log('Sample results:', result.slice(0, 5).map(r => ({ name: r.name, neighborhood: r.neighborhood, price: r.priceRange })));
   return result;
 };
 

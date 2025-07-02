@@ -3,24 +3,17 @@ import { useEffect, useRef } from 'react';
 
 interface AdSenseAdProps {
   adSlot: string;
-  adFormat?: 'auto' | 'rectangle' | 'vertical' | 'horizontal';
-  fullWidthResponsive?: boolean;
+  adFormat?: string;
   className?: string;
   style?: React.CSSProperties;
 }
 
-const AdSenseAd = ({ 
-  adSlot, 
-  adFormat = 'auto', 
-  fullWidthResponsive = true,
-  className = '',
-  style = {}
-}: AdSenseAdProps) => {
+const AdSenseAd = ({ adSlot, adFormat = 'auto', className = '', style = {} }: AdSenseAdProps) => {
   const adRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
-      // Check if AdSense is loaded
+      // Check if AdSense is available
       if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
         ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
       }
@@ -30,18 +23,14 @@ const AdSenseAd = ({
   }, []);
 
   return (
-    <div className={`adsense-container ${className}`} style={style}>
+    <div ref={adRef} className={`adsense-container ${className}`} style={style}>
       <ins
         className="adsbygoogle"
-        style={{
-          display: 'block',
-          ...style
-        }}
-        data-ad-client="ca-pub-XXXXXXXXXX"
+        style={{ display: 'block', ...style }}
+        data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" // Replace with your AdSense publisher ID
         data-ad-slot={adSlot}
         data-ad-format={adFormat}
-        data-full-width-responsive={fullWidthResponsive.toString()}
-        ref={adRef}
+        data-full-width-responsive="true"
       />
     </div>
   );
