@@ -6,14 +6,14 @@ interface MenuBackgroundCollageProps {
 }
 
 const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) => {
-  // Placeholder menu images from Nashville-style restaurants
+  // Updated to show actual menu boards and digital menus
   const menuImages = [
-    "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=300&fit=crop", // Menu board
-    "https://images.unsplash.com/photo-1559847844-d72047d81e92?w=400&h=300&fit=crop", // Restaurant menu
-    "https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=400&h=300&fit=crop", // Menu pages
-    "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=400&h=300&fit=crop", // Food menu
-    "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop", // Chalkboard menu
-    "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop", // Pizza menu
+    "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop", // Chalkboard menu with text
+    "https://images.unsplash.com/photo-1559847844-d72047d81e92?w=400&h=300&fit=crop", // Restaurant menu on table
+    "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop", // Digital menu board display
+    "https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=400&h=300&fit=crop", // Open menu pages
+    "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=300&fit=crop", // Menu board on wall
+    "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=400&h=300&fit=crop", // Menu with text visible
   ];
 
   if (!enabled) {
