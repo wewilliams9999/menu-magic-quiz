@@ -6,7 +6,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: '/', // This ensures assets load correctly on GitHub Pages
+  base: '/menu-magic-quiz/', // Updated for GitHub Pages deployment
   server: {
     host: "::",
     port: 8080,
