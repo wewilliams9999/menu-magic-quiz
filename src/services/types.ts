@@ -83,14 +83,18 @@ export const mapGooglePlacesToRestaurants = (places: any[]) => {
       description: place.vicinity || "A wonderful place to eat in Nashville",
       address: place.vicinity || place.formatted_address,
       imageUrl: place.photos?.length > 0 
-        ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=AIzaSyAkMyPslG3eTA9uW33qWHVs0o9zEtJdYp4` 
+        ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${place.photos[0].api_key || 'API_KEY_PLACEHOLDER'}` 
         : undefined,
       features: place.types?.filter(t => t !== "restaurant" && t !== "food" && t !== "establishment") || [],
       website: websiteLink,
       resyLink: mockResyLink,
       openTableLink: mockOpenTableLink,
       instagramLink: instagramLink,
-      phone: place.formatted_phone_number || null
+      phone: place.formatted_phone_number || null,
+      coordinates: place.geometry?.location ? {
+        latitude: place.geometry.location.lat,
+        longitude: place.geometry.location.lng
+      } : undefined
     };
   });
 };

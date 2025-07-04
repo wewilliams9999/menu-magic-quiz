@@ -60,7 +60,7 @@ export function buildGooglePlacesApiQuery(params: RestaurantParams, apiKey: stri
       }
     }
     
-    console.log('Location-based search URL:', url.toString());
+    console.log('Location-based search URL built successfully');
     return url;
   }
   
@@ -91,7 +91,7 @@ export function buildGooglePlacesApiQuery(params: RestaurantParams, apiKey: stri
   fallbackUrl.searchParams.append('query', query);
   fallbackUrl.searchParams.append('key', apiKey);
   
-  console.log('Text search fallback URL:', fallbackUrl.toString());
+  console.log('Text search fallback URL built successfully');
   console.log('Search query:', query);
   
   return fallbackUrl;
