@@ -6,7 +6,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: '/', // Fixed for custom domain deployment
+  base: mode === 'production' ? '/menu-magic-quiz/' : '/',
   server: {
     host: "::",
     port: 8080,
