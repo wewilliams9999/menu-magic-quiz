@@ -1,5 +1,5 @@
 
-import { Utensils, XCircle, Sparkles } from "lucide-react";
+import { Utensils, XCircle, Sparkles, DollarSign } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { QuizOption } from "@/utils/quiz/types";
@@ -14,6 +14,7 @@ interface PreferencesQuestionProps {
 const PreferencesQuestion = ({ options, selectedAnswers, onSelect }: PreferencesQuestionProps) => {
   const isAtmosphereQuestion = options.some(option => option.id.startsWith('atmosphere-'));
   const isDietaryQuestion = options.some(option => option.id.startsWith('dietary-'));
+  const isPriceQuestion = options.some(option => option.id.startsWith('price-'));
 
   const handleMultiSelectChange = (id: string, checked: boolean) => {
     if (id === 'none' && checked) {
@@ -41,6 +42,11 @@ const PreferencesQuestion = ({ options, selectedAnswers, onSelect }: Preferences
         return <Utensils className="w-5 h-5" />;
       case 'gluten-free':
         return <Sparkles className="w-5 h-5" />;
+      case '$':
+      case '$$':
+      case '$$$':
+      case '$$$$':
+        return <DollarSign className="w-5 h-5" />;
       default:
         return <Utensils className="w-5 h-5" />;
     }
@@ -87,8 +93,8 @@ const PreferencesQuestion = ({ options, selectedAnswers, onSelect }: Preferences
     );
   }
 
-  if (isDietaryQuestion) {
-    // Special handling for dietary question to ensure 2x2 layout
+  if (isDietaryQuestion || isPriceQuestion) {
+    // Special handling for dietary and price questions to ensure 2x2 layout
     return (
       <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-nashville-200 dark:border-nashville-800 shadow-lg">
         <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
