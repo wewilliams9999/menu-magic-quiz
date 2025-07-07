@@ -13,22 +13,13 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  // Fallback placeholder menu images
-  const fallbackMenuImages = [
-    "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop", // Chalkboard menu with text
-    "https://images.unsplash.com/photo-1559847844-d72047d81e92?w=400&h=300&fit=crop", // Restaurant menu on table
-    "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop", // Digital menu board display
-    "https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=400&h=300&fit=crop", // Open menu pages
-    "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=300&fit=crop", // Menu board on wall
-    "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=400&h=300&fit=crop", // Menu with text visible
-  ];
-
   // Auto-load menus on component mount
   useEffect(() => {
     const loadMenus = async () => {
       // First, try to get cached menus
       const stored = MenuScrapingService.getScrapedMenus();
       if (stored.length > 0) {
+        console.log(`Found ${stored.length} cached menu screenshots`);
         setScrapedMenus(stored);
         return;
       }
@@ -43,36 +34,58 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
           setScrapedMenus(result.data);
           MenuScrapingService.saveScrapedMenus(result.data);
           console.log(`Auto-loaded ${result.data.length} Nashville restaurant menus`);
+          
+          toast({
+            title: "Success!",
+            description: `Loaded ${result.data.length} real Nashville restaurant menus`,
+            duration: 4000,
+          });
         } else {
-          console.log('Failed to auto-load menus, using fallback images');
+          console.error('Failed to auto-load menus:', result.error);
+          toast({
+            title: "Couldn't load real menus",
+            description: "Using placeholder images for now. Will retry next time.",
+            variant: "destructive",
+            duration: 3000,
+          });
         }
       } catch (error) {
         console.error('Error auto-loading menus:', error);
+        toast({
+          title: "Error loading menus",
+          description: "Check console for details. Using placeholders for now.",
+          variant: "destructive",
+          duration: 3000,
+        });
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadMenus();
-  }, []);
+    if (enabled) {
+      loadMenus();
+    }
+  }, [enabled, toast]);
 
-  // Use scraped menus if available, otherwise use fallback images
-  const menuImages = scrapedMenus.length > 0 
-    ? scrapedMenus.map(menu => `data:image/png;base64,${menu.screenshot}`)
-    : fallbackMenuImages;
-
-  if (!enabled) {
+  // Only show background if we have real scraped menus OR if we're loading
+  // Don't show fallback images - either show real menus or nothing
+  if (!enabled || (scrapedMenus.length === 0 && !isLoading)) {
     return null;
   }
 
+  // Use scraped menu screenshots
+  const menuImages = scrapedMenus.length > 0 
+    ? scrapedMenus.map(menu => `data:image/png;base64,${menu.screenshot}`)
+    : [];
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Menu images collage */}
+      {/* Menu images collage - only show if we have real menus */}
       {menuImages.map((image, index) => (
         <motion.div
           key={index}
           initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: isLoading ? 0.03 : 0.08, scale: 1 }}
+          animate={{ opacity: 0.08, scale: 1 }}
           transition={{ delay: index * 0.2, duration: 1 }}
           className="absolute"
           style={{
