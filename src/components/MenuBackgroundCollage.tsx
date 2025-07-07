@@ -11,29 +11,38 @@ interface MenuBackgroundCollageProps {
 const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) => {
   const [scrapedMenus, setScrapedMenus] = useState<ScrapedMenu[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Auto-load menus on component mount
   useEffect(() => {
     const loadMenus = async () => {
+      console.log('=== MenuBackgroundCollage: Starting menu load process ===');
+      
       // First, try to get cached menus
       const stored = MenuScrapingService.getScrapedMenus();
+      console.log('Cached menus found:', stored.length);
+      
       if (stored.length > 0) {
-        console.log(`Found ${stored.length} cached menu screenshots`);
+        console.log(`Using ${stored.length} cached menu screenshots`);
         setScrapedMenus(stored);
         return;
       }
 
       // If no cached menus, scrape new ones automatically
+      console.log('No cached menus found, starting scraping process...');
       setIsLoading(true);
+      setError(null);
+      
       try {
-        console.log('Auto-loading Nashville restaurant menus...');
+        console.log('Calling MenuScrapingService.scrapeNashvilleMenus()...');
         const result = await MenuScrapingService.scrapeNashvilleMenus();
+        console.log('Scraping result:', result);
         
         if (result.success && result.data) {
+          console.log(`Successfully scraped ${result.data.length} menus`);
           setScrapedMenus(result.data);
           MenuScrapingService.saveScrapedMenus(result.data);
-          console.log(`Auto-loaded ${result.data.length} Nashville restaurant menus`);
           
           toast({
             title: "Success!",
@@ -41,35 +50,45 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
             duration: 4000,
           });
         } else {
-          console.error('Failed to auto-load menus:', result.error);
+          const errorMsg = result.error || 'Unknown error during scraping';
+          console.error('Scraping failed:', errorMsg);
+          setError(errorMsg);
+          
           toast({
-            title: "Couldn't load real menus",
-            description: "Using placeholder images for now. Will retry next time.",
+            title: "Failed to load real menus",
+            description: errorMsg,
             variant: "destructive",
-            duration: 3000,
+            duration: 5000,
           });
         }
       } catch (error) {
-        console.error('Error auto-loading menus:', error);
+        const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred';
+        console.error('Exception during menu scraping:', error);
+        setError(errorMsg);
+        
         toast({
           title: "Error loading menus",
-          description: "Check console for details. Using placeholders for now.",
+          description: errorMsg,
           variant: "destructive",
-          duration: 3000,
+          duration: 5000,
         });
       } finally {
         setIsLoading(false);
+        console.log('=== MenuBackgroundCollage: Menu load process completed ===');
       }
     };
 
     if (enabled) {
+      console.log('MenuBackgroundCollage enabled, starting load process');
       loadMenus();
+    } else {
+      console.log('MenuBackgroundCollage disabled, skipping load');
     }
   }, [enabled, toast]);
 
-  // Only show background if we have real scraped menus OR if we're loading
-  // Don't show fallback images - either show real menus or nothing
-  if (!enabled || (scrapedMenus.length === 0 && !isLoading)) {
+  // Show loading state or error state
+  if (!enabled) {
+    console.log('Component disabled, returning null');
     return null;
   }
 
@@ -77,6 +96,13 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
   const menuImages = scrapedMenus.length > 0 
     ? scrapedMenus.map(menu => `data:image/png;base64,${menu.screenshot}`)
     : [];
+
+  console.log('Rendering with:', { 
+    isLoading, 
+    error, 
+    menuImagesCount: menuImages.length,
+    scrapedMenusCount: scrapedMenus.length 
+  });
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -104,11 +130,11 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
         </motion.div>
       ))}
       
-      {/* Status indicator - only show when real menus are loaded */}
+      {/* Status indicators */}
       {scrapedMenus.length > 0 && (
         <div className="absolute bottom-4 right-4 z-30 pointer-events-none">
           <div className="bg-green-500/20 border border-green-500/30 rounded-full px-3 py-1 text-green-300 text-xs">
-            Real Nashville Menus ✓
+            Real Nashville Menus ✓ ({scrapedMenus.length})
           </div>
         </div>
       )}
@@ -118,6 +144,24 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
         <div className="absolute bottom-4 left-4 z-30 pointer-events-none">
           <div className="bg-orange-500/20 border border-orange-500/30 rounded-full px-3 py-1 text-orange-300 text-xs animate-pulse">
             Loading Nashville Menus...
+          </div>
+        </div>
+      )}
+
+      {/* Error indicator */}
+      {error && !isLoading && (
+        <div className="absolute bottom-4 left-4 z-30 pointer-events-none">
+          <div className="bg-red-500/20 border border-red-500/30 rounded-full px-3 py-1 text-red-300 text-xs">
+            Error: {error}
+          </div>
+        </div>
+      )}
+
+      {/* Debug info */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="absolute top-4 left-4 z-30 pointer-events-none">
+          <div className="bg-gray-500/20 border border-gray-500/30 rounded px-2 py-1 text-gray-300 text-xs">
+            Debug: Loading={isLoading.toString()}, Menus={scrapedMenus.length}, Error={error ? 'Yes' : 'No'}
           </div>
         </div>
       )}
