@@ -1,13 +1,22 @@
 
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
+import { MenuScrapingService, ScrapedMenu } from "@/services/menuScrapingService";
+import { useToast } from "@/components/ui/use-toast";
 
 interface MenuBackgroundCollageProps {
   enabled?: boolean;
 }
 
 const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) => {
-  // Updated to show actual menu boards and digital menus
-  const menuImages = [
+  const [scrapedMenus, setScrapedMenus] = useState<ScrapedMenu[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  // Fallback placeholder menu images
+  const fallbackMenuImages = [
     "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop", // Chalkboard menu with text
     "https://images.unsplash.com/photo-1559847844-d72047d81e92?w=400&h=300&fit=crop", // Restaurant menu on table
     "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop", // Digital menu board display
@@ -16,12 +25,72 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
     "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=400&h=300&fit=crop", // Menu with text visible
   ];
 
+  // Load scraped menus on component mount
+  useEffect(() => {
+    const stored = MenuScrapingService.getScrapedMenus();
+    setScrapedMenus(stored);
+  }, []);
+
+  const handleScrapeMenus = async () => {
+    setIsLoading(true);
+    try {
+      const result = await MenuScrapingService.scrapeNashvilleMenus();
+      
+      if (result.success && result.data) {
+        setScrapedMenus(result.data);
+        MenuScrapingService.saveScrapedMenus(result.data);
+        toast({
+          title: "Success!",
+          description: `Scraped ${result.data.length} Nashville restaurant menus`,
+          duration: 3000,
+        });
+      } else {
+        toast({
+          title: "Scraping Failed",
+          description: result.error || "Failed to scrape restaurant menus",
+          variant: "destructive",
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error('Error scraping menus:', error);
+      toast({
+        title: "Error",
+        description: "Failed to scrape restaurant menus",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Use scraped menus if available, otherwise use fallback images
+  const menuImages = scrapedMenus.length > 0 
+    ? scrapedMenus.map(menu => `data:image/png;base64,${menu.screenshot}`)
+    : fallbackMenuImages;
+
   if (!enabled) {
     return null;
   }
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Scrape button in top-right corner */}
+      <div className="absolute top-4 right-4 z-30 pointer-events-auto">
+        <Button
+          onClick={handleScrapeMenus}
+          disabled={isLoading}
+          variant="outline"
+          size="sm"
+          className="bg-black/20 border-white/20 text-white hover:bg-black/40"
+        >
+          <Download className="w-4 h-4 mr-2" />
+          {isLoading ? 'Scraping...' : scrapedMenus.length > 0 ? 'Refresh Menus' : 'Get Real Menus'}
+        </Button>
+      </div>
+
+      {/* Menu images collage */}
       {menuImages.map((image, index) => (
         <motion.div
           key={index}
@@ -44,6 +113,15 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
           />
         </motion.div>
       ))}
+      
+      {/* Status indicator */}
+      {scrapedMenus.length > 0 && (
+        <div className="absolute bottom-4 right-4 z-30 pointer-events-none">
+          <div className="bg-green-500/20 border border-green-500/30 rounded-full px-3 py-1 text-green-300 text-xs">
+            Real Nashville Menus ✓
+          </div>
+        </div>
+      )}
     </div>
   );
 };
