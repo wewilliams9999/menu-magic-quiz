@@ -1,10 +1,8 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
 import { MenuScrapingService, ScrapedMenu } from "@/services/menuScrapingService";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface MenuBackgroundCollageProps {
   enabled?: boolean;
@@ -25,45 +23,38 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
     "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=400&h=300&fit=crop", // Menu with text visible
   ];
 
-  // Load scraped menus on component mount
+  // Auto-load menus on component mount
   useEffect(() => {
-    const stored = MenuScrapingService.getScrapedMenus();
-    setScrapedMenus(stored);
-  }, []);
-
-  const handleScrapeMenus = async () => {
-    setIsLoading(true);
-    try {
-      const result = await MenuScrapingService.scrapeNashvilleMenus();
-      
-      if (result.success && result.data) {
-        setScrapedMenus(result.data);
-        MenuScrapingService.saveScrapedMenus(result.data);
-        toast({
-          title: "Success!",
-          description: `Scraped ${result.data.length} Nashville restaurant menus`,
-          duration: 3000,
-        });
-      } else {
-        toast({
-          title: "Scraping Failed",
-          description: result.error || "Failed to scrape restaurant menus",
-          variant: "destructive",
-          duration: 5000,
-        });
+    const loadMenus = async () => {
+      // First, try to get cached menus
+      const stored = MenuScrapingService.getScrapedMenus();
+      if (stored.length > 0) {
+        setScrapedMenus(stored);
+        return;
       }
-    } catch (error) {
-      console.error('Error scraping menus:', error);
-      toast({
-        title: "Error",
-        description: "Failed to scrape restaurant menus",
-        variant: "destructive",
-        duration: 5000,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+
+      // If no cached menus, scrape new ones automatically
+      setIsLoading(true);
+      try {
+        console.log('Auto-loading Nashville restaurant menus...');
+        const result = await MenuScrapingService.scrapeNashvilleMenus();
+        
+        if (result.success && result.data) {
+          setScrapedMenus(result.data);
+          MenuScrapingService.saveScrapedMenus(result.data);
+          console.log(`Auto-loaded ${result.data.length} Nashville restaurant menus`);
+        } else {
+          console.log('Failed to auto-load menus, using fallback images');
+        }
+      } catch (error) {
+        console.error('Error auto-loading menus:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadMenus();
+  }, []);
 
   // Use scraped menus if available, otherwise use fallback images
   const menuImages = scrapedMenus.length > 0 
@@ -76,26 +67,12 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Scrape button in top-right corner */}
-      <div className="absolute top-4 right-4 z-30 pointer-events-auto">
-        <Button
-          onClick={handleScrapeMenus}
-          disabled={isLoading}
-          variant="outline"
-          size="sm"
-          className="bg-black/20 border-white/20 text-white hover:bg-black/40"
-        >
-          <Download className="w-4 h-4 mr-2" />
-          {isLoading ? 'Scraping...' : scrapedMenus.length > 0 ? 'Refresh Menus' : 'Get Real Menus'}
-        </Button>
-      </div>
-
       {/* Menu images collage */}
       {menuImages.map((image, index) => (
         <motion.div
           key={index}
           initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 0.08, scale: 1 }}
+          animate={{ opacity: isLoading ? 0.03 : 0.08, scale: 1 }}
           transition={{ delay: index * 0.2, duration: 1 }}
           className="absolute"
           style={{
@@ -114,11 +91,20 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
         </motion.div>
       ))}
       
-      {/* Status indicator */}
+      {/* Status indicator - only show when real menus are loaded */}
       {scrapedMenus.length > 0 && (
         <div className="absolute bottom-4 right-4 z-30 pointer-events-none">
           <div className="bg-green-500/20 border border-green-500/30 rounded-full px-3 py-1 text-green-300 text-xs">
             Real Nashville Menus ✓
+          </div>
+        </div>
+      )}
+
+      {/* Loading indicator */}
+      {isLoading && (
+        <div className="absolute bottom-4 left-4 z-30 pointer-events-none">
+          <div className="bg-orange-500/20 border border-orange-500/30 rounded-full px-3 py-1 text-orange-300 text-xs animate-pulse">
+            Loading Nashville Menus...
           </div>
         </div>
       )}
