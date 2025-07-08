@@ -14,41 +14,44 @@ export class MenuScrapingService {
     'https://hattieb.com',
     'https://princeshotchicken.com',
     'https://martinsbarbecuejoint.com',
-    'https://thegulchnashville.com',
-    'https://rolfandaughters.com',
-    'https://thecatbirdseannashville.com',
-    'https://thenoellehotel.com/dining',
-    'https://southernground.com'
+    'https://thegulchnashville.com'
   ];
 
   static async scrapeNashvilleMenus(): Promise<{ success: boolean; data?: ScrapedMenu[]; error?: string }> {
     try {
-      console.log('Starting menu scraping for Nashville restaurants...');
+      console.log('=== MenuScrapingService: Starting scraping process ===');
       
       const { data, error } = await supabase.functions.invoke('scrape-menus', {
         body: {
-          restaurantUrls: this.NASHVILLE_RESTAURANTS.slice(0, 4) // Start with 4 to stay within free limits
+          restaurantUrls: this.NASHVILLE_RESTAURANTS
         }
       });
 
+      console.log('Supabase function invoke result:', { data, error });
+
       if (error) {
-        console.error('Error calling scrape-menus function:', error);
-        return { success: false, error: error.message };
+        console.error('Supabase function invoke error:', error);
+        return { success: false, error: `Function call failed: ${error.message}` };
+      }
+
+      if (!data) {
+        console.error('No data returned from function');
+        return { success: false, error: 'No data returned from scraping function' };
       }
 
       if (!data.success) {
-        console.error('Scraping failed:', data.error);
-        return { success: false, error: data.error || 'Failed to scrape menus' };
+        console.error('Function returned failure:', data.error);
+        return { success: false, error: data.error || 'Function execution failed' };
       }
 
-      console.log(`Successfully scraped ${data.count} menu screenshots`);
+      console.log(`=== MenuScrapingService: Successfully scraped ${data.count} menus ===`);
       return { success: true, data: data.data };
 
     } catch (error) {
-      console.error('Exception in scrapeNashvilleMenus:', error);
+      console.error('=== MenuScrapingService: Exception occurred ===', error);
       return { 
         success: false, 
-        error: error instanceof Error ? error.message : 'Failed to scrape menus' 
+        error: `Service error: ${error instanceof Error ? error.message : 'Unknown error'}` 
       };
     }
   }
@@ -60,9 +63,9 @@ export class MenuScrapingService {
   static saveScrapedMenus(menus: ScrapedMenu[]): void {
     try {
       localStorage.setItem(this.getStorageKey(), JSON.stringify(menus));
-      console.log(`Saved ${menus.length} scraped menus to localStorage`);
+      console.log(`MenuScrapingService: Saved ${menus.length} scraped menus to localStorage`);
     } catch (error) {
-      console.error('Error saving scraped menus:', error);
+      console.error('MenuScrapingService: Error saving scraped menus:', error);
     }
   }
 
@@ -71,11 +74,11 @@ export class MenuScrapingService {
       const stored = localStorage.getItem(this.getStorageKey());
       if (stored) {
         const menus = JSON.parse(stored);
-        console.log(`Retrieved ${menus.length} scraped menus from localStorage`);
+        console.log(`MenuScrapingService: Retrieved ${menus.length} scraped menus from localStorage`);
         return menus;
       }
     } catch (error) {
-      console.error('Error retrieving scraped menus:', error);
+      console.error('MenuScrapingService: Error retrieving scraped menus:', error);
     }
     return [];
   }
