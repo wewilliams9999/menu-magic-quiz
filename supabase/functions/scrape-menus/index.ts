@@ -29,9 +29,11 @@ const handler = async (req: Request): Promise<Response> => {
       return new Response(
         JSON.stringify({ 
           success: false,
-          error: 'Firecrawl API key not configured in edge function secrets' 
+          error: 'Firecrawl API key not configured in edge function secrets',
+          data: [],
+          count: 0
         }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
@@ -65,7 +67,7 @@ const handler = async (req: Request): Promise<Response> => {
         if (!firecrawlResponse.ok) {
           const errorText = await firecrawlResponse.text();
           console.error(`Firecrawl API error for ${url}:`, errorText);
-          errors.push(`${url}: ${errorText}`);
+          errors.push(`${url}: HTTP ${firecrawlResponse.status} - ${errorText}`);
           continue;
         }
 
@@ -100,14 +102,19 @@ const handler = async (req: Request): Promise<Response> => {
       console.log('Errors encountered:', errors);
     }
 
-    // Return success even if some URLs failed, as long as we got at least one result
+    // Always return success=true if we have ANY data, or success=false with helpful error info
+    const response = {
+      success: scrapedData.length > 0,
+      data: scrapedData,
+      count: scrapedData.length,
+      errors: errors.length > 0 ? errors : undefined,
+      message: scrapedData.length > 0 
+        ? `Successfully scraped ${scrapedData.length} restaurant menus` 
+        : 'No menus were successfully scraped'
+    };
+
     return new Response(
-      JSON.stringify({ 
-        success: scrapedData.length > 0,
-        data: scrapedData,
-        count: scrapedData.length,
-        errors: errors.length > 0 ? errors : undefined
-      }),
+      JSON.stringify(response),
       {
         status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -119,10 +126,12 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(
       JSON.stringify({ 
         success: false,
-        error: `Function error: ${error.message}` 
+        error: `Function error: ${error.message}`,
+        data: [],
+        count: 0
       }),
       {
-        status: 500,
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     );

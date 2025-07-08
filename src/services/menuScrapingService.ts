@@ -40,18 +40,22 @@ export class MenuScrapingService {
         return { success: false, error: 'No data returned from scraping function' };
       }
 
-      // Handle partial success - if we got some menus but had errors
-      if (data.success && data.data && data.data.length > 0) {
+      // Handle the response - even if some URLs failed, we consider it success if we got any data
+      if (data.success === true && data.data && data.data.length > 0) {
         console.log(`=== MenuScrapingService: Successfully scraped ${data.count} menus ===`);
-        if (data.errors) {
+        if (data.errors && data.errors.length > 0) {
           console.warn('Some URLs failed to scrape:', data.errors);
         }
         return { success: true, data: data.data };
       } else {
-        console.error('Function returned failure or no data:', data.error || data.errors);
+        // If no data was scraped successfully, return the error info
+        const errorMsg = data.error || 
+          (data.errors && data.errors.length > 0 ? data.errors.join(', ') : 'No menus could be scraped');
+        
+        console.error('No menus were successfully scraped:', errorMsg);
         return { 
           success: false, 
-          error: data.error || (data.errors ? data.errors.join(', ') : 'Function execution failed')
+          error: errorMsg
         };
       }
 
