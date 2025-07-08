@@ -9,12 +9,13 @@ export interface ScrapedMenu {
 }
 
 export class MenuScrapingService {
-  // Popular Nashville restaurant websites to scrape
+  // Popular Nashville restaurant websites to scrape - updated with more reliable URLs
   private static NASHVILLE_RESTAURANTS = [
     'https://hattieb.com',
     'https://princeshotchicken.com',
-    'https://martinsbarbecuejoint.com',
-    'https://thegulchnashville.com'
+    'https://thegulchnashville.com',
+    // Temporarily removing martinsbarbecuejoint.com due to DNS issues
+    'https://www.lovelesscafe.com'
   ];
 
   static async scrapeNashvilleMenus(): Promise<{ success: boolean; data?: ScrapedMenu[]; error?: string }> {
@@ -39,13 +40,20 @@ export class MenuScrapingService {
         return { success: false, error: 'No data returned from scraping function' };
       }
 
-      if (!data.success) {
-        console.error('Function returned failure:', data.error);
-        return { success: false, error: data.error || 'Function execution failed' };
+      // Handle partial success - if we got some menus but had errors
+      if (data.success && data.data && data.data.length > 0) {
+        console.log(`=== MenuScrapingService: Successfully scraped ${data.count} menus ===`);
+        if (data.errors) {
+          console.warn('Some URLs failed to scrape:', data.errors);
+        }
+        return { success: true, data: data.data };
+      } else {
+        console.error('Function returned failure or no data:', data.error || data.errors);
+        return { 
+          success: false, 
+          error: data.error || (data.errors ? data.errors.join(', ') : 'Function execution failed')
+        };
       }
-
-      console.log(`=== MenuScrapingService: Successfully scraped ${data.count} menus ===`);
-      return { success: true, data: data.data };
 
     } catch (error) {
       console.error('=== MenuScrapingService: Exception occurred ===', error);

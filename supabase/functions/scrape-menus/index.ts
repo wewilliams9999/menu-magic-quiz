@@ -39,6 +39,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log('Received request to scrape URLs:', restaurantUrls);
 
     const scrapedData = [];
+    const errors = [];
 
     for (const url of restaurantUrls) {
       try {
@@ -64,16 +65,18 @@ const handler = async (req: Request): Promise<Response> => {
         if (!firecrawlResponse.ok) {
           const errorText = await firecrawlResponse.text();
           console.error(`Firecrawl API error for ${url}:`, errorText);
+          errors.push(`${url}: ${errorText}`);
           continue;
         }
 
         const result = await firecrawlResponse.json();
         console.log(`Firecrawl result for ${url}:`, {
           hasScreenshot: !!result.data?.screenshot,
-          title: result.data?.metadata?.title
+          title: result.data?.metadata?.title,
+          success: result.success
         });
         
-        if (result.data?.screenshot) {
+        if (result.success && result.data?.screenshot) {
           scrapedData.push({
             url: url,
             screenshot: result.data.screenshot,
@@ -82,21 +85,28 @@ const handler = async (req: Request): Promise<Response> => {
           });
           console.log(`Successfully processed screenshot for ${url}`);
         } else {
-          console.log(`No screenshot data returned for ${url}`);
+          console.log(`No screenshot data returned for ${url}:`, result.error || 'Unknown error');
+          errors.push(`${url}: ${result.error || 'No screenshot data'}`);
         }
       } catch (error) {
         console.error(`Exception while scraping ${url}:`, error);
+        errors.push(`${url}: ${error.message}`);
         continue;
       }
     }
 
     console.log(`=== Scraping completed. Successfully scraped ${scrapedData.length} menus ===`);
+    if (errors.length > 0) {
+      console.log('Errors encountered:', errors);
+    }
 
+    // Return success even if some URLs failed, as long as we got at least one result
     return new Response(
       JSON.stringify({ 
-        success: true, 
+        success: scrapedData.length > 0,
         data: scrapedData,
-        count: scrapedData.length 
+        count: scrapedData.length,
+        errors: errors.length > 0 ? errors : undefined
       }),
       {
         status: 200,
