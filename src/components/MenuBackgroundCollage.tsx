@@ -133,14 +133,7 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
         </div>
       )}
 
-      {/* Error indicator */}
-      {error && !isLoading && (
-        <div className="absolute bottom-4 left-4 z-30 pointer-events-none">
-          <div className="bg-red-500/20 border border-red-500/30 rounded-full px-3 py-1 text-red-300 text-xs">
-            Error: {error}
-          </div>
-        </div>
-      )}
+      {/* Hide error indicators - show clean background */}
 
       {/* Debug info */}
       {process.env.NODE_ENV === 'development' && (
