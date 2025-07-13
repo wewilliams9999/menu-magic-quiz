@@ -1,5 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -9,6 +10,7 @@ const corsHeaders = {
 
 interface ScrapeRequest {
   restaurantUrls: string[];
+  storeInDb?: boolean;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -37,8 +39,17 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const { restaurantUrls }: ScrapeRequest = await req.json();
-    console.log('Received request to scrape URLs:', restaurantUrls);
+    const { restaurantUrls, storeInDb }: ScrapeRequest = await req.json();
+    console.log('Received request to scrape URLs:', restaurantUrls, 'Store in DB:', storeInDb);
+
+    // Initialize Supabase client if we need to store in DB
+    let supabase = null;
+    if (storeInDb) {
+      supabase = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      );
+    }
 
     const scrapedData = [];
     const errors = [];
@@ -108,6 +119,36 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`=== Scraping completed. Successfully scraped ${scrapedData.length} menus ===`);
     if (errors.length > 0) {
       console.log('Errors encountered:', errors);
+    }
+
+    // Store in database if requested and we have data
+    if (storeInDb && supabase && scrapedData.length > 0) {
+      console.log('Storing scraped menus in database...');
+      
+      // Clear old data first (keep only latest scraping)
+      const { error: deleteError } = await supabase
+        .from('scraped_menus')
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all
+      
+      if (deleteError) {
+        console.warn('Error clearing old menu data:', deleteError);
+      }
+
+      // Insert new data
+      const { error: insertError } = await supabase
+        .from('scraped_menus')
+        .insert(scrapedData.map(menu => ({
+          url: menu.url,
+          screenshot: menu.screenshot,
+          title: menu.title
+        })));
+
+      if (insertError) {
+        console.error('Error storing menus in database:', insertError);
+      } else {
+        console.log(`Successfully stored ${scrapedData.length} menus in database`);
+      }
     }
 
     // Always return success=true if we have ANY data, or success=false with helpful error info

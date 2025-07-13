@@ -18,13 +18,52 @@ export class MenuScrapingService {
     'https://www.lovelesscafe.com'
   ];
 
+  static async loadCachedMenus(): Promise<{ success: boolean; data?: ScrapedMenu[]; error?: string }> {
+    try {
+      console.log('=== MenuScrapingService: Loading cached menus from database ===');
+      
+      // Try to load from database first
+      const { data: dbMenus, error } = await supabase
+        .from('scraped_menus')
+        .select('*')
+        .order('scraped_at', { ascending: false });
+
+      if (error) {
+        console.warn('Error loading from database, falling back to localStorage:', error);
+      } else if (dbMenus && dbMenus.length > 0) {
+        console.log(`Successfully loaded ${dbMenus.length} menus from database`);
+        const formattedMenus = dbMenus.map(menu => ({
+          url: menu.url,
+          screenshot: menu.screenshot,
+          title: menu.title,
+          timestamp: menu.scraped_at || menu.created_at
+        }));
+        return { success: true, data: formattedMenus };
+      }
+
+      // Fall back to localStorage if database is empty
+      console.log('No menus in database, checking localStorage...');
+      const localMenus = this.getScrapedMenus();
+      if (localMenus.length > 0) {
+        console.log(`Found ${localMenus.length} menus in localStorage`);
+        return { success: true, data: localMenus };
+      }
+
+      return { success: false, error: 'No cached menus found' };
+    } catch (error) {
+      console.error('Error loading cached menus:', error);
+      return { success: false, error: `Error loading cached menus: ${error instanceof Error ? error.message : 'Unknown error'}` };
+    }
+  }
+
   static async scrapeNashvilleMenus(): Promise<{ success: boolean; data?: ScrapedMenu[]; error?: string }> {
     try {
       console.log('=== MenuScrapingService: Starting scraping process ===');
       
       const { data, error } = await supabase.functions.invoke('scrape-menus', {
         body: {
-          restaurantUrls: this.NASHVILLE_RESTAURANTS
+          restaurantUrls: this.NASHVILLE_RESTAURANTS,
+          storeInDb: false // Don't store in DB for manual scrapes, only for cron job
         }
       });
 

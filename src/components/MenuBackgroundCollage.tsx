@@ -14,76 +14,61 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
-  // Auto-load menus on component mount
   useEffect(() => {
     const loadMenus = async () => {
-      console.log('=== MenuBackgroundCollage: Starting menu load process ===');
+      if (!enabled) return;
       
-      // First, try to get cached menus
-      const stored = MenuScrapingService.getScrapedMenus();
-      console.log('Cached menus found:', stored.length);
-      
-      if (stored.length > 0) {
-        console.log(`Using ${stored.length} cached menu screenshots`);
-        setScrapedMenus(stored);
-        return;
-      }
-
-      // If no cached menus, scrape new ones automatically
-      console.log('No cached menus found, starting scraping process...');
+      console.log('MenuBackgroundCollage: Loading menus...');
       setIsLoading(true);
       setError(null);
-      
+
       try {
-        console.log('Calling MenuScrapingService.scrapeNashvilleMenus()...');
-        const result = await MenuScrapingService.scrapeNashvilleMenus();
-        console.log('Scraping result:', result);
+        // First try to load cached menus (from database or localStorage)
+        const cachedResult = await MenuScrapingService.loadCachedMenus();
         
-        if (result.success && result.data) {
-          console.log(`Successfully scraped ${result.data.length} menus`);
-          setScrapedMenus(result.data);
-          MenuScrapingService.saveScrapedMenus(result.data);
-          
+        if (cachedResult.success && cachedResult.data) {
+          console.log('MenuBackgroundCollage: Loaded cached menus successfully');
+          setScrapedMenus(cachedResult.data);
           toast({
-            title: "Success!",
-            description: `Loaded ${result.data.length} real Nashville restaurant menus`,
-            duration: 4000,
+            title: "Menu Images Loaded",
+            description: `Displaying ${cachedResult.data.length} restaurant menu screenshots`,
           });
         } else {
-          const errorMsg = result.error || 'Unknown error during scraping';
-          console.error('Scraping failed:', errorMsg);
-          setError(errorMsg);
+          console.log('MenuBackgroundCollage: No cached menus found, attempting to scrape...');
+          // Only scrape if no cached data exists
+          const scrapeResult = await MenuScrapingService.scrapeNashvilleMenus();
           
-          toast({
-            title: "Failed to load real menus",
-            description: errorMsg,
-            variant: "destructive",
-            duration: 5000,
-          });
+          if (scrapeResult.success && scrapeResult.data) {
+            setScrapedMenus(scrapeResult.data);
+            // Save to localStorage as backup
+            MenuScrapingService.saveScrapedMenus(scrapeResult.data);
+            toast({
+              title: "Menu Images Scraped",
+              description: `Successfully scraped ${scrapeResult.data.length} restaurant menus`,
+            });
+          } else {
+            setError(scrapeResult.error || 'Failed to load menu images');
+            toast({
+              title: "Unable to Load Menu Images",
+              description: scrapeResult.error || 'Failed to load menu images',
+              variant: "destructive",
+            });
+          }
         }
       } catch (error) {
-        const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred';
-        console.error('Exception during menu scraping:', error);
-        setError(errorMsg);
-        
+        console.error('MenuBackgroundCollage: Error loading menus:', error);
+        setError('Failed to load menu images');
         toast({
-          title: "Error loading menus",
-          description: errorMsg,
+          title: "Error",
+          description: "Failed to load menu images",
           variant: "destructive",
-          duration: 5000,
         });
       } finally {
         setIsLoading(false);
-        console.log('=== MenuBackgroundCollage: Menu load process completed ===');
       }
     };
 
-    if (enabled) {
-      console.log('MenuBackgroundCollage enabled, starting load process');
-      loadMenus();
-    } else {
-      console.log('MenuBackgroundCollage disabled, skipping load');
-    }
+    loadMenus();
   }, [enabled, toast]);
 
   // Show loading state or error state
