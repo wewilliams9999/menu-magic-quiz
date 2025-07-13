@@ -18,58 +18,42 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
     const loadMenus = async () => {
       if (!enabled) return;
       
-      console.log('MenuBackgroundCollage: Loading menus...');
+      console.log('MenuBackgroundCollage: Loading cached menus...');
       setIsLoading(true);
       setError(null);
 
       try {
-        // First try to load cached menus (from database or localStorage)
+        // Load cached menus from database (populated by daily cron job)
         const cachedResult = await MenuScrapingService.loadCachedMenus();
         
-        if (cachedResult.success && cachedResult.data) {
+        if (cachedResult.success && cachedResult.data && cachedResult.data.length > 0) {
           console.log('MenuBackgroundCollage: Loaded cached menus successfully');
           setScrapedMenus(cachedResult.data);
-          toast({
-            title: "Menu Images Loaded",
-            description: `Displaying ${cachedResult.data.length} restaurant menu screenshots`,
-          });
+          setIsLoading(false);
+          return;
+        }
+
+        // If no cached menus, trigger initial scrape (one-time setup)
+        console.log('MenuBackgroundCollage: No cached menus found, triggering initial scrape...');
+        const scrapeResult = await MenuScrapingService.scrapeNashvilleMenus();
+        
+        if (scrapeResult.success && scrapeResult.data && scrapeResult.data.length > 0) {
+          setScrapedMenus(scrapeResult.data);
+          console.log('MenuBackgroundCollage: Initial scrape completed successfully');
         } else {
-          console.log('MenuBackgroundCollage: No cached menus found, attempting to scrape...');
-          // Only scrape if no cached data exists
-          const scrapeResult = await MenuScrapingService.scrapeNashvilleMenus();
-          
-          if (scrapeResult.success && scrapeResult.data) {
-            setScrapedMenus(scrapeResult.data);
-            // Save to localStorage as backup
-            MenuScrapingService.saveScrapedMenus(scrapeResult.data);
-            toast({
-              title: "Menu Images Scraped",
-              description: `Successfully scraped ${scrapeResult.data.length} restaurant menus`,
-            });
-          } else {
-            setError(scrapeResult.error || 'Failed to load menu images');
-            toast({
-              title: "Unable to Load Menu Images",
-              description: scrapeResult.error || 'Failed to load menu images',
-              variant: "destructive",
-            });
-          }
+          console.log('MenuBackgroundCollage: Scraping failed, will retry on next visit');
+          // Don't show error to user - just show clean background
         }
       } catch (error) {
         console.error('MenuBackgroundCollage: Error loading menus:', error);
-        setError('Failed to load menu images');
-        toast({
-          title: "Error",
-          description: "Failed to load menu images",
-          variant: "destructive",
-        });
+        // Don't show error to user - just show clean background
       } finally {
         setIsLoading(false);
       }
     };
 
     loadMenus();
-  }, [enabled, toast]);
+  }, [enabled]);
 
   // Show loading state or error state
   if (!enabled) {
