@@ -64,6 +64,14 @@ const handler = async (req: Request): Promise<Response> => {
 
         console.log(`Firecrawl API response status for ${url}:`, firecrawlResponse.status);
 
+        // Handle rate limiting specifically
+        if (firecrawlResponse.status === 429) {
+          const errorText = await firecrawlResponse.text();
+          console.warn(`Rate limit hit for ${url}:`, errorText);
+          errors.push(`${url}: Rate limit exceeded - please try again later`);
+          continue;
+        }
+
         if (!firecrawlResponse.ok) {
           const errorText = await firecrawlResponse.text();
           console.error(`Firecrawl API error for ${url}:`, errorText);
