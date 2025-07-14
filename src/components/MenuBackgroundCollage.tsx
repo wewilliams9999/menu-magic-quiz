@@ -66,11 +66,12 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
     ? scrapedMenus.map(menu => `data:image/png;base64,${menu.screenshot}`)
     : [];
 
-  console.log('Rendering with:', { 
+  console.log('MenuBackgroundCollage Rendering with:', { 
     isLoading, 
     error, 
     menuImagesCount: menuImages.length,
-    scrapedMenusCount: scrapedMenus.length 
+    scrapedMenusCount: scrapedMenus.length,
+    scrapedMenus: scrapedMenus.map(m => ({ url: m.url, hasScreenshot: !!m.screenshot }))
   });
 
   return (
