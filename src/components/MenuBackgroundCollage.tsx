@@ -110,7 +110,7 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
             <motion.div
               key={`fallback-${index}`}
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 0.06, scale: 1 }}
+              animate={{ opacity: 0.15, scale: 1 }}
               transition={{ delay: index * 0.3, duration: 1.5 }}
               className="absolute"
               style={{
