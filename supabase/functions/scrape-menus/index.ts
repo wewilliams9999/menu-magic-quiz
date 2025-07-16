@@ -58,8 +58,8 @@ const handler = async (req: Request): Promise<Response> => {
       try {
         console.log(`Starting scrape for: ${url}`);
         
-        // Call Firecrawl API to scrape the website
-        const firecrawlResponse = await fetch('https://api.firecrawl.dev/v0/scrape', {
+        // Call Firecrawl API to scrape the website with improved settings
+        const firecrawlResponse = await fetch('https://api.firecrawl.dev/v1/scrape', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${firecrawlApiKey}`,
@@ -67,9 +67,16 @@ const handler = async (req: Request): Promise<Response> => {
           },
           body: JSON.stringify({
             url: url,
-            formats: ['screenshot'],
-            screenshot: true,
-            waitFor: 2000
+            formats: ['screenshot', 'html'],
+            actions: [
+              {
+                type: 'wait',
+                milliseconds: 3000
+              }
+            ],
+            onlyMainContent: false,
+            includeTags: ['img', 'div', 'section'],
+            waitFor: 3000
           })
         });
 
@@ -97,6 +104,7 @@ const handler = async (req: Request): Promise<Response> => {
           success: result.success
         });
         
+        // Handle new Firecrawl v1 API response format
         if (result.success && result.data?.screenshot) {
           scrapedData.push({
             url: url,
