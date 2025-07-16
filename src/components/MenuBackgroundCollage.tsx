@@ -63,7 +63,7 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
 
   // Use scraped menu screenshots or fallback to gradient placeholders
   const menuImages = scrapedMenus.length > 0 
-    ? scrapedMenus.map(menu => menu.screenshot ? `data:image/png;base64,${menu.screenshot}` : null).filter(Boolean)
+    ? scrapedMenus.map(menu => menu.screenshot).filter(Boolean)
     : [];
     
   // If no real menu images, show decorative background elements
