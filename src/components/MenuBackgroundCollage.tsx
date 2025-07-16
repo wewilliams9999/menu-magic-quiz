@@ -42,16 +42,11 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
           console.log('MenuBackgroundCollage: Initial scrape completed successfully');
         } else {
           console.log('MenuBackgroundCollage: Scraping failed, showing fallback menu images');
-          // Use fallback menu images when scraping fails
-          setScrapedMenus([
-            { url: 'fallback1', screenshot: '', title: 'Nashville Menu', timestamp: new Date().toISOString() },
-            { url: 'fallback2', screenshot: '', title: 'Nashville Menu', timestamp: new Date().toISOString() },
-            { url: 'fallback3', screenshot: '', title: 'Nashville Menu', timestamp: new Date().toISOString() }
-          ]);
+          // Don't set fake menu data - let the component show decorative fallback
         }
       } catch (error) {
         console.error('MenuBackgroundCollage: Error loading menus:', error);
-        // Don't show error to user - just show clean background
+        // Don't set fake menu data - let the component show decorative fallback
       } finally {
         setIsLoading(false);
       }
