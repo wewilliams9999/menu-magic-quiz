@@ -67,16 +67,16 @@ const handler = async (req: Request): Promise<Response> => {
           },
           body: JSON.stringify({
             url: url,
-            formats: ['screenshot', 'html'],
+            formats: ['screenshot'],
+            waitFor: 3000,
+            timeout: 30000,
+            mobile: false,
             actions: [
               {
                 type: 'wait',
                 milliseconds: 3000
               }
-            ],
-            onlyMainContent: false,
-            includeTags: ['img', 'div', 'section'],
-            waitFor: 3000
+            ]
           })
         });
 
