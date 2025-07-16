@@ -71,6 +71,8 @@ export class MenuScrapingService {
 
       if (error) {
         console.error('Supabase function invoke error:', error);
+        // Set a fallback error message for the background component
+        localStorage.setItem('menu_scraping_error', error.message || 'Scraping failed');
         return { success: false, error: `Function call failed: ${error.message}` };
       }
 

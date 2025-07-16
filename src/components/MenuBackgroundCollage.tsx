@@ -41,8 +41,13 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
           setScrapedMenus(scrapeResult.data);
           console.log('MenuBackgroundCollage: Initial scrape completed successfully');
         } else {
-          console.log('MenuBackgroundCollage: Scraping failed, will retry on next visit');
-          // Don't show error to user - just show clean background
+          console.log('MenuBackgroundCollage: Scraping failed, showing fallback menu images');
+          // Use fallback menu images when scraping fails
+          setScrapedMenus([
+            { url: 'fallback1', screenshot: '', title: 'Nashville Menu', timestamp: new Date().toISOString() },
+            { url: 'fallback2', screenshot: '', title: 'Nashville Menu', timestamp: new Date().toISOString() },
+            { url: 'fallback3', screenshot: '', title: 'Nashville Menu', timestamp: new Date().toISOString() }
+          ]);
         }
       } catch (error) {
         console.error('MenuBackgroundCollage: Error loading menus:', error);
@@ -61,10 +66,13 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
     return null;
   }
 
-  // Use scraped menu screenshots
+  // Use scraped menu screenshots or fallback to gradient placeholders
   const menuImages = scrapedMenus.length > 0 
-    ? scrapedMenus.map(menu => `data:image/png;base64,${menu.screenshot}`)
+    ? scrapedMenus.map(menu => menu.screenshot ? `data:image/png;base64,${menu.screenshot}` : null).filter(Boolean)
     : [];
+    
+  // If no real menu images, show decorative background elements
+  const shouldShowFallback = menuImages.length === 0;
 
   console.log('MenuBackgroundCollage Rendering with:', { 
     isLoading, 
@@ -99,6 +107,40 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
           />
         </motion.div>
       ))}
+      
+      {/* Fallback decorative elements when no real menus */}
+      {shouldShowFallback && (
+        <>
+          {[...Array(6)].map((_, index) => (
+            <motion.div
+              key={`fallback-${index}`}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 0.06, scale: 1 }}
+              transition={{ delay: index * 0.3, duration: 1.5 }}
+              className="absolute"
+              style={{
+                left: `${(index % 3) * 30 + 15}%`,
+                top: `${Math.floor(index / 3) * 35 + 20}%`,
+                transform: `rotate(${(index % 2 === 0 ? 1 : -1) * (8 + index * 3)}deg)`,
+              }}
+            >
+              <div className="w-40 h-32 rounded-lg shadow-lg bg-gradient-to-br from-orange-500/20 to-red-600/20 border border-orange-400/30 backdrop-blur-sm">
+                <div className="p-3 h-full flex flex-col justify-between">
+                  <div className="space-y-1">
+                    <div className="h-2 bg-white/30 rounded w-3/4"></div>
+                    <div className="h-1 bg-white/20 rounded w-1/2"></div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="h-1 bg-white/20 rounded w-full"></div>
+                    <div className="h-1 bg-white/20 rounded w-2/3"></div>
+                    <div className="h-1 bg-white/20 rounded w-4/5"></div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </>
+      )}
       
       {/* Status indicators */}
       {scrapedMenus.length > 0 && (
