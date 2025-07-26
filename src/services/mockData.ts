@@ -16,7 +16,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://www.princeshotchicken.com",
       phone: "(615) 226-9442",
       coordinates: { latitude: 36.1945, longitude: -86.8027 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "budget-2", 
@@ -30,7 +30,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://www.mastacos.com",
       phone: "(615) 543-6271",
       coordinates: { latitude: 36.1836, longitude: -86.7311 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "budget-3",
@@ -44,7 +44,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://hattieb.com",
       phone: "(615) 678-4794",
       coordinates: { latitude: 36.1447, longitude: -86.7978 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "budget-4",
@@ -56,7 +56,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "Various locations throughout Nashville",
       features: ["Sliders", "24/7", "Drive-thru"],
       coordinates: { latitude: 36.1627, longitude: -86.7816 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "budget-5",
@@ -68,7 +68,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "Multiple Nashville locations",
       features: ["Sliders", "Late night", "Value meals"],
       coordinates: { latitude: 36.1535, longitude: -86.7743 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "budget-6",
@@ -80,7 +80,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "Various Nashville locations",
       features: ["Value menu", "Drive-thru", "Late night"],
       coordinates: { latitude: 36.1580, longitude: -86.7734 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "budget-7",
@@ -92,7 +92,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "Numerous Nashville locations",
       features: ["Dollar menu", "McCafe", "24/7"],
       coordinates: { latitude: 36.1612, longitude: -86.7775 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "budget-8",
@@ -104,7 +104,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "Multiple Nashville locations",
       features: ["$5 footlongs", "Fresh ingredients", "Healthy options"],
       coordinates: { latitude: 36.1598, longitude: -86.7752 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "budget-9",
@@ -116,7 +116,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "Various Nashville locations",
       features: ["4 for $4", "Fresh beef", "Frosty"],
       coordinates: { latitude: 36.1556, longitude: -86.7690 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "budget-10",
@@ -128,7 +128,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "Multiple Nashville locations", 
       features: ["$5 Fill Up", "Original recipe", "Family meals"],
       coordinates: { latitude: 36.1523, longitude: -86.7812 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "budget-11",
@@ -140,7 +140,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "Various Nashville locations",
       features: ["$5 Hot-N-Ready", "Crazy bread", "No wait"],
       coordinates: { latitude: 36.1489, longitude: -86.7665 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "budget-12",
@@ -152,7 +152,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "Several Nashville locations",
       features: ["Combo trays", "40+ milkshakes", "Late night"],
       coordinates: { latitude: 36.1445, longitude: -86.7756 },
-      isAlternative: true
+      isAlternative: false
     },
     // West Side Moderate Options ($$) - ADDED MORE
     {
@@ -167,7 +167,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://puckettsgrocery.com",
       phone: "(615) 298-5573",
       coordinates: { latitude: 36.1105, longitude: -86.8441 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "west-2",
@@ -181,7 +181,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://lovelesscafe.com",
       phone: "(615) 646-9700",
       coordinates: { latitude: 36.0668, longitude: -86.9127 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "west-3",
@@ -195,7 +195,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://firebirdsrestaurants.com",
       phone: "(615) 577-2356",
       coordinates: { latitude: 36.1063, longitude: -86.8147 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "west-4",
@@ -209,7 +209,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://whiskeykitchen.com",
       phone: "(615) 254-3029",
       coordinates: { latitude: 36.1063, longitude: -86.8147 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "west-5",
@@ -223,7 +223,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://tavernashville.com",
       phone: "(615) 320-8580",
       coordinates: { latitude: 36.1508, longitude: -86.8014 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "west-6",
@@ -236,7 +236,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       features: ["Steaks", "Seafood", "Full bar"],
       phone: "(615) 646-4002",
       coordinates: { latitude: 36.0962, longitude: -86.8758 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "west-7",
@@ -250,7 +250,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://sunsetgrill.com",
       phone: "(615) 386-3663",
       coordinates: { latitude: 36.1343, longitude: -86.8169 },
-      isAlternative: true
+      isAlternative: false
     },
     // Moderate options ($$)
     {
@@ -265,7 +265,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://pharmacyburger.com",
       phone: "(615) 712-9517",
       coordinates: { latitude: 36.1835, longitude: -86.7312 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "moderate-2",
@@ -279,7 +279,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://www.folkrestaurant.com",
       phone: "(615) 610-2595",
       coordinates: { latitude: 36.1886, longitude: -86.7434 },
-      isAlternative: true
+      isAlternative: false
     },
     {
       id: "moderate-3",
@@ -293,7 +293,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://butchertownhall.com",
       phone: "(615) 454-3634",
       coordinates: { latitude: 36.1795, longitude: -86.7841 },
-      isAlternative: true
+      isAlternative: false
     },
     // Higher-end options for variety ($$$)
     {
@@ -308,7 +308,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       website: "https://husknashville.com",
       phone: "(615) 256-6565",
       coordinates: { latitude: 36.1553, longitude: -86.7699 },
-      isAlternative: true
+      isAlternative: false
     }
   ];
 };
