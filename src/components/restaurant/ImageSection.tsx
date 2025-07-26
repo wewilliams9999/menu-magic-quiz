@@ -7,8 +7,8 @@ interface ImageSectionProps {
 }
 
 const ImageSection = ({ restaurant }: ImageSectionProps) => {
-  const [imageSrc, setImageSrc] = useState<string | null>(restaurant.logoUrl || restaurant.imageUrl || null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [imageSrc, setImageSrc] = useState<string | null>(restaurant.imageUrl || restaurant.logoUrl || null);
+  const [isLoading, setIsLoading] = useState(!!restaurant.imageUrl || !!restaurant.logoUrl);
   
   // Generate a fallback image URL based on the restaurant website
   const generateWebsiteImageUrl = (website: string | undefined): string | null => {
@@ -25,25 +25,41 @@ const ImageSection = ({ restaurant }: ImageSectionProps) => {
   
   // Handle image loading errors
   const handleImageError = () => {
-    if (restaurant.logoUrl && imageSrc === restaurant.logoUrl && restaurant.imageUrl) {
-      // If logo fails, try the restaurant image
-      console.log(`Logo failed for ${restaurant.name}, trying restaurant image`);
+    console.log(`Image failed for ${restaurant.name}, current src:`, imageSrc);
+    
+    if (restaurant.imageUrl && imageSrc !== restaurant.imageUrl) {
+      // Try restaurant image if not already tried
+      console.log(`Trying restaurant imageUrl for ${restaurant.name}`);
       setImageSrc(restaurant.imageUrl);
+    } else if (restaurant.logoUrl && imageSrc !== restaurant.logoUrl) {
+      // Try logo if not already tried
+      console.log(`Trying logoUrl for ${restaurant.name}`);
+      setImageSrc(restaurant.logoUrl);
     } else if (restaurant.website) {
-      // If both logo and image fail or aren't available, try website favicon
-      console.log(`Images failed for ${restaurant.name}, trying website favicon`);
+      // Try website favicon as last resort
+      console.log(`Trying website favicon for ${restaurant.name}`);
       const websiteImage = generateWebsiteImageUrl(restaurant.website);
       setImageSrc(websiteImage);
     } else {
-      // If all else fails, set to null to show a placeholder
+      // If all else fails, set to null to show placeholder
+      console.log(`All image options failed for ${restaurant.name}, showing placeholder`);
       setImageSrc(null);
+      setIsLoading(false);
     }
   };
   
   useEffect(() => {
     // Reset image source and loading state when restaurant changes
-    setImageSrc(restaurant.logoUrl || restaurant.imageUrl || null);
-    setIsLoading(true);
+    const newImageSrc = restaurant.imageUrl || restaurant.logoUrl || null;
+    setImageSrc(newImageSrc);
+    setIsLoading(!!newImageSrc);
+    
+    console.log(`Loading image for ${restaurant.name}:`, {
+      imageUrl: restaurant.imageUrl,
+      logoUrl: restaurant.logoUrl,
+      website: restaurant.website,
+      selectedSrc: newImageSrc
+    });
   }, [restaurant]);
   
   return (

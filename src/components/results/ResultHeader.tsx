@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 
@@ -18,12 +17,12 @@ const ResultHeader = ({
   displayedResults 
 }: ResultHeaderProps) => {
   return (
-    <div className="text-center mb-10">
+    <div className="text-center mb-4">
       <motion.div 
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.5 }}
-        className="inline-flex items-center justify-center p-3 rounded-full mb-5"
+        className="inline-flex items-center justify-center p-2 rounded-full mb-3"
       >
         <div className="relative">
           <span className="text-red-500 text-4xl">✦</span>
@@ -37,7 +36,7 @@ const ResultHeader = ({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className="text-3xl md:text-4xl font-bold mb-3 text-red-500"
+        className="text-2xl md:text-3xl font-bold mb-2 text-red-500"
       >
         {isSingleResult 
           ? "Your Nashville Restaurant Match" 
