@@ -23,6 +23,7 @@ export const neighborhoodOptions: QuizOption[] = [
   { id: "neighborhood-13", text: "Berry Hill", value: "berry-hill" },
   { id: "neighborhood-10", text: "Bordeaux", value: "bordeaux" },
   { id: "neighborhood-16", text: "Brentwood", value: "brentwood" },
+  { id: "neighborhood-24", text: "Cool Springs", value: "cool-springs" },
   { id: "neighborhood-19", text: "Crieve Hall", value: "crieve-hall" },
   { id: "neighborhood-1", text: "Downtown", value: "downtown" },
   { id: "neighborhood-6", text: "East Nashville", value: "east" },
