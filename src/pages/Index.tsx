@@ -1,7 +1,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import MenuBackgroundCollage from "@/components/MenuBackgroundCollage";
+
 
 const Index = () => {
   const navigate = useNavigate();
@@ -10,16 +10,11 @@ const Index = () => {
     navigate("/welcome");
   };
   
-  // Easy toggle - set this to false to disable the menu background
-  const showMenuBackground = true;
-  
   return (
     <div 
-      className="min-h-screen flex flex-col items-center justify-center relative cursor-pointer"
+      className="min-h-screen flex flex-col items-center justify-center relative cursor-pointer bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"
       onClick={handleClick}
     >
-      {/* Menu Background Collage - easily toggleable */}
-      <MenuBackgroundCollage enabled={showMenuBackground} />
       
       {/* Logo Background with improved sizing for cross-browser compatibility */}
       <div 
