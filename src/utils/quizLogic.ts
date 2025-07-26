@@ -50,7 +50,7 @@ export const processAnswersForAPI = (answers: Record<string, any>) => {
     : (answers.cuisine ? [answers.cuisine as string] : []);
   
   // Get distance value for location-based search
-  const distance = typeof answers.distance === 'number' ? answers.distance : undefined;
+  const distance = answers.distance ? Number(answers.distance) : undefined;
 
   return {
     neighborhoods: neighborhoods.length > 0 ? neighborhoods : undefined,

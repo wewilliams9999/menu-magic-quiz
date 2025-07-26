@@ -376,6 +376,10 @@ export const getFilteredFallbackRestaurants = (params?: {
   
   // Calculate distances and filter by distance if user location is provided
   if (params.userLocation && params.distance) {
+    console.log(`=== DISTANCE FILTERING DEBUG ===`);
+    console.log(`User location:`, params.userLocation);
+    console.log(`Requested distance: ${params.distance} miles`);
+    
     restaurants = restaurants.map(restaurant => {
       if (restaurant.coordinates) {
         const distance = calculateDistance(
@@ -384,22 +388,33 @@ export const getFilteredFallbackRestaurants = (params?: {
           restaurant.coordinates.latitude,
           restaurant.coordinates.longitude
         );
+        console.log(`${restaurant.name} (${restaurant.neighborhood}): ${distance.toFixed(2)} miles`);
         return { ...restaurant, distanceFromUser: distance };
       }
       // For restaurants without coordinates, assign a reasonable distance for multiple location chains
       const isChain = restaurant.neighborhood === "Multiple Locations";
+      const assumedDistance = isChain ? 1.5 : undefined;
+      console.log(`${restaurant.name} (${restaurant.neighborhood}): ${assumedDistance || 'unknown'} miles (assumed)`);
       return { 
         ...restaurant, 
-        distanceFromUser: isChain ? 1.5 : undefined // Assume chains are typically within 1.5 miles
+        distanceFromUser: assumedDistance
       };
     });
     
     // Filter by distance and sort by proximity
+    const beforeFilter = restaurants.length;
     restaurants = restaurants
       .filter(r => !r.distanceFromUser || r.distanceFromUser <= params.distance!)
       .sort((a, b) => (a.distanceFromUser || 999) - (b.distanceFromUser || 999));
     
-    console.log(`Filtered by distance (${params.distance} miles): ${restaurants.length} restaurants`);
+    console.log(`Before distance filter: ${beforeFilter} restaurants`);
+    console.log(`After distance filter (${params.distance} miles): ${restaurants.length} restaurants`);
+    console.log(`Filtered restaurants:`, restaurants.map(r => ({ 
+      name: r.name, 
+      neighborhood: r.neighborhood, 
+      distance: r.distanceFromUser?.toFixed(2) + ' miles' 
+    })));
+    console.log(`=== END DISTANCE FILTERING DEBUG ===`);
   }
   
   // Score and sort by preference matches, but maintain some randomization
