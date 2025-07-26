@@ -36,13 +36,8 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
           hasPrice
         });
         
-        // If we don't have any search criteria, return fallback data
-        if (!hasNeighborhoods && !hasLocation && !hasCuisine && !hasPrice) {
-          console.log("No search criteria provided, using fallback data");
-          const fallbackData = getFallbackRestaurants();
-          console.log("Fallback data returned:", fallbackData);
-          return fallbackData;
-        }
+        // ALWAYS try the API first, only use fallback if API fails
+        console.log("🔄 CALLING API FIRST (not checking criteria anymore)");
         
         // Prepare API parameters
         const apiParams: RestaurantApiParams = {
