@@ -24,7 +24,7 @@ const NeighborhoodSelector = ({
   useUserLocation = false,
 }: NeighborhoodSelectorProps) => {
   const isMobile = useIsMobile();
-  const [activeTab, setActiveTab] = useState<"map" | "list">("map");
+  const [activeTab, setActiveTab] = useState<"map" | "list">("list");
   const [searchQuery, setSearchQuery] = useState("");
   
   const neighborhoodOptions = neighborhoods.map(neighborhood => ({
@@ -64,7 +64,7 @@ const NeighborhoodSelector = ({
         </motion.div>
       )}
       
-      <Tabs defaultValue="map" value={activeTab} onValueChange={(val) => setActiveTab(val as "map" | "list")} className="w-full">
+      <Tabs defaultValue="list" value={activeTab} onValueChange={(val) => setActiveTab(val as "map" | "list")} className="w-full">
         <div className="flex justify-between items-center mb-4">
           <TabsList className="grid grid-cols-2 w-40">
             <TabsTrigger value="map" className="flex items-center gap-1.5">
