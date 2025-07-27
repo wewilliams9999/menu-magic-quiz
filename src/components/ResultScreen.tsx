@@ -117,7 +117,7 @@ const ResultScreen = ({ results, onReset, onRetry, isLoading = false, requestedD
 
       {/* Add banner ad after header */}
       {safeResults.length > 0 && (
-        <BannerAd className="mb-8" />
+        <BannerAd className="mb-2" />
       )}
 
       {safeResults.length > 0 ? (

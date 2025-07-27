@@ -101,9 +101,17 @@ function extractNeighborhood(place: GooglePlaceResult): string {
 }
 
 function getPhotoUrl(place: GooglePlaceResult, apiKey: string): string | undefined {
-  return place.photos?.length > 0 
+  const photoUrl = place.photos?.length > 0 
     ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${apiKey}`
     : undefined;
+  
+  console.log(`Photo URL for ${place.name}:`, {
+    hasPhotos: !!place.photos?.length,
+    photoUrl,
+    photoReference: place.photos?.[0]?.photo_reference
+  });
+  
+  return photoUrl;
 }
 
 function extractFeatures(place: GooglePlaceResult): string[] {
