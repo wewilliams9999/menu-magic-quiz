@@ -12,7 +12,7 @@ const Index = () => {
   
   return (
     <div 
-      className="min-h-screen flex flex-col items-center justify-center relative cursor-pointer dive-bar-bg"
+      className="min-h-screen flex flex-col items-center justify-center relative cursor-pointer bg-black"
       onClick={handleClick}
     >
       
