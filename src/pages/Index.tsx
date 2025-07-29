@@ -12,7 +12,7 @@ const Index = () => {
   
   return (
     <div 
-      className="min-h-screen flex flex-col items-center justify-center relative cursor-pointer bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"
+      className="min-h-screen flex flex-col items-center justify-center relative cursor-pointer bg-gradient-to-br from-slate-900 via-red-900 to-slate-900"
       onClick={handleClick}
     >
       
