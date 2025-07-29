@@ -12,7 +12,7 @@ const Index = () => {
   
   return (
     <div 
-      className="min-h-screen flex flex-col items-center justify-center relative cursor-pointer bg-gradient-to-br from-slate-900 via-red-900 to-slate-900"
+      className="min-h-screen flex flex-col items-center justify-center relative cursor-pointer dive-bar-bg"
       onClick={handleClick}
     >
       
@@ -21,10 +21,10 @@ const Index = () => {
         className="absolute inset-0 flex items-center justify-center z-10"
       >
         <div 
-          className="w-[80vmin] h-[80vmin] bg-center bg-contain bg-no-repeat"
+          className="w-[80vmin] h-[80vmin] bg-center bg-contain bg-no-repeat neon-glow"
           style={{
             backgroundImage: `url("/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png")`,
-            filter: 'contrast(1.2) brightness(1.1)'
+            filter: 'contrast(1.3) brightness(1.2) drop-shadow(0 0 30px rgba(255, 120, 0, 0.8))'
           }}
         />
       </div>
