@@ -25,7 +25,7 @@ const Index = () => {
           alt="Logo"
           className="w-[70vmin] h-[70vmin] object-contain"
           style={{
-            filter: 'contrast(1.3) brightness(1.4) drop-shadow(0 0 20px rgba(139, 0, 0, 0.8))'
+            filter: 'contrast(1.3) brightness(1.4)'
           }}
         />
       </div>
