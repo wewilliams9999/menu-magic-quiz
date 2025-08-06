@@ -14,6 +14,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "123 Ewing Dr, Nashville, TN 37207",
       features: ["Hot chicken", "Cash only", "Local legend"],
       website: "https://www.princeshotchicken.com",
+      resyLink: "https://resy.com/cities/bna/venues/princes-hot-chicken-shack",
       phone: "(615) 226-9442",
       coordinates: { latitude: 36.1945, longitude: -86.8027 },
       isAlternative: false
@@ -28,6 +29,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "732 McFerrin Ave, Nashville, TN 37206",
       features: ["Street tacos", "Casual dining", "Great value"],
       website: "https://www.mastacos.com",
+      openTableLink: "https://www.opentable.com/r/mas-tacos-por-favor-nashville",
       phone: "(615) 543-6271",
       coordinates: { latitude: 36.1836, longitude: -86.7311 },
       isAlternative: false
@@ -42,6 +44,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "112 19th Ave S, Nashville, TN 37203",
       features: ["Hot chicken", "Multiple locations", "Tourist favorite"],
       website: "https://hattieb.com",
+      resyLink: "https://resy.com/cities/bna/venues/hattie-bs-hot-chicken",
       phone: "(615) 678-4794",
       coordinates: { latitude: 36.1447, longitude: -86.7978 },
       isAlternative: false
@@ -165,6 +168,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "4142 Harding Pike, Nashville, TN 37205",
       features: ["Comfort food", "Live music", "Historic setting"],
       website: "https://puckettsgrocery.com",
+      openTableLink: "https://www.opentable.com/r/pucketts-grocery-restaurant-nashville",
       phone: "(615) 298-5573",
       coordinates: { latitude: 36.1105, longitude: -86.8441 },
       isAlternative: false
@@ -179,6 +183,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "8400 Highway 100, Nashville, TN 37221",
       features: ["Famous biscuits", "Country ham", "Nashville institution"],
       website: "https://lovelesscafe.com",
+      resyLink: "https://resy.com/cities/bna/venues/the-loveless-cafe",
       phone: "(615) 646-9700",
       coordinates: { latitude: 36.0668, longitude: -86.9127 },
       isAlternative: false
@@ -193,6 +198,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "2120 Abbott Martin Rd, Nashville, TN 37215",
       features: ["Wood-fired grill", "Steaks", "Seafood"],
       website: "https://firebirdsrestaurants.com",
+      openTableLink: "https://www.opentable.com/r/firebirds-wood-fired-grill-nashville",
       phone: "(615) 577-2356",
       coordinates: { latitude: 36.1063, longitude: -86.8147 },
       isAlternative: false
@@ -263,6 +269,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "731 McFerrin Ave, Nashville, TN 37206", 
       features: ["Craft burgers", "Milkshakes", "Unique atmosphere"],
       website: "https://pharmacyburger.com",
+      resyLink: "https://resy.com/cities/bna/venues/pharmacy-burger-parlor",
       phone: "(615) 712-9517",
       coordinates: { latitude: 36.1835, longitude: -86.7312 },
       isAlternative: false
@@ -277,6 +284,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "823 Meridian St, Nashville, TN 37207",
       features: ["Wood-fired pizza", "Vegetarian options", "Weekend brunch"],
       website: "https://www.folkrestaurant.com",
+      openTableLink: "https://www.opentable.com/r/folk-restaurant-nashville",
       phone: "(615) 610-2595",
       coordinates: { latitude: 36.1886, longitude: -86.7434 },
       isAlternative: false
@@ -306,6 +314,7 @@ export const getFallbackRestaurants = (): QuizResult[] => {
       address: "37 Rutledge St, Nashville, TN 37210",
       features: ["Farm-to-table", "Historic setting", "Seasonal menu"],
       website: "https://husknashville.com",
+      resyLink: "https://resy.com/cities/bna/venues/husk-nashville",
       phone: "(615) 256-6565",
       coordinates: { latitude: 36.1553, longitude: -86.7699 },
       isAlternative: false
