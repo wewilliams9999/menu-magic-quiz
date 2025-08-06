@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Music } from "lucide-react";
+import { Utensils } from "lucide-react";
 
 const WelcomePage = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const WelcomePage = () => {
             onClick={() => navigate("/quiz")} 
             className="bg-transparent border-2 border-red-500 text-red-500 hover:bg-red-500/10 px-8 py-6 text-lg neon-box"
           >
-            <Music className="mr-2" />
+            <Utensils className="mr-2" />
             Find My Perfect Nashville Restaurant
           </Button>
         </motion.div>
