@@ -83,13 +83,13 @@ const ResultScreen = ({ results, onReset, onRetry, isLoading = false, requestedD
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-4xl mx-auto px-4"
+      className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
       >
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-red-500">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-red-500 leading-tight">
             Finding Your Perfect Nashville Restaurants...
           </h1>
-          <p className="text-zinc-300 text-lg">
+          <p className="text-zinc-300 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto">
             We're searching for the best matches based on your preferences.
           </p>
         </div>
@@ -105,7 +105,7 @@ const ResultScreen = ({ results, onReset, onRetry, isLoading = false, requestedD
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.6 }}
-      className="w-full max-w-4xl mx-auto px-4"
+      className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
     >
       <ResultHeader
         isSingleResult={isSingleResult}

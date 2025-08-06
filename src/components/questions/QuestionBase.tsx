@@ -31,36 +31,36 @@ const QuestionBase = ({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}
       transition={{ duration: 0.4 }}
-      className="w-full max-w-3xl mx-auto px-4"
+      className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
     >
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-red-200">Question {currentIndex + 1} of {totalQuestions}</span>
-          <span className="text-sm font-medium text-red-200">{Math.round(((currentIndex + 1) / totalQuestions) * 100)}% Complete</span>
+      <div className="mb-6 sm:mb-8">
+        <div className="flex items-center justify-between mb-2 text-xs sm:text-sm">
+          <span className="font-medium text-red-200">Question {currentIndex + 1} of {totalQuestions}</span>
+          <span className="font-medium text-red-200">{Math.round(((currentIndex + 1) / totalQuestions) * 100)}% Complete</span>
         </div>
-        <div className="w-full bg-gray-700 rounded-full h-2.5 overflow-hidden">
+        <div className="w-full bg-gray-700 rounded-full h-2 sm:h-2.5 overflow-hidden">
           <motion.div
             initial={{ width: `${(currentIndex / totalQuestions) * 100}%` }}
             animate={{ width: `${((currentIndex + 1) / totalQuestions) * 100}%` }}
-            className="bg-gradient-to-r from-red-500 to-red-400 h-2.5 rounded-full"
+            className="bg-gradient-to-r from-red-500 to-red-400 h-2 sm:h-2.5 rounded-full"
           ></motion.div>
         </div>
       </div>
 
-      <div className="text-center mb-6">
-        <h2 className="text-3xl md:text-4xl font-bold mb-3 text-red-500">
+      <div className="text-center mb-4 sm:mb-6">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 text-red-500 leading-tight">
           {questionText}
         </h2>
         {description && (
-          <p className="text-white text-opacity-90">{description}</p>
+          <p className="text-white text-opacity-90 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto">{description}</p>
         )}
       </div>
 
       {/* Navigation buttons with updated styling */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-0 mb-6 sm:mb-8">
         <Button 
           onClick={onPrevious}
-          className="bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300"
+          className="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300 px-4 sm:px-6 py-3 sm:py-2 touch-manipulation"
         >
           <ChevronLeft className="mr-2 h-4 w-4" />
           Previous
@@ -68,7 +68,7 @@ const QuestionBase = ({
         <Button 
           onClick={onNext}
           disabled={isNextDisabled}
-          className="bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none"
+          className="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none px-4 sm:px-6 py-3 sm:py-2 touch-manipulation"
         >
           {currentIndex === totalQuestions - 1 ? (
             "See Results"

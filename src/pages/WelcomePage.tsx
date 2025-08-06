@@ -16,13 +16,13 @@ const WelcomePage = () => {
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         transition={{ duration: 1.2 }} 
-        className="text-center max-w-2xl mx-auto px-4 py-12 z-10 relative"
+        className="text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 z-10 relative"
       >
         <motion.h1 
           initial={{ y: -20, opacity: 0 }} 
           animate={{ y: 0, opacity: 1 }} 
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="text-4xl md:text-5xl font-bold mb-6 text-red-500"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-red-500 leading-tight"
         >
           Nashville Restaurant Finder
         </motion.h1>
@@ -31,7 +31,7 @@ const WelcomePage = () => {
           initial={{ y: 10, opacity: 0 }} 
           animate={{ y: 0, opacity: 1 }} 
           transition={{ delay: 0.7, duration: 0.6 }} 
-          className="mt-4 text-white mb-8 text-xl"
+          className="mt-2 sm:mt-4 text-white mb-6 sm:mb-8 text-lg sm:text-xl lg:text-2xl max-w-2xl mx-auto"
         >
           Answer a few questions and discover Nashville restaurants you'll love.
         </motion.p>
@@ -42,13 +42,16 @@ const WelcomePage = () => {
           transition={{ delay: 0.9, duration: 0.6 }} 
           whileHover={{ scale: 1.05 }} 
           whileTap={{ scale: 0.98 }}
+          className="w-full max-w-sm sm:max-w-md mx-auto"
         >
           <Button 
             onClick={() => navigate("/quiz")} 
-            className="bg-transparent border-2 border-red-500 text-red-500 hover:bg-red-500/10 px-8 py-6 text-lg neon-box"
+            className="w-full sm:w-auto bg-transparent border-2 border-red-500 text-red-500 hover:bg-red-500/10 px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg neon-box min-h-[56px] touch-manipulation"
           >
-            <Utensils className="mr-2" />
-            Find My Perfect Nashville Restaurant
+            <Utensils className="mr-2 w-5 h-5 sm:w-6 sm:h-6" />
+            <span className="whitespace-nowrap overflow-hidden text-ellipsis">
+              Find My Perfect Nashville Restaurant
+            </span>
           </Button>
         </motion.div>
       </motion.div>

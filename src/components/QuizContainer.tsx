@@ -70,7 +70,7 @@ const QuizContainer = () => {
   const requestedDistance = typeof answers.distance === 'number' ? answers.distance : undefined;
 
   return (
-    <div className="min-h-[80vh] flex flex-col justify-center bg-gradient-to-b from-black to-gray-900 text-white p-4">
+    <div className="min-h-screen sm:min-h-[80vh] flex flex-col justify-center bg-gradient-to-b from-black to-gray-900 text-white p-4 sm:p-6 lg:p-8">
       <AnimatePresence mode="wait">
         {currentScreen === "location" && (
           <LocationSelectionScreen 

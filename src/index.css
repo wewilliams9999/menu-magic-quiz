@@ -163,10 +163,58 @@
   }
 }
 
+/* Mobile-first responsive improvements */
+@media (max-width: 640px) {
+  .text-responsive {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+  }
+  
+  .text-responsive-lg {
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+  }
+  
+  .text-responsive-xl {
+    font-size: clamp(2rem, 8vw, 4rem);
+  }
+}
+
+/* Touch-friendly interactions */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Better button styling for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .hover\:scale-105:hover {
+    transform: none;
+  }
+  
+  .hover\:bg-red-500\/10:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+  }
+}
+
+/* Improved scrolling on mobile */
+@supports (-webkit-overflow-scrolling: touch) {
+  .scroll-smooth {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 /* Reset styles for App.css - no need to include all App.css code here*/
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0;
   text-align: center;
+}
+
+/* Ensure minimum touch target sizes on mobile */
+@media (max-width: 640px) {
+  button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }

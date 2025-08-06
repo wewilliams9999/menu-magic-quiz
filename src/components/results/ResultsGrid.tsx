@@ -19,7 +19,7 @@ const ResultsGrid = ({ results }: ResultsGridProps) => {
       // Insert ad after every 3rd restaurant (but not after the last one)
       if ((index + 1) % 3 === 0 && index < results.length - 1) {
         items.push(
-          <div key={`ad-${index}`} className="md:col-span-2">
+          <div key={`ad-${index}`} className="md:col-span-2 lg:col-span-3">
             <NativeAd />
           </div>
         );
@@ -30,7 +30,7 @@ const ResultsGrid = ({ results }: ResultsGridProps) => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
       {renderWithAds()}
     </div>
   );
