@@ -20,18 +20,14 @@ const Index = () => {
       <div 
         className="absolute inset-0 flex items-center justify-center z-10"
       >
-        <div 
-          className="w-[40vmin] h-[40vmin] rounded-full overflow-hidden flex items-center justify-center"
+        <img 
+          src="/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png"
+          alt="Logo"
+          className="w-[70vmin] h-[70vmin] object-contain"
           style={{
-            filter: 'drop-shadow(0 0 30px rgba(139, 0, 0, 0.9))'
+            filter: 'contrast(1.3) brightness(1.4) drop-shadow(0 0 20px rgba(139, 0, 0, 0.8))'
           }}
-        >
-          <img 
-            src="/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png"
-            alt="Logo"
-            className="w-[120%] h-[120%] object-cover object-center"
-          />
-        </div>
+        />
       </div>
       
       {/* Immediate instruction to click with subtle pulse animation */}
