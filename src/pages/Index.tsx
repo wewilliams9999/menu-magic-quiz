@@ -29,12 +29,12 @@ const Index = () => {
         />
       </div>
       
-      {/* Subtle indication to click */}
+      {/* Immediate instruction to click with subtle pulse animation */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.7 }}
-        transition={{ delay: 1.5, duration: 1 }}
-        className="text-white text-xl z-20"
+        animate={{ opacity: 0.8 }}
+        transition={{ duration: 0.8 }}
+        className="text-white text-lg sm:text-xl z-20 mt-8 animate-pulse"
       >
         Click anywhere to continue
       </motion.div>
