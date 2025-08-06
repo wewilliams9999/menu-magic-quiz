@@ -20,10 +20,11 @@ const Index = () => {
       <div 
         className="absolute inset-0 flex items-center justify-center z-10"
       >
-        <div 
-          className="w-[80vmin] h-[80vmin] bg-center bg-contain bg-no-repeat neon-glow"
+        <img 
+          src="/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png"
+          alt="Logo"
+          className="w-[60vmin] h-[60vmin] object-contain"
           style={{
-            backgroundImage: `url("/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png")`,
             filter: 'contrast(1.3) brightness(1.2) drop-shadow(0 0 30px rgba(139, 0, 0, 0.9))'
           }}
         />
