@@ -90,13 +90,36 @@ function getCuisineFromTypes(types: string[]): string {
 }
 
 function extractNeighborhood(place: GooglePlaceResult): string {
+  // Try to extract neighborhood from vicinity or formatted_address
   let neighborhood = "Nashville";
-  if (place.plus_code && place.plus_code.compound_code) {
+  
+  // First try vicinity (more specific location)
+  if (place.vicinity) {
+    const vicinity = place.vicinity.trim();
+    if (vicinity && vicinity !== "Nashville") {
+      neighborhood = vicinity;
+    }
+  }
+  
+  // If still generic, try formatted_address
+  if (neighborhood === "Nashville" && place.formatted_address) {
+    const addressParts = place.formatted_address.split(',');
+    if (addressParts.length >= 2) {
+      const possibleNeighborhood = addressParts[1].trim();
+      if (possibleNeighborhood && !possibleNeighborhood.includes('TN') && !possibleNeighborhood.includes('Tennessee')) {
+        neighborhood = possibleNeighborhood;
+      }
+    }
+  }
+  
+  // Fallback to plus_code if still generic
+  if (neighborhood === "Nashville" && place.plus_code && place.plus_code.compound_code) {
     const addressParts = place.plus_code.compound_code.split(',');
     if (addressParts.length > 0) {
       neighborhood = addressParts[0].replace(/^[^ ]+ /, '');  // Remove the plus code
     }
   }
+  
   return neighborhood;
 }
 

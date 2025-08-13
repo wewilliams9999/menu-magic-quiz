@@ -85,7 +85,7 @@ const ResultScreen = ({ results, onReset, onRetry, isLoading = false, requestedD
         transition={{ duration: 0.6 }}
       className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
       >
-        <div className="text-center mb-6 sm:mb-8">
+        <div className="text-center mb-4 sm:mb-6">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-red-500 leading-tight">
             Finding Your Perfect Nashville Restaurants...
           </h1>
