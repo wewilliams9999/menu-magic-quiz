@@ -97,33 +97,31 @@ const PreferencesQuestion = ({ options, selectedAnswers, onSelect }: Preferences
     // Special handling for dietary and price questions to ensure 2x2 layout
     return (
       <div className="bg-white/5 dark:bg-black/5 backdrop-blur-sm rounded-xl p-6 border border-nashville-200 dark:border-nashville-800 shadow-lg">
-        <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 justify-items-center">
           {options.map((option) => (
             <div 
               key={option.id}
-              className={`flex items-start space-x-3 p-3 rounded-lg hover:bg-nashville-100/50 dark:hover:bg-nashville-800/50 transition-colors`}
+              className={`flex flex-col items-center space-y-2 p-4 rounded-lg hover:bg-nashville-100/50 dark:hover:bg-nashville-800/50 transition-colors w-full text-center`}
             >
-              <Checkbox 
-                id={option.id}
-                checked={selectedAnswers.includes(option.value)}
-                onCheckedChange={(checked) => {
-                  handleMultiSelectChange(option.value, checked === true);
-                }}
-                className="mt-1 data-[state=checked]:bg-nashville-accent data-[state=checked]:border-nashville-accent"
-              />
-              <div className="flex-1 space-y-1">
-                <div className="flex items-center space-x-2">
-                  <div className={`text-nashville-accent ${selectedAnswers.includes(option.value) ? 'opacity-100' : 'opacity-70'}`}>
-                    {getPreferenceIcon(option.value)}
-                  </div>
-                  <Label
-                    htmlFor={option.id}
-                    className="text-base font-medium cursor-pointer"
-                  >
-                    {option.text}
-                  </Label>
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id={option.id}
+                  checked={selectedAnswers.includes(option.value)}
+                  onCheckedChange={(checked) => {
+                    handleMultiSelectChange(option.value, checked === true);
+                  }}
+                  className="data-[state=checked]:bg-nashville-accent data-[state=checked]:border-nashville-accent"
+                />
+                <div className={`text-nashville-accent ${selectedAnswers.includes(option.value) ? 'opacity-100' : 'opacity-70'}`}>
+                  {getPreferenceIcon(option.value)}
                 </div>
               </div>
+              <Label
+                htmlFor={option.id}
+                className="text-sm font-medium cursor-pointer text-center leading-tight"
+              >
+                {option.text}
+              </Label>
             </div>
           ))}
         </div>
