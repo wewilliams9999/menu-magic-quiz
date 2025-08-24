@@ -26,29 +26,42 @@ const QuestionBase = ({
 }: QuestionBaseProps) => {
   return (
     <div className="relative">
-      {/* Subtle animated background elements */}
+      {/* Cozy floating elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{ 
-            rotate: 360,
-            scale: [1, 1.1, 1]
+            y: [-10, 10, -10],
+            rotate: [0, 5, 0, -5, 0]
           }}
           transition={{ 
-            rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-            scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+            duration: 8, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
           }}
-          className="absolute -top-20 -right-20 w-40 h-40 bg-red-500/5 rounded-full blur-xl"
+          className="absolute top-10 right-10 w-32 h-32 bg-gradient-to-br from-cozy-peach/20 to-cozy-pink/20 rounded-full blur-2xl"
         />
         <motion.div
           animate={{ 
-            rotate: -360,
-            scale: [1, 1.2, 1]
+            y: [10, -10, 10],
+            scale: [1, 1.1, 1]
           }}
           transition={{ 
-            rotate: { duration: 25, repeat: Infinity, ease: "linear" },
-            scale: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+            duration: 6, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
           }}
-          className="absolute -bottom-20 -left-20 w-60 h-60 bg-red-500/3 rounded-full blur-2xl"
+          className="absolute bottom-10 left-10 w-48 h-48 bg-gradient-to-br from-cozy-warm/15 to-cozy-cream/15 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{ 
+            rotate: 360
+          }}
+          transition={{ 
+            duration: 30, 
+            repeat: Infinity, 
+            ease: "linear" 
+          }}
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-cozy-peach/5 via-cozy-pink/5 to-cozy-warm/5 rounded-full blur-3xl"
         />
       </div>
 
@@ -68,25 +81,26 @@ const QuestionBase = ({
         >
           <div className="flex items-center justify-between mb-2 text-xs sm:text-sm">
             <motion.span 
-              className="font-medium text-red-200"
+              className="font-semibold text-primary/80"
               animate={{ opacity: [0.8, 1, 0.8] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             >
               Question {currentIndex + 1} of {totalQuestions}
             </motion.span>
-            <span className="font-medium text-red-200">{Math.round(((currentIndex + 1) / totalQuestions) * 100)}% Complete</span>
+            <span className="font-semibold text-primary/80">{Math.round(((currentIndex + 1) / totalQuestions) * 100)}% Complete</span>
           </div>
-          <div className="w-full bg-gray-700/50 backdrop-blur-sm rounded-full h-2 sm:h-2.5 overflow-hidden border border-red-500/10">
+          <div className="w-full bg-muted/30 backdrop-blur-sm rounded-full h-3 overflow-hidden border border-primary/20 shadow-inner">
             <motion.div
               initial={{ width: `${(currentIndex / totalQuestions) * 100}%` }}
               animate={{ width: `${((currentIndex + 1) / totalQuestions) * 100}%` }}
-              className="bg-gradient-to-r from-red-500 via-red-400 to-red-300 h-2 sm:h-2.5 rounded-full relative overflow-hidden"
+              className="bg-gradient-to-r from-cozy-peach via-cozy-pink to-cozy-warm h-3 rounded-full relative overflow-hidden shadow-lg"
             >
               <motion.div
                 animate={{ x: ['0%', '100%'] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-full"></div>
             </motion.div>
           </div>
         </motion.div>
@@ -98,21 +112,17 @@ const QuestionBase = ({
           transition={{ delay: 0.3, duration: 0.5 }}
         >
           <motion.h2 
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 text-red-500 leading-tight"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 cozy-text leading-tight"
             animate={{ 
-              textShadow: [
-                "0 0 20px rgba(239, 68, 68, 0.5)",
-                "0 0 40px rgba(239, 68, 68, 0.3)",
-                "0 0 20px rgba(239, 68, 68, 0.5)"
-              ]
+              scale: [1, 1.02, 1]
             }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
             {questionText}
           </motion.h2>
           {description && (
             <motion.p 
-              className="text-white text-opacity-90 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto"
+              className="text-muted-foreground text-sm sm:text-base lg:text-lg max-w-2xl mx-auto"
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.9 }}
               transition={{ delay: 0.5, duration: 0.4 }}
@@ -131,7 +141,7 @@ const QuestionBase = ({
         >
           <Button 
             onClick={onPrevious}
-            className="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300 px-4 sm:px-6 py-3 sm:py-2 touch-manipulation hover:scale-105 hover:shadow-lg hover:shadow-red-500/25"
+            className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all duration-300 px-6 py-3 rounded-2xl touch-manipulation hover:scale-105 cozy-glow"
           >
             <ChevronLeft className="mr-2 h-4 w-4" />
             Previous
@@ -139,7 +149,7 @@ const QuestionBase = ({
           <Button 
             onClick={onNext}
             disabled={isNextDisabled}
-            className="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none px-4 sm:px-6 py-3 sm:py-2 touch-manipulation hover:scale-105 hover:shadow-lg hover:shadow-red-500/25"
+            className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none px-6 py-3 rounded-2xl touch-manipulation hover:scale-105 cozy-glow"
           >
             {currentIndex === totalQuestions - 1 ? (
               "See Results"

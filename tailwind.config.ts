@@ -63,19 +63,21 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				nashville: {
-					DEFAULT: '#1a1a1a',
-					50: '#f8f8f8',
-					100: '#e6e6e6',
-					200: '#cccccc',
-					300: '#b3b3b3',
-					400: '#999999',
-					500: '#808080',
-					600: '#666666',
-					700: '#4d4d4d',
-					800: '#333333',
-					900: '#1a1a1a',
-					accent: '#e53e3e'
+				cozy: {
+					peach: 'hsl(var(--cozy-peach))',
+					cream: 'hsl(var(--cozy-cream))',
+					pink: 'hsl(var(--cozy-pink))',
+					warm: 'hsl(var(--cozy-warm))',
+					50: '#fdf8f6',
+					100: '#f8ede8',
+					200: '#f0d5c8',
+					300: '#e8baa0',
+					400: '#de9472',
+					500: '#d77651',
+					600: '#c85d3e',
+					700: '#a74933',
+					800: '#8a3f2e',
+					900: '#72362a'
 				},
 				neon: {
 					orange: '#ff7800',
@@ -136,15 +138,22 @@ export default {
 						filter: 'brightness(0.8)'
 					}
 				},
-				neonPulse: {
+				cozyBounce: {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-4px)' }
+				},
+				cozyWiggle: {
+					'0%, 100%': { transform: 'rotate(0deg)' },
+					'25%': { transform: 'rotate(2deg)' },
+					'75%': { transform: 'rotate(-2deg)' }
+				},
+				cozyGlow: {
 					'0%, 100%': { 
-						opacity: '1',
-						textShadow: '0 0 5px rgba(229, 62, 62, 0.7), 0 0 15px rgba(229, 62, 62, 0.5)' 
+						boxShadow: '0 4px 20px rgba(255, 167, 139, 0.3)'
 					},
 					'50%': { 
-						opacity: '0.8',
-						textShadow: '0 0 10px rgba(229, 62, 62, 0.9), 0 0 20px rgba(229, 62, 62, 0.7)' 
-					},
+						boxShadow: '0 8px 32px rgba(255, 167, 139, 0.5)'
+					}
 				}
 			},
 			animation: {
@@ -156,7 +165,9 @@ export default {
 				'slide-out': 'slideOut 0.5s ease-out forwards',
 				'pulse': 'pulse 2s ease-in-out infinite',
 				'flicker': 'flicker 8s linear infinite',
-				'neon-pulse': 'neonPulse 3s ease-in-out infinite'
+				'cozy-bounce': 'cozyBounce 2s ease-in-out infinite',
+				'cozy-wiggle': 'cozyWiggle 3s ease-in-out infinite',
+				'cozy-glow': 'cozyGlow 4s ease-in-out infinite'
 			},
 			backgroundImage: {
 				'brick-pattern': "url(\"data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%233f3f3f' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z'/%3E%3C/g%3E%3C/svg%3E\")"
