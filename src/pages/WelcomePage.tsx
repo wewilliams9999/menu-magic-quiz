@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Utensils } from "lucide-react";
+import ShareBucketListPreview from "@/components/ShareBucketListPreview";
 
 const WelcomePage = () => {
   const navigate = useNavigate();
@@ -55,6 +56,11 @@ const WelcomePage = () => {
           </Button>
         </motion.div>
       </motion.div>
+
+      {/* Preview Section */}
+      <div className="bg-background">
+        <ShareBucketListPreview />
+      </div>
     </div>
   );
 };
