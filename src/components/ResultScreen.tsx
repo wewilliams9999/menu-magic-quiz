@@ -12,6 +12,7 @@ import ResultsGrid from "./results/ResultsGrid";
 import ShowMoreButton from "./results/ShowMoreButton";
 import ResetButton from "./results/ResetButton";
 import BannerAd from "./ads/BannerAd";
+import ShareBucketListButton from "./ShareBucketListButton";
 
 interface ResultScreenProps {
   results: QuizResult[];
@@ -137,6 +138,11 @@ const ResultScreen = ({ results, onReset, onRetry, isLoading = false, requestedD
           {hasMoreResults && (
             <ShowMoreButton onShowMore={handleShowMore} />
           )}
+
+          {/* Share Button */}
+          <div className="text-center my-8">
+            <ShareBucketListButton restaurants={safeResults} />
+          </div>
         </>
       ) : (
         <NoResultsMessage />
