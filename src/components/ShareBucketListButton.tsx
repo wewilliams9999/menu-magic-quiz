@@ -47,7 +47,7 @@ const ShareBucketListButton: React.FC<ShareBucketListButtonProps> = ({
         ) : (
           <Share2 className="w-5 h-5" />
         )}
-        {isSharing ? 'Creating Image...' : 'Share My Bucket List'}
+        {isSharing ? 'Preparing Share...' : 'Share My Nashville Picks'}
       </Button>
 
       {/* Hidden card for image generation */}

@@ -38,28 +38,60 @@ export const useShareBucketList = ({ restaurants }: UseShareBucketListProps) => 
     if (!cardElement) {
       toast({
         title: "Error",
-        description: "Unable to generate share image. Please try again.",
+        description: "Unable to generate share content. Please try again.",
         variant: "destructive",
       });
       return;
     }
 
     const topThreeNames = restaurants.slice(0, 3).map(r => r.name).join(', ');
-    const shareText = `My Nashville Restaurant Bucket List: ${topThreeNames}. What are yours? 🍽️ See if we match up!`;
+    const shareText = `My Nashville Restaurant Picks: ${topThreeNames}. What are yours? 🍽️ See if we match up!`;
     const shareUrl = window.location.origin;
 
+    // Create a comprehensive fallback that works in iframe environments
+    const createFallbackShare = () => {
+      const fullShareText = `${shareText}\n\nDiscover your perfect Nashville restaurants: ${shareUrl}`;
+      
+      // Try to create a downloadable text file
+      try {
+        const blob = new Blob([fullShareText], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'my-nashville-restaurant-picks.txt';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        toast({
+          title: "Share file downloaded! 📄",
+          description: "Your restaurant picks have been saved as a text file. Share it anywhere!",
+        });
+        return;
+      } catch (error) {
+        console.error('File download failed:', error);
+      }
+
+      // Final fallback: Show the text in a toast for manual copying
+      toast({
+        title: "Ready to share! 📋",
+        description: fullShareText,
+        duration: 10000, // Show longer so they can copy it
+      });
+    };
+
+    // Try native sharing first (won't work in Lovable iframe but will work when deployed)
     try {
-      // Check if Web Share API is supported and we can share images
-      if (navigator.share && navigator.canShare) {
+      if (navigator.share && !window.location.hostname.includes('lovable.dev')) {
         const imageBlob = await generateShareImage(cardElement);
         
         if (imageBlob) {
-          const file = new File([imageBlob], 'my-nashville-bucket-list.png', { type: 'image/png' });
+          const file = new File([imageBlob], 'my-nashville-picks.png', { type: 'image/png' });
           
-          // Check if we can share files
           if (navigator.canShare({ files: [file] })) {
             await navigator.share({
-              title: 'My Nashville Restaurant Bucket List',
+              title: 'My Nashville Restaurant Picks',
               text: shareText,
               url: shareUrl,
               files: [file],
@@ -68,9 +100,8 @@ export const useShareBucketList = ({ restaurants }: UseShareBucketListProps) => 
           }
         }
         
-        // Fallback to sharing without image
         await navigator.share({
-          title: 'My Nashville Restaurant Bucket List',
+          title: 'My Nashville Restaurant Picks',
           text: shareText,
           url: shareUrl,
         });
@@ -80,22 +111,24 @@ export const useShareBucketList = ({ restaurants }: UseShareBucketListProps) => 
       console.error('Native sharing failed:', error);
     }
 
-    // Fallback: Copy to clipboard
+    // Try clipboard (won't work in Lovable iframe but will work when deployed)
     try {
-      const textToCopy = `${shareText}\n\n${shareUrl}`;
-      await navigator.clipboard.writeText(textToCopy);
-      
-      toast({
-        title: "Copied to clipboard! 📋",
-        description: "Share text copied. You can now paste it anywhere!",
-      });
+      if (!window.location.hostname.includes('lovable.dev')) {
+        const textToCopy = `${shareText}\n\n${shareUrl}`;
+        await navigator.clipboard.writeText(textToCopy);
+        
+        toast({
+          title: "Copied to clipboard! 📋",
+          description: "Share text copied. You can now paste it anywhere!",
+        });
+        return;
+      }
     } catch (error) {
       console.error('Clipboard failed:', error);
-      toast({
-        title: "Share your results",
-        description: `${shareText}\n\n${shareUrl}`,
-      });
     }
+
+    // Use fallback for iframe environments (like Lovable preview)
+    createFallbackShare();
   }, [restaurants, toast, generateShareImage]);
 
   return { shareResults };

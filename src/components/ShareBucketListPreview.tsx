@@ -56,7 +56,7 @@ const ShareBucketListPreview = () => {
             My Nashville Restaurant
           </h1>
           <h2 className="text-xl font-bold text-primary">
-            Bucket List 🍽️
+            Picks 🍽️
           </h2>
         </div>
 
@@ -91,7 +91,7 @@ const ShareBucketListPreview = () => {
         {/* Call to Action */}
         <div className="text-center space-y-3">
           <p className="text-sm text-muted-foreground leading-relaxed">
-            These are my next 3 Nashville restaurants. What are yours? 🤔
+            These are my top 3 Nashville restaurant picks. What are yours? 🤔
           </p>
           <p className="text-sm font-semibold text-primary">
             See if we match up!
@@ -116,7 +116,7 @@ const ShareBucketListPreview = () => {
         </p>
         <Button className="inline-flex items-center gap-2" size="lg">
           <Share2 className="w-5 h-5" />
-          Share My Bucket List
+          Share My Nashville Picks
         </Button>
         <p className="text-sm text-muted-foreground max-w-md mx-auto">
           The share button will create an image version of this card and use the device's native sharing (iOS/Android) or copy to clipboard on desktop.

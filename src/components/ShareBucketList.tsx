@@ -31,7 +31,7 @@ const ShareBucketList: React.FC<ShareBucketListProps> = ({ restaurants, classNam
           My Nashville Restaurant
         </h1>
         <h2 className="text-xl font-bold text-primary">
-          Bucket List 🍽️
+          Picks 🍽️
         </h2>
       </div>
 
@@ -66,7 +66,7 @@ const ShareBucketList: React.FC<ShareBucketListProps> = ({ restaurants, classNam
       {/* Call to Action */}
       <div className="text-center space-y-3">
         <p className="text-sm text-muted-foreground leading-relaxed">
-          These are my next 3 Nashville restaurants. What are yours? 🤔
+          These are my top 3 Nashville restaurant picks. What are yours? 🤔
         </p>
         <p className="text-sm font-semibold text-primary">
           See if we match up!
