@@ -50,7 +50,7 @@ const WelcomePage = () => {
           >
             <Utensils className="mr-2 w-5 h-5 sm:w-6 sm:h-6" />
             <span className="whitespace-nowrap overflow-hidden text-ellipsis">
-              Find My Perfect Nashville Restaurant
+              Find My Next Meal
             </span>
           </Button>
         </motion.div>
