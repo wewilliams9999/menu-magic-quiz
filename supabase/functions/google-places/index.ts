@@ -16,9 +16,9 @@ Deno.serve(async (req) => {
     // Try multiple methods to get the API key
     let apiKey: string | undefined;
     
-    // Method 1: Standard Deno.env.get
-    apiKey = Deno.env.get('GOOGLE_PLACES_API_KEY');
-    console.log('Method 1 (Deno.env.get):', apiKey ? `Found ${apiKey.length} chars` : 'Not found');
+    // Method 1: Try both secret names with standard Deno.env.get
+    apiKey = Deno.env.get('GOOGLE_PLACES_API_KEY') || Deno.env.get('GOOGLE_API_KEY');
+    console.log('Method 1 (both names):', apiKey ? `Found ${apiKey.length} chars` : 'Not found');
     
     // Method 2: Try alternative environment access
     if (!apiKey) {
