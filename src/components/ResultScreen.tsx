@@ -106,7 +106,7 @@ const ResultScreen = ({ results, onReset, onRetry, isLoading = false, requestedD
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.6 }}
-      className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+      className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4"
     >
       <ResultHeader
         isSingleResult={isSingleResult}
@@ -118,11 +118,11 @@ const ResultScreen = ({ results, onReset, onRetry, isLoading = false, requestedD
 
       {/* Add banner ad after header */}
       {safeResults.length > 0 && (
-        <BannerAd className="mb-2" />
+        <BannerAd />
       )}
 
       {safeResults.length > 0 ? (
-        <>
+        <div className="space-y-4">
           <ResultAlerts 
             noExactMatches={noExactMatches}
             hasAlternatives={hasAlternatives}
@@ -140,10 +140,10 @@ const ResultScreen = ({ results, onReset, onRetry, isLoading = false, requestedD
           )}
 
           {/* Share Button */}
-          <div className="text-center my-8">
+          <div className="text-center">
             <ShareBucketListButton restaurants={safeResults} />
           </div>
-        </>
+        </div>
       ) : (
         <NoResultsMessage />
       )}

@@ -16,9 +16,12 @@ interface RestaurantDataParams {
 }
 
 export const useRestaurantData = (params: RestaurantDataParams) => {
+  console.log("🎯 useRestaurantData hook called with params:", params);
+  
   return useQuery({
     queryKey: ['restaurants', JSON.stringify(params)], // Use JSON.stringify for better cache key
     queryFn: async () => {
+      console.log("🚀 useQuery queryFn executing...");
       try {
         console.log("=== RESTAURANT DATA HOOK ===");
         console.log("useRestaurantData called with params:", params);
