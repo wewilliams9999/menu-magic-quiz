@@ -18,11 +18,24 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
       timestamp: Date.now()
     };
     
-    // Call our Supabase Edge Function
-    console.log("📡 Making API call to restaurants function...");
-    const { data, error } = await supabase.functions.invoke('restaurants', {
-      body: requestParams
-    });
+    // Call our Supabase Edge Function - Try new google-places function first
+    console.log("📡 Trying new google-places function...");
+    let data, error;
+    
+    try {
+      const result = await supabase.functions.invoke('google-places', {
+        body: requestParams
+      });
+      data = result.data;
+      error = result.error;
+    } catch (err) {
+      console.log("📡 google-places failed, falling back to restaurants function");
+      const result = await supabase.functions.invoke('restaurants', {
+        body: requestParams
+      });
+      data = result.data;
+      error = result.error;
+    }
     
     console.log("📡 API Response - Data:", data, "Error:", error);
     
