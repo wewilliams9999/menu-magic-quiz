@@ -19,9 +19,12 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     };
     
     // Call our Supabase Edge Function
+    console.log("📡 Making API call to restaurants function...");
     const { data, error } = await supabase.functions.invoke('restaurants', {
       body: requestParams
     });
+    
+    console.log("📡 API Response - Data:", data, "Error:", error);
     
     if (error) {
       console.error("❌ Error calling restaurant API:", error);
