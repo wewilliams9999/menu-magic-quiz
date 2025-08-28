@@ -10,14 +10,21 @@ Deno.serve(async (req) => {
   }
 
   try {
-    console.log('🚀 Restaurant function called - v2');
+    console.log('🚀 Restaurant function v3 called at', new Date().toISOString());
     
-    // Get the API key from environment variables
-    const apiKey = Deno.env.get('GOOGLE_PLACES_API_KEY');
+    // Debug all environment variables
+    console.log('Available env vars:', Object.keys(Deno.env.toObject()));
+    
+    // Get the API key from environment variables with multiple possible names
+    let apiKey = Deno.env.get('GOOGLE_PLACES_API_KEY') || 
+                 Deno.env.get('GOOGLE_API_KEY') || 
+                 Deno.env.get('PLACES_API_KEY');
+    
     console.log('API key status:', apiKey ? `Present (${apiKey.length} chars)` : 'Missing');
     
     if (!apiKey) {
-      console.error('❌ Missing Google Places API key');
+      console.error('❌ Missing Google Places API key in all variants');
+      console.log('Checked: GOOGLE_PLACES_API_KEY, GOOGLE_API_KEY, PLACES_API_KEY');
       throw new Error('Missing Google Places API key');
     }
 
@@ -28,7 +35,7 @@ Deno.serve(async (req) => {
     // Build the Google Places API request URL
     const url = buildGooglePlacesApiQuery(params, apiKey);
     
-    console.log('🌐 Calling Google Places API:', url.toString());
+    console.log('🌐 Calling Google Places API:', url.toString().replace(apiKey, 'API_KEY_HIDDEN'));
     
     // Make the request to Google Places API
     const response = await fetch(url.toString());
@@ -130,7 +137,7 @@ async function tryTextSearchFallback(params: RestaurantParams, apiKey: string) {
     fallbackUrl.searchParams.append('radius', '8000'); // 8km radius
   }
   
-  console.log('🔄 Text search fallback URL:', fallbackUrl.toString());
+  console.log('🔄 Text search fallback URL:', fallbackUrl.toString().replace(apiKey, 'API_KEY_HIDDEN'));
   
   try {
     const response = await fetch(fallbackUrl.toString());
