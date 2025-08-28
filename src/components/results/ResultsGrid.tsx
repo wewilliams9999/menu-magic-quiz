@@ -30,8 +30,10 @@ const ResultsGrid = ({ results }: ResultsGridProps) => {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-      {renderWithAds()}
+    <div className="w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 auto-rows-fr">
+        {renderWithAds()}
+      </div>
     </div>
   );
 };

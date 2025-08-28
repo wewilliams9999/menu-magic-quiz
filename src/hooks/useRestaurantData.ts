@@ -38,6 +38,7 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         
         // ALWAYS try the API first, only use fallback if API fails
         console.log("🔄 CALLING API FIRST (not checking criteria anymore)");
+        console.log("🚀 About to call fetchRestaurants function...");
         
         // Prepare API parameters
         const apiParams: RestaurantApiParams = {
@@ -51,15 +52,20 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         };
         
         console.log("Calling fetchRestaurants with:", apiParams);
-        const results = await fetchRestaurants(apiParams);
         
-        console.log(`useRestaurantData final results count: ${results?.length || 0}`);
-        console.log("useRestaurantData final results:", results);
-        
-        // Ensure we always return an array
-        const finalResults = Array.isArray(results) ? results : [];
-        console.log("=== END RESTAURANT DATA HOOK ===");
-        return finalResults;
+        try {
+          const results = await fetchRestaurants(apiParams);
+          console.log(`✅ fetchRestaurants returned: ${results?.length || 0} results`);
+          console.log("fetchRestaurants results:", results);
+          
+          // Ensure we always return an array
+          const finalResults = Array.isArray(results) ? results : [];
+          console.log("=== END RESTAURANT DATA HOOK ===");
+          return finalResults;
+        } catch (apiError) {
+          console.error("❌ fetchRestaurants threw error:", apiError);
+          throw apiError;
+        }
         
       } catch (error) {
         console.error("Error in useRestaurantData:", error);
