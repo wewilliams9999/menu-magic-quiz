@@ -7,8 +7,5 @@ verify_jwt = false
 [functions.restaurants]
 verify_jwt = false
 
-[functions.test-secrets]
-verify_jwt = false
-
 [functions.keep-alive]
 verify_jwt = false

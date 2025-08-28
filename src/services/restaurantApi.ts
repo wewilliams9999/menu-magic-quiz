@@ -12,11 +12,6 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
   try {
     console.log("🔍 Fetching restaurants with params:", JSON.stringify(params, null, 2));
     
-    // TEMPORARY: Test secret access
-    console.log("🧪 Testing secret access first...");
-    const { data: testData, error: testError } = await supabase.functions.invoke('test-secrets', {});
-    console.log("🧪 Secret test result:", testData, "Error:", testError);
-    
     // Add timestamp to prevent caching issues
     const requestParams = {
       ...params,
