@@ -19,7 +19,7 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
   console.log("🎯 useRestaurantData hook called with params:", params);
   
   return useQuery({
-    queryKey: ['restaurants', JSON.stringify(params), Date.now()], // Add timestamp to force fresh queries
+    queryKey: ['restaurants', JSON.stringify(params)], // Remove timestamp to allow proper caching
     queryFn: async () => {
       console.log("🚀 useQuery queryFn executing...");
       try {
@@ -61,8 +61,8 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         return fallbackData;
       }
     },
-    enabled: true, // Always enable the query
-    staleTime: 0, // Always fetch fresh data to prevent caching issues
+    enabled: Object.keys(params).length > 0, // Only enable when we have actual params
+    staleTime: 5000, // Cache for 5 seconds
     refetchOnWindowFocus: false,
     retry: 1, // Only retry once to avoid long delays
   });

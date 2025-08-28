@@ -43,8 +43,8 @@ const QuizContainer = () => {
   console.log("Restaurant results type:", typeof restaurantResults);
   console.log("Restaurant results:", restaurantResults);
   console.log("Restaurant results length:", restaurantResults?.length);
-  console.log("Is loading:", isLoading);
-  console.log("Error:", error);
+  console.log("Is loading from hook:", isLoading);
+  console.log("Hook error:", error);
   console.log("=== END DEBUG ===");
 
   // Get questions function
