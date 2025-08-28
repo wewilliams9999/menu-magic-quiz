@@ -19,25 +19,12 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
   console.log("🎯 useRestaurantData hook called with params:", params);
   
   return useQuery({
-    queryKey: ['restaurants', JSON.stringify(params)], // Use JSON.stringify for better cache key
+    queryKey: ['restaurants', JSON.stringify(params), Date.now()], // Add timestamp to force fresh queries
     queryFn: async () => {
       console.log("🚀 useQuery queryFn executing...");
       try {
         console.log("=== RESTAURANT DATA HOOK ===");
         console.log("useRestaurantData called with params:", params);
-        
-        // Check if we have enough criteria to search
-        const hasNeighborhoods = params.neighborhoods && params.neighborhoods.length > 0;
-        const hasLocation = params.userLocation && params.distance;
-        const hasCuisine = params.cuisine && params.cuisine.length > 0;
-        const hasPrice = params.price && params.price.length > 0;
-        
-        console.log("Search criteria check:", {
-          hasNeighborhoods,
-          hasLocation,
-          hasCuisine,
-          hasPrice
-        });
         
         // ALWAYS try the API first, only use fallback if API fails
         console.log("🔄 CALLING API FIRST (not checking criteria anymore)");
@@ -56,19 +43,14 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         
         console.log("Calling fetchRestaurants with:", apiParams);
         
-        try {
-          const results = await fetchRestaurants(apiParams);
-          console.log(`✅ fetchRestaurants returned: ${results?.length || 0} results`);
-          console.log("fetchRestaurants results:", results);
-          
-          // Ensure we always return an array
-          const finalResults = Array.isArray(results) ? results : [];
-          console.log("=== END RESTAURANT DATA HOOK ===");
-          return finalResults;
-        } catch (apiError) {
-          console.error("❌ fetchRestaurants threw error:", apiError);
-          throw apiError;
-        }
+        const results = await fetchRestaurants(apiParams);
+        console.log(`✅ fetchRestaurants returned: ${results?.length || 0} results`);
+        console.log("fetchRestaurants results:", results);
+        
+        // Ensure we always return an array
+        const finalResults = Array.isArray(results) ? results : [];
+        console.log("=== END RESTAURANT DATA HOOK ===");
+        return finalResults;
         
       } catch (error) {
         console.error("Error in useRestaurantData:", error);

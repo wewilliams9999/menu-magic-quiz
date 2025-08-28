@@ -30,7 +30,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
   
   return (
     <Card 
-      className={`overflow-hidden transition-all duration-300 hover:shadow-md hover:border-red-500/30 ${
+      className={`h-full flex flex-col overflow-hidden transition-all duration-300 hover:shadow-md hover:border-red-500/30 ${
         restaurant.isAlternative ? 'border-amber-500/30' : ''
       }`}
       itemScope
@@ -42,20 +42,24 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
         </div>
       )}
       
-      <ImageSection restaurant={restaurant} />
-      <RestaurantHeader restaurant={restaurant} />
-      <FeaturesList features={restaurant.features} />
-      
-      <CardFooter className="flex flex-wrap gap-2 justify-start mt-2">
-        <RestaurantLinks restaurant={restaurant} />
-        <MapLinks restaurant={restaurant} />
+      <div className="flex-1 flex flex-col">
+        <ImageSection restaurant={restaurant} />
+        <div className="flex-1 flex flex-col">
+          <RestaurantHeader restaurant={restaurant} />
+          <FeaturesList features={restaurant.features} />
+        </div>
         
-        {/* Schema.org metadata */}
-        <meta itemProp="telephone" content={restaurant.phone || "Not available"} />
-        <meta itemProp="description" content={`${restaurant.name} is a ${restaurant.priceRange} ${restaurant.cuisine} restaurant in the ${restaurant.neighborhood} area of Nashville.`} />
-        <meta itemProp="geo" content={`Nashville, TN`} />
-        <meta name="keywords" content={`Nashville restaurants, Nashville menus, ${restaurant.cuisine} restaurant Nashville, ${restaurant.neighborhood} restaurants Nashville, Best Nashville restaurants`} />
-      </CardFooter>
+        <CardFooter className="flex flex-wrap gap-2 justify-start mt-auto p-4">
+          <RestaurantLinks restaurant={restaurant} />
+          <MapLinks restaurant={restaurant} />
+          
+          {/* Schema.org metadata */}
+          <meta itemProp="telephone" content={restaurant.phone || "Not available"} />
+          <meta itemProp="description" content={`${restaurant.name} is a ${restaurant.priceRange} ${restaurant.cuisine} restaurant in the ${restaurant.neighborhood} area of Nashville.`} />
+          <meta itemProp="geo" content={`Nashville, TN`} />
+          <meta name="keywords" content={`Nashville restaurants, Nashville menus, ${restaurant.cuisine} restaurant Nashville, ${restaurant.neighborhood} restaurants Nashville, Best Nashville restaurants`} />
+        </CardFooter>
+      </div>
     </Card>
   );
 };
