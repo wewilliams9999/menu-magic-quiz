@@ -10,30 +10,38 @@ Deno.serve(async (req) => {
   }
 
   try {
-    console.log('🚀 Restaurant function v4 FRESH DEPLOYMENT at', new Date().toISOString());
-    console.log('🔧 Environment check starting...');
+    console.log('🚀 Restaurant function v5 COMPLETE REDEPLOY at', new Date().toISOString());
     
-    // Get all environment variables
-    const allEnvVars = Deno.env.toObject();
-    console.log('📋 Available environment variables:', Object.keys(allEnvVars));
+    // Try different ways to access the API key
+    let apiKey;
     
-    // Try to get the API key with all possible names
-    const apiKey1 = Deno.env.get('GOOGLE_PLACES_API_KEY');
-    const apiKey2 = Deno.env.get('GOOGLE_API_KEY');
-    const apiKey3 = Deno.env.get('PLACES_API_KEY');
+    // Method 1: Direct access
+    apiKey = Deno.env.get('GOOGLE_PLACES_API_KEY');
+    console.log('Method 1 - Direct access:', apiKey ? `Found (${apiKey.length} chars)` : 'Missing');
     
-    console.log('🔑 API key checks:');
-    console.log('  GOOGLE_PLACES_API_KEY:', apiKey1 ? `Present (${apiKey1.length} chars)` : 'Missing');
-    console.log('  GOOGLE_API_KEY:', apiKey2 ? `Present (${apiKey2.length} chars)` : 'Missing');
-    console.log('  PLACES_API_KEY:', apiKey3 ? `Present (${apiKey3.length} chars)` : 'Missing');
+    // Method 2: Try accessing all env vars and find the key
+    if (!apiKey) {
+      const allVars = Deno.env.toObject();
+      console.log('Method 2 - All env vars:', Object.keys(allVars));
+      apiKey = allVars['GOOGLE_PLACES_API_KEY'];
+      console.log('Method 2 - Object access:', apiKey ? `Found (${apiKey.length} chars)` : 'Missing');
+    }
     
-    const apiKey = apiKey1 || apiKey2 || apiKey3;
+    // Method 3: Check if it's stored with a different case or format
+    if (!apiKey) {
+      for (const [key, value] of Object.entries(Deno.env.toObject())) {
+        if (key.toLowerCase().includes('google') && key.toLowerCase().includes('places')) {
+          console.log(`Method 3 - Found variant key: ${key}`);
+          apiKey = value;
+          break;
+        }
+      }
+    }
     
-    console.log('API key status:', apiKey ? `Present (${apiKey.length} chars)` : 'Missing');
+    console.log('Final API key status:', apiKey ? `SUCCESS (${apiKey.length} chars)` : 'FAILED - NO KEY FOUND');
     
     if (!apiKey) {
-      console.error('❌ Missing Google Places API key in all variants');
-      console.log('Checked: GOOGLE_PLACES_API_KEY, GOOGLE_API_KEY, PLACES_API_KEY');
+      console.error('❌ Could not access Google Places API key with any method');
       throw new Error('Missing Google Places API key');
     }
 
