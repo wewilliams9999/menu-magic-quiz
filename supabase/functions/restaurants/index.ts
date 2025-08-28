@@ -10,12 +10,11 @@ Deno.serve(async (req) => {
   }
 
   try {
-    console.log('🚀 Restaurant function called');
+    console.log('🚀 Restaurant function called - v2');
     
     // Get the API key from environment variables
     const apiKey = Deno.env.get('GOOGLE_PLACES_API_KEY');
-    console.log('API key status:', apiKey ? 'Present' : 'Missing');
-    console.log('API key length:', apiKey ? apiKey.length : 0);
+    console.log('API key status:', apiKey ? `Present (${apiKey.length} chars)` : 'Missing');
     
     if (!apiKey) {
       console.error('❌ Missing Google Places API key');
