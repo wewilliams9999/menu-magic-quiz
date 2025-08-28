@@ -1,7 +1,10 @@
 
 project_id = "vgbpfraisdnzilymqbky"
 
-[functions."*"]
+[functions]
+verify_jwt = false
+
+[functions.restaurants]
 verify_jwt = false
 
 [functions.keep-alive]

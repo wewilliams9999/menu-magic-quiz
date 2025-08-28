@@ -10,15 +10,24 @@ Deno.serve(async (req) => {
   }
 
   try {
-    console.log('🚀 Restaurant function v3 called at', new Date().toISOString());
+    console.log('🚀 Restaurant function v4 FRESH DEPLOYMENT at', new Date().toISOString());
+    console.log('🔧 Environment check starting...');
     
-    // Debug all environment variables
-    console.log('Available env vars:', Object.keys(Deno.env.toObject()));
+    // Get all environment variables
+    const allEnvVars = Deno.env.toObject();
+    console.log('📋 Available environment variables:', Object.keys(allEnvVars));
     
-    // Get the API key from environment variables with multiple possible names
-    let apiKey = Deno.env.get('GOOGLE_PLACES_API_KEY') || 
-                 Deno.env.get('GOOGLE_API_KEY') || 
-                 Deno.env.get('PLACES_API_KEY');
+    // Try to get the API key with all possible names
+    const apiKey1 = Deno.env.get('GOOGLE_PLACES_API_KEY');
+    const apiKey2 = Deno.env.get('GOOGLE_API_KEY');
+    const apiKey3 = Deno.env.get('PLACES_API_KEY');
+    
+    console.log('🔑 API key checks:');
+    console.log('  GOOGLE_PLACES_API_KEY:', apiKey1 ? `Present (${apiKey1.length} chars)` : 'Missing');
+    console.log('  GOOGLE_API_KEY:', apiKey2 ? `Present (${apiKey2.length} chars)` : 'Missing');
+    console.log('  PLACES_API_KEY:', apiKey3 ? `Present (${apiKey3.length} chars)` : 'Missing');
+    
+    const apiKey = apiKey1 || apiKey2 || apiKey3;
     
     console.log('API key status:', apiKey ? `Present (${apiKey.length} chars)` : 'Missing');
     
