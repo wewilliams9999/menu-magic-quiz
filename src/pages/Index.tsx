@@ -23,7 +23,7 @@ const Index = () => {
         <img 
           src="/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png"
           alt="Logo"
-          className="w-[70vmin] h-[70vmin] object-contain"
+          className="w-[80vmin] h-[80vmin] object-contain"
           style={{
             filter: 'contrast(1.3) brightness(1.4)'
           }}
