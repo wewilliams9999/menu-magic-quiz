@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Home, Heart, Crown, Coffee, Flower } from 'lucide-react';
+import { Home, Heart, Crown, Coffee, Flower, Car } from 'lucide-react';
 
 // Cozy and cute icons for restaurant atmospheres
 export const CasualIcon = () => (
@@ -26,5 +26,10 @@ export const UniqueIcon = () => (
 export const QuietIcon = () => (
   <div className="animate-cozy-wiggle delay-150">
     <Flower className="w-8 h-8 text-cozy-pink" />
+  </div>
+);
+export const ParkingIcon = () => (
+  <div className="animate-cozy-bounce delay-200">
+    <Car className="w-8 h-8 text-cozy-warm" />
   </div>
 );

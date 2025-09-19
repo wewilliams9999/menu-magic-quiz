@@ -1,6 +1,6 @@
 
 import { QuizOption } from "./types";
-import { CasualIcon, ElegantIcon, TrendyIcon, UniqueIcon, QuietIcon } from "@/utils/atmosphere-icons";
+import { CasualIcon, ElegantIcon, TrendyIcon, UniqueIcon, QuietIcon, ParkingIcon } from "@/utils/atmosphere-icons";
 
 export const atmosphereOptions: QuizOption[] = [
   {
@@ -38,5 +38,11 @@ export const atmosphereOptions: QuizOption[] = [
     text: "Quiet",
     value: "quiet",
     icon: QuietIcon
+  },
+  {
+    id: "atmosphere-6",
+    text: "Easy Parking",
+    value: "parking",
+    icon: ParkingIcon
   }
 ];

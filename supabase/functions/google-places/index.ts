@@ -236,6 +236,7 @@ function buildGooglePlacesApiQuery(params: RestaurantParams, apiKey: string): UR
       }
     }
     
+    // Handle cuisine filtering
     if (params.cuisine && params.cuisine.length > 0) {
       const validCuisines = params.cuisine.filter(c => 
         c && 
@@ -245,6 +246,18 @@ function buildGooglePlacesApiQuery(params: RestaurantParams, apiKey: string): UR
       if (validCuisines.length > 0) {
         url.searchParams.append('keyword', validCuisines[0]);
         console.log('Added cuisine keyword:', validCuisines[0]);
+      }
+    }
+    
+    // Handle atmosphere/parking filtering
+    if (params.atmosphere) {
+      const atmosphereArray = Array.isArray(params.atmosphere) ? params.atmosphere : [params.atmosphere];
+      if (atmosphereArray.includes('parking')) {
+        // Add parking-related keywords to help find places with good parking
+        const currentKeyword = url.searchParams.get('keyword') || '';
+        const parkingKeyword = currentKeyword ? `${currentKeyword} parking` : 'parking';
+        url.searchParams.set('keyword', parkingKeyword);
+        console.log('Added parking keyword:', parkingKeyword);
       }
     }
     

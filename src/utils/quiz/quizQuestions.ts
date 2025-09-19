@@ -52,8 +52,8 @@ export const quizQuestions: QuizQuestion[] = [
   },
   {
     id: "atmosphere",
-    questionText: "What kind of atmosphere do you prefer?",
-    question: "What kind of atmosphere do you prefer?",
+    questionText: "What's important to you?",
+    question: "What's important to you?",
     description: "Select all that apply",
     type: "multipleChoice",
     options: atmosphereOptions,
