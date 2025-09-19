@@ -5,10 +5,18 @@ import { RestaurantApiParams } from "./types";
 import { getFilteredFallbackRestaurants } from "./mockData";
 import { calculateDistance } from "./restaurantUtils";
 
+// Types for API response status
+export interface RestaurantApiResponse {
+  results: QuizResult[];
+  status: 'success' | 'api_failed' | 'no_results';
+  error?: string;
+}
+
 /**
  * Fetches restaurant data from the Google Places API via our secure Edge Function
+ * Now returns status information instead of silently falling back to mock data
  */
-export const fetchRestaurants = async (params: RestaurantApiParams): Promise<QuizResult[]> => {
+export const fetchRestaurants = async (params: RestaurantApiParams): Promise<RestaurantApiResponse> => {
   try {
     console.log("🔍 Fetching restaurants with params:", JSON.stringify(params, null, 2));
     
@@ -41,14 +49,11 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     
     if (error) {
       console.error("❌ Error calling restaurant API:", error);
-      console.log("📱 Falling back to filtered mock data due to API error");
-      return getFilteredFallbackRestaurants({
-        cuisine: params.cuisine,
-        price: params.price,
-        neighborhoods: params.neighborhoods,
-        userLocation: params.userLocation,
-        distance: params.distance
-      });
+      return {
+        results: [],
+        status: 'api_failed',
+        error: error.message || 'API call failed'
+      };
     }
     
     console.log("📡 Raw API response:", data);
@@ -56,14 +61,11 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
     // Check if we got an error in the response
     if (data?.error) {
       console.error("❌ API returned error:", data.error);
-      console.log("📱 Using filtered fallback data due to API error response");
-      return getFilteredFallbackRestaurants({
-        cuisine: params.cuisine,
-        price: params.price,
-        neighborhoods: params.neighborhoods,
-        userLocation: params.userLocation,
-        distance: params.distance
-      });
+      return {
+        results: [],
+        status: 'api_failed',
+        error: data.error
+      };
     }
     
     // Process API results if we have them
@@ -121,55 +123,28 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Qui
       console.log("📊 No API results returned from Google Places");
     }
     
-    // Always get location-aware fallback data
-    const fallbackResults = getFilteredFallbackRestaurants({
-      cuisine: params.cuisine,
-      price: params.price,
-      neighborhoods: params.neighborhoods,
-      userLocation: params.userLocation,
-      distance: params.distance
-    });
-    
-    console.log(`📱 Got ${fallbackResults.length} fallback results`);
-    
-    // If we have good API results (>= 8), use them with minimal fallback supplements
-    if (apiResults.length >= 8) {
-      const enhancedFallback = fallbackResults
-        .slice(0, 2) // Add just 2 fallback options for variety
-        .map(restaurant => ({ ...restaurant, isAlternative: true }));
-      
-      const combinedResults = [...apiResults, ...enhancedFallback];
-      console.log(`✅ Combined ${apiResults.length} API + ${enhancedFallback.length} fallback results`);
-      return combinedResults;
-    }
-    
-    // If we have some API results but not many (1-7), supplement with fallback
+    // Return API results if we have them, otherwise indicate no results
     if (apiResults.length > 0) {
-      const enhancedFallback = fallbackResults
-        .slice(0, 6) // Add up to 6 fallback options
-        .map(restaurant => ({ ...restaurant, isAlternative: true }));
-      
-      const combinedResults = [...apiResults, ...enhancedFallback];
-      console.log(`✅ Supplemented ${apiResults.length} API results with ${enhancedFallback.length} fallback results`);
-      return combinedResults;
+      console.log(`✅ Returning ${apiResults.length} API results`);
+      return {
+        results: apiResults,
+        status: 'success'
+      };
+    } else {
+      console.log("📊 No results from API");
+      return {
+        results: [],
+        status: 'no_results',
+        error: 'No restaurants found matching your criteria'
+      };
     }
-    
-    // If no API results, use fallback as primary results (not marked as alternatives)
-    console.log(`📊 No API results, using ${fallbackResults.length} location-aware fallback results as primary`);
-    return fallbackResults;
     
   } catch (error) {
     console.error("💥 Exception in fetchRestaurants:", error);
-    console.log("📱 Exception fallback: Using location-aware filtered mock data");
-    
-    const fallbackResults = getFilteredFallbackRestaurants({
-      cuisine: params.cuisine,
-      price: params.price,
-      neighborhoods: params.neighborhoods,
-      userLocation: params.userLocation,
-      distance: params.distance
-    });
-    console.log(`📱 Exception fallback: Using ${fallbackResults.length} restaurants`);
-    return fallbackResults;
+    return {
+      results: [],
+      status: 'api_failed',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
+    };
   }
 };

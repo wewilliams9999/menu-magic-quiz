@@ -1,6 +1,6 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { fetchRestaurants, getFallbackRestaurants, RestaurantApiParams } from "@/services/restaurantService";
+import { fetchRestaurants, getFallbackRestaurants, RestaurantApiParams, RestaurantApiResponse } from "@/services/restaurantService";
 
 interface RestaurantDataParams {
   neighborhoods?: string[];
@@ -20,7 +20,7 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
   
   return useQuery({
     queryKey: ['restaurants', JSON.stringify(params)], // Remove timestamp to allow proper caching
-    queryFn: async () => {
+    queryFn: async (): Promise<RestaurantApiResponse> => {
       console.log("🚀 useQuery queryFn executing...");
       try {
         console.log("=== RESTAURANT DATA HOOK ===");
@@ -43,22 +43,21 @@ export const useRestaurantData = (params: RestaurantDataParams) => {
         
         console.log("Calling fetchRestaurants with:", apiParams);
         
-        const results = await fetchRestaurants(apiParams);
-        console.log(`✅ fetchRestaurants returned: ${results?.length || 0} results`);
-        console.log("fetchRestaurants results:", results);
+        const response = await fetchRestaurants(apiParams);
+        console.log(`✅ fetchRestaurants returned: status=${response.status}, results=${response.results?.length || 0}`);
+        console.log("fetchRestaurants response:", response);
         
-        // Ensure we always return an array
-        const finalResults = Array.isArray(results) ? results : [];
         console.log("=== END RESTAURANT DATA HOOK ===");
-        return finalResults;
+        return response;
         
       } catch (error) {
         console.error("Error in useRestaurantData:", error);
-        console.log("Hook exception: falling back to mock data");
-        // Fall back to mock data on error
-        const fallbackData = getFallbackRestaurants();
-        console.log("Exception fallback data:", fallbackData);
-        return fallbackData;
+        console.log("Hook exception: returning error response");
+        return {
+          results: [],
+          status: 'api_failed',
+          error: error instanceof Error ? error.message : 'Unknown error occurred'
+        };
       }
     },
     enabled: Object.keys(params).length > 0, // Only enable when we have actual params
