@@ -379,11 +379,58 @@ Deno.serve(async (req) => {
     }
     
     const data = await response.json();
-    console.log(`✅ Google API success: ${data.results?.length || 0} results, status: ${data.status}`);
+    console.log(`📊 Google API response: status=${data.status}, results=${data.results?.length || 0}`);
+    console.log('📊 Full API response data:', JSON.stringify(data, null, 2));
+    
+    // Handle different Google API response statuses
+    if (data.status === 'REQUEST_DENIED') {
+      console.error('❌ Google API REQUEST_DENIED - likely API key restriction issue');
+      return new Response(
+        JSON.stringify({ 
+          error: 'Google Places API access denied. Please check your API key restrictions.',
+          status: data.status,
+          results: [] 
+        }),
+        { 
+          status: 403, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+    
+    if (data.status === 'OVER_QUERY_LIMIT') {
+      console.error('❌ Google API OVER_QUERY_LIMIT');
+      return new Response(
+        JSON.stringify({ 
+          error: 'Google Places API quota exceeded',
+          status: data.status,
+          results: [] 
+        }),
+        { 
+          status: 429, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+    
+    if (data.status === 'INVALID_REQUEST') {
+      console.error('❌ Google API INVALID_REQUEST');
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid request parameters sent to Google Places API',
+          status: data.status,
+          results: [] 
+        }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
     
     if (data.status === 'OK' && data.results && data.results.length > 0) {
       const restaurants = mapGooglePlacesToRestaurants(data.results, apiKey);
-      console.log('🍽️ Returning processed restaurants:', restaurants.length);
+      console.log('✅ Successfully processed restaurants:', restaurants.length);
       
       return new Response(
         JSON.stringify({ results: restaurants }),
@@ -391,10 +438,31 @@ Deno.serve(async (req) => {
       );
     }
     
-    console.log('❌ No results from Google Places API');
+    // Handle cases where status is OK but no results
+    if (data.status === 'OK') {
+      console.log('📊 Google API returned OK but no results found');
+      return new Response(
+        JSON.stringify({ 
+          results: [], 
+          message: 'No restaurants found matching your criteria',
+          status: data.status 
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    // Handle any other unexpected statuses
+    console.log('❌ Unexpected Google API status:', data.status);
     return new Response(
-      JSON.stringify({ results: [], message: 'No restaurants found' }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ 
+        error: `Google Places API returned unexpected status: ${data.status}`,
+        status: data.status,
+        results: [] 
+      }),
+      { 
+        status: 500, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
     );
     
   } catch (error) {

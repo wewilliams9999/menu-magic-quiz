@@ -46,9 +46,12 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Res
     }
     
     console.log("📡 API Response - Data:", data, "Error:", error);
+    console.log("📡 Response status code:", data?.status);
+    console.log("📡 Response has results:", !!data?.results);
+    console.log("📡 Results count:", data?.results?.length || 0);
     
     if (error) {
-      console.error("❌ Error calling restaurant API:", error);
+      console.error("❌ Supabase function invocation error:", error);
       return {
         results: [],
         status: 'api_failed',
@@ -56,7 +59,7 @@ export const fetchRestaurants = async (params: RestaurantApiParams): Promise<Res
       };
     }
     
-    console.log("📡 Raw API response:", data);
+    console.log("📡 Raw API response data:", JSON.stringify(data, null, 2));
     
     // Check if we got an error in the response
     if (data?.error) {
