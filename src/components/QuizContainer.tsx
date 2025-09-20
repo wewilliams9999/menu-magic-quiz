@@ -114,6 +114,13 @@ const QuizContainer = () => {
     handleReset();
   };
 
+  // Handle retry with cleanup - clear API states before going back to quiz
+  const handleRetryWithCleanup = () => {
+    setMockResults(null);
+    setShowApiError(false);
+    handleRetry();
+  };
+
   return (
     <div className="min-h-screen sm:min-h-[80vh] flex flex-col justify-center bg-gradient-to-b from-black to-gray-900 text-white p-4 sm:p-6 lg:p-8">
       <AnimatePresence mode="wait">
@@ -155,7 +162,7 @@ const QuizContainer = () => {
             key="result" 
             results={safeRestaurantResults} 
             onReset={handleResetWithCleanup}
-            onRetry={handleRetry}
+            onRetry={handleRetryWithCleanup}
             isLoading={isLoading}
             requestedDistance={requestedDistance}
           />
