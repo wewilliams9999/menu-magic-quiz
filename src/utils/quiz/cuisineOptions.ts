@@ -3,6 +3,7 @@ import { QuizOption } from "./types";
 
 export const cuisineOptions: QuizOption[] = [
   { id: "cuisine-0", text: "Anything - I'm Adventurous!", value: "anything" },
+  { id: "cuisine-10", text: "Brunch", value: "brunch" },
   { id: "cuisine-1", text: "American", value: "american" },
   { id: "cuisine-9", text: "Fast Food", value: "fast-food" },
   { id: "cuisine-2", text: "Italian", value: "italian" },
