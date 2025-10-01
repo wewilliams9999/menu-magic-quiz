@@ -9,7 +9,7 @@ import { useQuizState } from "@/hooks/useQuizState";
 import { getQuizQuestions, processAnswersForAPI } from "@/utils/quizLogic";
 import { useQuizNavigation } from "./quiz/QuizNavigation";
 import { QuizResult } from "@/utils/quizData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const QuizContainer = () => {
   const {
@@ -69,10 +69,12 @@ const QuizContainer = () => {
     }
   }
 
-  // Show API error dialog when appropriate
-  if (currentScreen === "result" && shouldShowApiError && !showApiError && !mockResults) {
-    setShowApiError(true);
-  }
+  // Show API error dialog when appropriate (moved to useEffect to avoid state update during render)
+  useEffect(() => {
+    if (currentScreen === "result" && shouldShowApiError && !showApiError && !mockResults) {
+      setShowApiError(true);
+    }
+  }, [currentScreen, shouldShowApiError, showApiError, mockResults]);
 
   const handleUseMockData = (mockData: QuizResult[]) => {
     setMockResults(mockData);
