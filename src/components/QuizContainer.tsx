@@ -10,8 +10,11 @@ import { getQuizQuestions, processAnswersForAPI } from "@/utils/quizLogic";
 import { useQuizNavigation } from "./quiz/QuizNavigation";
 import { QuizResult } from "@/utils/quizData";
 import { useState, useEffect } from "react";
+import { isMaintenanceActive } from "@/utils/maintenanceMode";
+import { useNavigate } from "react-router-dom";
 
 const QuizContainer = () => {
+  const navigate = useNavigate();
   const {
     currentScreen,
     setCurrentScreen,
@@ -68,6 +71,13 @@ const QuizContainer = () => {
       shouldShowApiError = true;
     }
   }
+
+  // Redirect to maintenance page if not in test mode
+  useEffect(() => {
+    if (isMaintenanceActive()) {
+      navigate("/maintenance");
+    }
+  }, [navigate]);
 
   // Show API error dialog when appropriate (moved to useEffect to avoid state update during render)
   useEffect(() => {

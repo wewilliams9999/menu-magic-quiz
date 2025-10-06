@@ -4,9 +4,17 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Utensils } from "lucide-react";
 import ShareBucketListPreview from "@/components/ShareBucketListPreview";
+import { isMaintenanceActive } from "@/utils/maintenanceMode";
+import { useEffect } from "react";
 
 const WelcomePage = () => {
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (isMaintenanceActive()) {
+      navigate("/maintenance");
+    }
+  }, [navigate]);
   
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative bg-black">
