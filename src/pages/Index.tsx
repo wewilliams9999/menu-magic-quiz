@@ -105,7 +105,7 @@ const Index = () => {
 
         <section ref={resultsRef} className="mt-10 space-y-5" aria-live="polite">
           {results?.map(({ spot, reasons }, i) => (
-            <article key={spot.name} className="rounded-2xl border border-border bg-card p-5" style={{ animation: `fade-in 0.4s ease-out ${i * 0.1}s both` }}>
+            <article key={spot.name} className="rounded-2xl border border-border bg-card p-5" style={{ animation: `fadeIn 0.4s ease-out ${i * 0.1}s both` }}>
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h2 className="font-display text-2xl font-bold">{spot.name}</h2>
@@ -136,11 +136,11 @@ const Index = () => {
           {results && (
             <div className="rounded-2xl border border-neon-cyan/40 p-5">
               {saved ? (
-                <p className="text-center font-medium text-neon-cyan">Saved! Your shortlist is on its way to your inbox.</p>
+                <p className="text-center font-medium text-neon-cyan">Saved! We will send your shortlist to your inbox.</p>
               ) : (
                 <form onSubmit={saveShortlist}>
                   <p className="font-display flex items-center gap-2 text-lg font-bold"><Mail className="h-5 w-5 text-neon-cyan" />Save my vibe shortlist</p>
-                  <p className="mt-1 text-sm text-muted-foreground">We'll email these picks and menu links. No spam, and we never share your email.</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Get these picks and menu links by email. No spam, and we never share your email.</p>
                   <div className="mt-3 flex gap-2">
                     <Input type="email" required maxLength={254} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" aria-label="Email address" />
                     <Button type="submit" disabled={saving}>{saving ? "Saving..." : "Save"}</Button>
