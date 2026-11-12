@@ -33,3 +33,8 @@ setTimeout(trackPageView, 100);
 
 // Render the app
 root.render(<App />);
+
+// Harmless browser warning from layout measuring; keep it from surfacing as an app error.
+window.addEventListener("error", (e) => {
+  if (e.message?.includes("ResizeObserver loop")) e.stopImmediatePropagation();
+});
