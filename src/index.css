@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -251,10 +251,10 @@
     --neon-pink: 330 81% 60%;
     --neon-cyan: 199 92% 60%;
     --on-air: 38 92% 55%;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Figtree', sans-serif;
   }
-  .theme-neon .font-display { font-family: 'Space Grotesk', sans-serif; }
-  .neon-glow-text { text-shadow: 0 0 18px hsl(var(--neon-pink) / 0.7); }
+  .theme-neon .font-display { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
+  .neon-glow-text { text-shadow: 0 0 14px hsl(var(--neon-pink) / 0.4); }
   .on-air-glow { box-shadow: 0 0 0 4px hsl(var(--on-air) / 0.35), 0 0 32px hsl(var(--on-air) / 0.8); }
   .booth-glow { box-shadow: 0 0 40px -10px hsl(var(--neon-cyan) / 0.5); }
 }
