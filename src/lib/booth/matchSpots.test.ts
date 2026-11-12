@@ -1,3 +1,4 @@
+// @ts-expect-error bun provides this module at test time
 import { test, expect } from "bun:test";
 import { parseIntent, matchSpots } from "./matchSpots";
 import { SPOTS } from "../../data/nashvilleSpots";

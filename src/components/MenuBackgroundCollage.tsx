@@ -158,7 +158,7 @@ const MenuBackgroundCollage = ({ enabled = true }: MenuBackgroundCollageProps) =
       {/* Hide error indicators - show clean background */}
 
       {/* Debug info */}
-      {process.env.NODE_ENV === 'development' && (
+      {import.meta.env.DEV && (
         <div className="absolute top-4 left-4 z-30 pointer-events-none">
           <div className="bg-gray-500/20 border border-gray-500/30 rounded px-2 py-1 text-gray-300 text-xs">
             Debug: Loading={isLoading.toString()}, Menus={scrapedMenus.length}, Error={error ? 'Yes' : 'No'}
