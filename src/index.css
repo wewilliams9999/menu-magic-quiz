@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -226,4 +227,34 @@
     min-height: 44px;
     min-width: 44px;
   }
+}
+
+@layer base {
+  .theme-neon {
+    --background: 232 38% 7%;
+    --foreground: 220 30% 94%;
+    --card: 230 40% 14%;
+    --card-foreground: 220 30% 94%;
+    --popover: 230 40% 12%;
+    --popover-foreground: 220 30% 94%;
+    --primary: 330 81% 60%;
+    --primary-foreground: 232 38% 7%;
+    --secondary: 230 35% 18%;
+    --secondary-foreground: 220 30% 94%;
+    --muted: 230 30% 18%;
+    --muted-foreground: 225 20% 68%;
+    --accent: 199 92% 60%;
+    --accent-foreground: 232 38% 7%;
+    --border: 230 30% 24%;
+    --input: 230 30% 24%;
+    --ring: 199 92% 60%;
+    --neon-pink: 330 81% 60%;
+    --neon-cyan: 199 92% 60%;
+    --on-air: 38 92% 55%;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .theme-neon .font-display { font-family: 'Space Grotesk', sans-serif; }
+  .neon-glow-text { text-shadow: 0 0 18px hsl(var(--neon-pink) / 0.7); }
+  .on-air-glow { box-shadow: 0 0 0 4px hsl(var(--on-air) / 0.35), 0 0 32px hsl(var(--on-air) / 0.8); }
+  .booth-glow { box-shadow: 0 0 40px -10px hsl(var(--neon-cyan) / 0.5); }
 }

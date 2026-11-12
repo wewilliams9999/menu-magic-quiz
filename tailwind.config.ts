@@ -20,6 +20,11 @@ export default {
 		},
 		extend: {
 			colors: {
+				neon: {
+					pink: 'hsl(var(--neon-pink))',
+					cyan: 'hsl(var(--neon-cyan))',
+					amber: 'hsl(var(--on-air))'
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
