@@ -41,6 +41,30 @@ export type Database = {
         }
         Relationships: []
       }
+      shortlist_signups: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          restaurants: string[]
+          search_query: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          restaurants?: string[]
+          search_query?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          restaurants?: string[]
+          search_query?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
