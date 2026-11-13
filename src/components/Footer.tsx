@@ -44,13 +44,10 @@ const Footer = () => {
             <h4 className="font-semibold text-zinc-100">Quick Links</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/" className="text-zinc-400 hover:text-red-400 transition-colors">Home</Link>
+                <Link to="/" className="text-zinc-400 hover:text-red-400 transition-colors">The Entrance</Link>
               </li>
               <li>
-                <Link to="/quiz" className="text-zinc-400 hover:text-red-400 transition-colors">Restaurant Quiz</Link>
-              </li>
-              <li>
-                <Link to="/welcome" className="text-zinc-400 hover:text-red-400 transition-colors">Welcome</Link>
+                <Link to="/booth" className="text-zinc-400 hover:text-red-400 transition-colors">Sound Booth</Link>
               </li>
             </ul>
           </div>
@@ -71,6 +68,10 @@ const Footer = () => {
           </div>
         </div>
         
+        <div className="mt-8 mx-auto max-w-2xl text-center">
+          <h4 className="font-semibold text-zinc-100">Behind NashMenus</h4>
+          <p className="mt-2 text-sm text-zinc-400">There are so many incredible places to eat in Nashville, but even for locals, figuring out where to go tonight can feel overwhelming. We built NashMenus to make that choice easy, with the details that matter, from room noise to parking.</p>
+        </div>
         <div className="mt-8 pt-4 border-t border-gray-800 text-xs text-center text-zinc-500">
           <p>© {currentYear} Nash Menus. All rights reserved.</p>
         </div>

@@ -102,14 +102,19 @@ const Index = () => {
           <p className="mt-3 max-w-md text-muted-foreground">Tell us who you're with, where, and what matters. We'll match the room, the noise level, and the parking.</p>
         </header>
 
-        <form onSubmit={(e) => { e.preventDefault(); runSearch(query, "typed"); }} className="booth-glow mt-8 flex items-center gap-2 rounded-full border border-border bg-card p-2 pl-5">
-          <Search className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={onAir ? "Listening..." : "Dinner with dad Sunday in East Nashville..."}
-            aria-label="Describe what you're looking for" className="min-w-0 flex-1 bg-transparent py-2 text-base outline-none placeholder:text-muted-foreground" />
-          <button type="button" onClick={toggleMic} aria-label={onAir ? "Stop listening" : "Speak your search"} aria-pressed={onAir}
-            className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition ${onAir ? "on-air-glow animate-pulse bg-neon-amber text-primary-foreground" : "mic-idle-glow bg-secondary text-neon-amber hover:bg-muted"}`}>
-            <Mic className="h-7 w-7" />
-          </button>
+        <p className="mt-8 text-center text-sm font-medium text-accent">Give as much or as little detail as you want.</p>
+        <form onSubmit={(e) => { e.preventDefault(); runSearch(query, "typed"); }} className="booth-glow mt-3 rounded-3xl border border-border bg-card p-4">
+          <textarea value={query} onChange={(e) => setQuery(e.target.value)} rows={4}
+            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); runSearch(query, "typed"); } }}
+            placeholder={onAir ? "Listening..." : "Casual hot chicken with easy parking, dinner with dad on Sunday, or a cozy patio where we can actually hear each other..."}
+            aria-label="Describe what you're looking for" className="w-full resize-none bg-transparent text-base leading-relaxed outline-none placeholder:text-muted-foreground" />
+          <div className="mt-2 flex items-center justify-between gap-2">
+            <button type="button" onClick={toggleMic} aria-label={onAir ? "Stop listening" : "Speak your search"} aria-pressed={onAir}
+              className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition ${onAir ? "on-air-glow animate-pulse bg-neon-amber text-primary-foreground" : "mic-idle-glow bg-secondary text-neon-amber hover:bg-muted"}`}>
+              <Mic className="h-7 w-7" />
+            </button>
+            <Button type="submit" className="rounded-full px-6"><Search className="mr-2 h-4 w-4" />Find my table</Button>
+          </div>
         </form>
         <div className="mt-2 h-5 text-center text-xs font-bold uppercase tracking-[0.3em] text-neon-amber" aria-live="polite">{onAir ? "● On Air" : ""}</div>
 
@@ -135,6 +140,7 @@ const Index = () => {
                 <p className="text-foreground">{spot.vibe}.</p>
                 {SIGNATURE_DISHES[spot.name] && <p className="mt-2 text-sm"><span className="font-semibold text-primary">Order: </span>{SIGNATURE_DISHES[spot.name].slice(0, 2).join(" & ")}</p>}
                 <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground"><Car className="h-4 w-4 text-neon-cyan" />{PARK[spot.parking]} · {spot.reservations ? "Takes reservations" : "Walk-in only"}</p>
+                <p className="mt-2 rounded-lg bg-secondary/60 px-3 py-2 text-sm"><span className="font-semibold text-neon-amber">Walk in like a regular: </span>{spot.reservations ? "Book ahead for weekends, then just give your name at the host stand." : "No reservations here, so arrive a little early and put your name in. Grab a drink while you wait."}{spot.parking === "street" ? " Leave a few extra minutes to find a street spot." : ""}</p>
                 <details className="mt-2 text-sm">
                   <summary className="cursor-pointer text-neon-cyan">Parking tips & Street View</summary>
                   <ParkingScout key={spot.id ?? spot.name} id={spot.id} name={spot.name} lat={spot.lat} lng={spot.lng} notes={spot.parkingNotes} />
