@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Mic, Search, MapPin, Volume2, Car, CalendarCheck, ExternalLink, Mail } from "lucide-react";
-import { SPOTS } from "@/data/nashvilleSpots";
+import { SPOTS, type Spot } from "@/data/nashvilleSpots";
+import { ParkingScout } from "@/components/ParkingScout";
 import { SIGNATURE_DISHES } from "@/data/signatureDishes";
 import { matchSpots, parseIntent, type Match } from "@/lib/booth/matchSpots";
 import { trackEvent } from "@/utils/analytics";
@@ -30,12 +31,26 @@ const Index = () => {
   const recRef = useRef<any>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
 
+  const [spots, setSpots] = useState<Spot[]>(SPOTS);
+  useEffect(() => {
+    supabase.from("restaurants").select("*").then(({ data }) => {
+      if (!data?.length) return;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setSpots(data.map((r: any) => ({
+        id: r.id, name: r.name, neighborhood: r.neighborhood, vibe: r.vibe, knownFor: r.known_for,
+        noise: r.noise, parking: r.parking, reservations: r.reservations, openSunday: r.open_sunday,
+        price: r.price, tags: r.tags, menuUrl: r.menu_url, reserveUrl: r.reserve_url ?? undefined,
+        lat: r.lat, lng: r.lng, parkingNotes: r.parking_notes,
+      })));
+    });
+  }, []);
+
   useEffect(() => { document.title = "NashMenus | Say the vibe, find your Nashville table"; }, []);
 
   const runSearch = (text: string, source: "typed" | "voice" | "chip") => {
     const q = text.trim();
     if (!q) return;
-    setResults(matchSpots(SPOTS, parseIntent(q)));
+    setResults(matchSpots(spots, parseIntent(q)));
     setSaved(false);
     trackEvent("sound_booth_search", { source, query_length: q.length });
     setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
@@ -130,6 +145,7 @@ const Index = () => {
                 <div className="rounded-lg bg-secondary p-2"><Car className="mb-1 h-4 w-4 text-neon-cyan" />{PARK[spot.parking]}</div>
                 <div className="rounded-lg bg-secondary p-2"><CalendarCheck className="mb-1 h-4 w-4 text-neon-cyan" />{spot.reservations ? "Reservations" : "Walk-in only"}</div>
               </div>
+              <ParkingScout key={spot.id ?? spot.name} id={spot.id} name={spot.name} lat={spot.lat} lng={spot.lng} notes={spot.parkingNotes} />
               {reasons.length > 0 && <p className="mt-3 text-sm text-muted-foreground">Why it fits: {reasons.slice(0, 3).join(" · ")}</p>}
               <div className="mt-4 flex gap-2">
                 <Button asChild variant="secondary" className="flex-1">
