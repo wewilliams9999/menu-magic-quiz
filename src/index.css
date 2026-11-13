@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -254,6 +254,12 @@
     font-family: 'Figtree', sans-serif;
   }
   .theme-neon .font-display { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
+  .theme-neon .font-calligraphy { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 800; letter-spacing: -0.01em; }
+  .mic-idle-glow { box-shadow: 0 0 0 3px hsl(var(--on-air) / 0.25), 0 0 28px hsl(var(--on-air) / 0.55); animation: micbreath 3s ease-in-out infinite; }
+  @keyframes micbreath { 50% { box-shadow: 0 0 0 5px hsl(var(--on-air) / 0.15), 0 0 44px hsl(var(--on-air) / 0.8); } }
+  .neon-flicker { animation: flicker 4s infinite; }
+  @keyframes flicker { 0%,19%,22%,62%,64%,100% { opacity: 1; } 20%,63% { opacity: 0.55; } }
+  .door-glow { box-shadow: 0 0 0 2px hsl(var(--on-air) / 0.6), 0 0 40px hsl(var(--on-air) / 0.6); }
   .neon-glow-text { text-shadow: 0 0 14px hsl(var(--neon-pink) / 0.4); }
   .on-air-glow { box-shadow: 0 0 0 4px hsl(var(--on-air) / 0.35), 0 0 32px hsl(var(--on-air) / 0.8); }
   .booth-glow { box-shadow: 0 0 40px -10px hsl(var(--neon-cyan) / 0.5); }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Mic, Search, MapPin, Volume2, Car, CalendarCheck, ExternalLink, Mail } from "lucide-react";
+import { Mic, Search, MapPin, Car, ExternalLink, Mail } from "lucide-react";
 import { SPOTS, type Spot } from "@/data/nashvilleSpots";
 import { ParkingScout } from "@/components/ParkingScout";
 import { SIGNATURE_DISHES } from "@/data/signatureDishes";
@@ -95,7 +95,7 @@ const Index = () => {
     <div className="theme-neon min-h-screen bg-background text-foreground">
       <main className="mx-auto max-w-2xl px-5 pb-16 pt-10">
         <header className="flex flex-col items-center text-center">
-          <img src="/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png" alt="NashMenus logo" className="h-28 w-28 object-contain sm:h-36 sm:w-36" />
+          <img src="/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png" alt="NashMenus logo" className="neon-flicker mix-blend-screen h-40 w-40 object-contain sm:h-48 sm:w-48" />
           <p className="mt-4 text-xs font-medium uppercase tracking-[0.3em] text-accent">Music City dining</p>
           <h1 className="font-display mt-2 text-4xl font-bold leading-tight neon-glow-text sm:text-5xl">Say the vibe.<br />Find your table.</h1>
           <p className="mt-3 max-w-md text-muted-foreground">Tell us who you're with, where, and what matters. We'll match the room, the noise level, and the parking.</p>
@@ -106,12 +106,13 @@ const Index = () => {
           <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={onAir ? "Listening..." : "Dinner with dad Sunday in East Nashville..."}
             aria-label="Describe what you're looking for" className="min-w-0 flex-1 bg-transparent py-2 text-base outline-none placeholder:text-muted-foreground" />
           <button type="button" onClick={toggleMic} aria-label={onAir ? "Stop listening" : "Speak your search"} aria-pressed={onAir}
-            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition ${onAir ? "on-air-glow animate-pulse bg-neon-amber text-primary-foreground" : "bg-secondary text-foreground hover:bg-muted"}`}>
-            <Mic className="h-5 w-5" />
+            className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition ${onAir ? "on-air-glow animate-pulse bg-neon-amber text-primary-foreground" : "mic-idle-glow bg-secondary text-neon-amber hover:bg-muted"}`}>
+            <Mic className="h-7 w-7" />
           </button>
         </form>
         <div className="mt-2 h-5 text-center text-xs font-bold uppercase tracking-[0.3em] text-neon-amber" aria-live="polite">{onAir ? "● On Air" : ""}</div>
 
+        <p className="mt-2 text-center text-sm text-muted-foreground">Tap a suggestion, or type or speak your own:</p>
         <div className="mt-3 flex flex-wrap justify-center gap-2">
           {CHIPS.map((c) => (
             <button key={c} onClick={() => { setQuery(c); trackEvent("chip_clicked", { chip: c }); runSearch(c, "chip"); }}
@@ -120,42 +121,33 @@ const Index = () => {
         </div>
 
         <section ref={resultsRef} className="mt-10 space-y-5" aria-live="polite">
-          {results?.map(({ spot, reasons }, i) => (
-            <article key={spot.name} className="rounded-2xl border border-border bg-card p-5" style={{ animation: `fadeIn 0.4s ease-out ${i * 0.1}s both` }}>
-              <div className="flex items-start justify-between gap-3">
+          {results?.map(({ spot }, i) => (
+            <article key={spot.name} className="overflow-hidden rounded-2xl border border-border bg-card" style={{ animation: `fadeIn 0.4s ease-out ${i * 0.1}s both` }}>
+              <div className="relative flex h-40 items-end bg-gradient-to-br from-neon-pink/30 via-secondary to-neon-cyan/20 p-5">
+                <span className="absolute right-4 top-4 rounded-full bg-background/70 px-3 py-1 text-xs font-medium text-neon-pink">#{i + 1} match</span>
                 <div>
-                  <h2 className="font-display text-2xl font-bold">{spot.name}</h2>
-                  <p className="mt-1 flex items-center gap-1 text-sm text-accent"><MapPin className="h-4 w-4" />{spot.neighborhood} · {spot.price}</p>
+                  <h2 className="font-calligraphy text-4xl leading-tight neon-glow-text">{spot.name}</h2>
+                  <p className="mt-1 flex items-center gap-1 text-sm text-accent"><MapPin className="h-4 w-4" />{spot.neighborhood} · {spot.price} · {NOISE[spot.noise]}</p>
                 </div>
-                <span className="rounded-full bg-neon-pink/15 px-3 py-1 text-xs font-medium text-neon-pink">#{i + 1} match</span>
               </div>
-              <p className="mt-3 text-foreground">{spot.vibe}. <span className="text-muted-foreground">Known for {spot.knownFor.toLowerCase()}.</span></p>
-              {SIGNATURE_DISHES[spot.name] && (
-                <div className="mt-3 rounded-lg border border-border bg-muted/30 p-3">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-primary">What to order</p>
-                  <ul className="mt-1 flex flex-wrap gap-2">
-                    {SIGNATURE_DISHES[spot.name].map((d) => (
-                      <li key={d} className="rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground">{d}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
-                <div className="rounded-lg bg-secondary p-2"><Volume2 className="mb-1 h-4 w-4 text-neon-cyan" />{NOISE[spot.noise]}</div>
-                <div className="rounded-lg bg-secondary p-2"><Car className="mb-1 h-4 w-4 text-neon-cyan" />{PARK[spot.parking]}</div>
-                <div className="rounded-lg bg-secondary p-2"><CalendarCheck className="mb-1 h-4 w-4 text-neon-cyan" />{spot.reservations ? "Reservations" : "Walk-in only"}</div>
-              </div>
-              <ParkingScout key={spot.id ?? spot.name} id={spot.id} name={spot.name} lat={spot.lat} lng={spot.lng} notes={spot.parkingNotes} />
-              {reasons.length > 0 && <p className="mt-3 text-sm text-muted-foreground">Why it fits: {reasons.slice(0, 3).join(" · ")}</p>}
-              <div className="mt-4 flex gap-2">
-                <Button asChild variant="secondary" className="flex-1">
-                  <a href={spot.menuUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("menu_click", { restaurant_name: spot.name })}>View official menu <ExternalLink className="ml-1 h-4 w-4" /></a>
-                </Button>
-                {spot.reserveUrl && (
-                  <Button asChild className="flex-1">
-                    <a href={spot.reserveUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("reservation_click", { restaurant_name: spot.name })}>Reserve</a>
+              <div className="p-5 text-left">
+                <p className="text-foreground">{spot.vibe}.</p>
+                {SIGNATURE_DISHES[spot.name] && <p className="mt-2 text-sm"><span className="font-semibold text-primary">Order: </span>{SIGNATURE_DISHES[spot.name].slice(0, 2).join(" & ")}</p>}
+                <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground"><Car className="h-4 w-4 text-neon-cyan" />{PARK[spot.parking]} · {spot.reservations ? "Takes reservations" : "Walk-in only"}</p>
+                <details className="mt-2 text-sm">
+                  <summary className="cursor-pointer text-neon-cyan">Parking tips & Street View</summary>
+                  <ParkingScout key={spot.id ?? spot.name} id={spot.id} name={spot.name} lat={spot.lat} lng={spot.lng} notes={spot.parkingNotes} />
+                </details>
+                <div className="mt-4 flex gap-2">
+                  <Button asChild variant="secondary" className="flex-1">
+                    <a href={spot.menuUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("menu_click", { restaurant_name: spot.name })}>Menu <ExternalLink className="ml-1 h-4 w-4" /></a>
                   </Button>
-                )}
+                  {spot.reserveUrl && (
+                    <Button asChild className="flex-1">
+                      <a href={spot.reserveUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("reservation_click", { restaurant_name: spot.name })}>Reserve</a>
+                    </Button>
+                  )}
+                </div>
               </div>
             </article>
           ))}
