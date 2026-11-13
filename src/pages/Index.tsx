@@ -6,6 +6,7 @@ import { SIGNATURE_DISHES } from "@/data/signatureDishes";
 import { matchSpots, parseIntent, type Match } from "@/lib/booth/matchSpots";
 import { trackEvent } from "@/utils/analytics";
 import { supabase } from "@/integrations/supabase/client";
+import logo from "@/assets/nashmenus-logo-neon.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
