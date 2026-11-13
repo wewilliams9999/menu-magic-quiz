@@ -14,6 +14,10 @@ export interface Spot {
   tags: string[];
   menuUrl: string;
   reserveUrl?: string;
+  id?: string;
+  lat?: number | null;
+  lng?: number | null;
+  parkingNotes?: { quote: string; url: string; source: string }[];
 }
 
 // Curated starter list. Details should be re-verified by the owner before launch.

@@ -12,3 +12,9 @@ verify_jwt = false
 
 [functions.keep-alive]
 verify_jwt = false
+
+[functions.parking-scout]
+verify_jwt = false
+
+[functions.restaurant-health]
+verify_jwt = false
