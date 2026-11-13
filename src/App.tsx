@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Homepage from "./pages/Homepage";
+import Entrance from "./pages/Entrance";
 import WelcomePage from "./pages/WelcomePage";
 import MaintenancePage from "./pages/MaintenancePage";
 import NotFound from "./pages/NotFound";
@@ -21,7 +22,8 @@ const App = () => (
         <div className="flex flex-col min-h-screen">
           <div className="flex-grow">
             <Routes>
-              <Route path="/" element={<Index />} />
+              <Route path="/" element={<Entrance />} />
+              <Route path="/booth" element={<Index />} />
               <Route path="/index" element={<Index />} />
               <Route path="/home" element={<Homepage />} />
               <Route path="/welcome" element={<WelcomePage />} />
