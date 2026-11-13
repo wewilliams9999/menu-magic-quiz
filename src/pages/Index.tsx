@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Mic, Search, MapPin, Volume2, Car, CalendarCheck, ExternalLink, Mail } from "lucide-react";
 import { SPOTS } from "@/data/nashvilleSpots";
+import { SIGNATURE_DISHES } from "@/data/signatureDishes";
 import { matchSpots, parseIntent, type Match } from "@/lib/booth/matchSpots";
 import { trackEvent } from "@/utils/analytics";
 import { supabase } from "@/integrations/supabase/client";
@@ -114,6 +115,16 @@ const Index = () => {
                 <span className="rounded-full bg-neon-pink/15 px-3 py-1 text-xs font-medium text-neon-pink">#{i + 1} match</span>
               </div>
               <p className="mt-3 text-foreground">{spot.vibe}. <span className="text-muted-foreground">Known for {spot.knownFor.toLowerCase()}.</span></p>
+              {SIGNATURE_DISHES[spot.name] && (
+                <div className="mt-3 rounded-lg border border-border bg-muted/30 p-3">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-primary">What to order</p>
+                  <ul className="mt-1 flex flex-wrap gap-2">
+                    {SIGNATURE_DISHES[spot.name].map((d) => (
+                      <li key={d} className="rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground">{d}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
                 <div className="rounded-lg bg-secondary p-2"><Volume2 className="mb-1 h-4 w-4 text-neon-cyan" />{NOISE[spot.noise]}</div>
                 <div className="rounded-lg bg-secondary p-2"><Car className="mb-1 h-4 w-4 text-neon-cyan" />{PARK[spot.parking]}</div>
@@ -122,7 +133,7 @@ const Index = () => {
               {reasons.length > 0 && <p className="mt-3 text-sm text-muted-foreground">Why it fits: {reasons.slice(0, 3).join(" · ")}</p>}
               <div className="mt-4 flex gap-2">
                 <Button asChild variant="secondary" className="flex-1">
-                  <a href={spot.menuUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("menu_click", { restaurant_name: spot.name })}>View menu <ExternalLink className="ml-1 h-4 w-4" /></a>
+                  <a href={spot.menuUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("menu_click", { restaurant_name: spot.name })}>View official menu <ExternalLink className="ml-1 h-4 w-4" /></a>
                 </Button>
                 {spot.reserveUrl && (
                   <Button asChild className="flex-1">
