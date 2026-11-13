@@ -23,6 +23,7 @@ export default {
 				neon: {
 					pink: 'hsl(var(--neon-pink))',
 					cyan: 'hsl(var(--neon-cyan))',
+					amber: 'hsl(var(--on-air))',
 					amber: 'hsl(var(--on-air))'
 				},
 				border: 'hsl(var(--border))',
