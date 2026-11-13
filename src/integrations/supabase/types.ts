@@ -14,6 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
+      restaurants: {
+        Row: {
+          created_at: string
+          id: string
+          known_for: string
+          last_verified_at: string | null
+          lat: number | null
+          link_health: Json
+          lng: number | null
+          menu_url: string
+          name: string
+          neighborhood: string
+          noise: string
+          open_sunday: boolean
+          parking: string
+          parking_notes: Json
+          parking_scouted_at: string | null
+          price: string
+          reservations: boolean
+          reserve_url: string | null
+          status: string
+          tags: string[]
+          updated_at: string
+          vibe: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          known_for?: string
+          last_verified_at?: string | null
+          lat?: number | null
+          link_health?: Json
+          lng?: number | null
+          menu_url: string
+          name: string
+          neighborhood: string
+          noise?: string
+          open_sunday?: boolean
+          parking?: string
+          parking_notes?: Json
+          parking_scouted_at?: string | null
+          price?: string
+          reservations?: boolean
+          reserve_url?: string | null
+          status?: string
+          tags?: string[]
+          updated_at?: string
+          vibe?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          known_for?: string
+          last_verified_at?: string | null
+          lat?: number | null
+          link_health?: Json
+          lng?: number | null
+          menu_url?: string
+          name?: string
+          neighborhood?: string
+          noise?: string
+          open_sunday?: boolean
+          parking?: string
+          parking_notes?: Json
+          parking_scouted_at?: string | null
+          price?: string
+          reservations?: boolean
+          reserve_url?: string | null
+          status?: string
+          tags?: string[]
+          updated_at?: string
+          vibe?: string
+        }
+        Relationships: []
+      }
       scraped_menus: {
         Row: {
           created_at: string | null
