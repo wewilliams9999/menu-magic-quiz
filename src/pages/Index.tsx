@@ -95,7 +95,7 @@ const Index = () => {
     <div className="theme-neon min-h-screen bg-background text-foreground">
       <main className="mx-auto max-w-2xl px-5 pb-16 pt-10">
         <header className="flex flex-col items-center text-center">
-          <img src="/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png" alt="NashMenus logo" className="neon-flicker mix-blend-screen h-40 w-40 object-contain drop-shadow-[0_0_24px_hsl(var(--neon-pink)/0.7)] sm:h-48 sm:w-48" />
+          <img src="/lovable-uploads/5e438e4a-f73a-48ba-bd59-55214f04eeaf.png" alt="NashMenus logo" className="neon-flicker mix-blend-screen h-40 w-40 object-contain sm:h-48 sm:w-48" />
           <p className="mt-4 text-xs font-medium uppercase tracking-[0.3em] text-accent">Music City dining</p>
           <h1 className="font-display mt-2 text-4xl font-bold leading-tight neon-glow-text sm:text-5xl">Say the vibe.<br />Find your table.</h1>
           <p className="mt-3 max-w-md text-muted-foreground">Tell us who you're with, where, and what matters. We'll match the room, the noise level, and the parking.</p>
