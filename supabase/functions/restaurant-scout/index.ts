@@ -16,13 +16,13 @@ const QUERIES = [
 const HOODS = ["East Nashville","Germantown","The Gulch","Midtown","12 South","Downtown","Wedgewood-Houston","Sylvan Park","The Nations","Brentwood","Franklin","Leiper's Fork","Green Hills","Hendersonville"];
 
 async function extract(text: string) {
-  const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+  const res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
     method: "POST",
     headers: { Authorization: `Bearer ${Deno.env.get("LOVABLE_API_KEY")}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "google/gemini-2.5-flash",
-      response_format: { type: "json_object" },
-      messages: [
+      model: "openai/gpt-6-astra",
+      text: { format: { type: "json_object" } },
+      input: [
         { role: "system", content: `Extract real, currently open sit-down or notable restaurants in the Nashville area named in the text. Return JSON {"spots":[...]} with fields: name, neighborhood (one of ${HOODS.join(", ")}), vibe (short phrase), known_for (short phrase), noise (quiet|lively|loud), parking (lot|street|valet), reservations (bool), open_sunday (bool), price ($|$$|$$$), tags (from: family,date,romantic,brunch,patio,cocktails,hot chicken,beer,casual,friends,cozy,special), menu_url (official site, https). Skip anything closed or unsure. No em dashes.` },
         { role: "user", content: text.slice(0, 24000) },
       ],
@@ -30,7 +30,8 @@ async function extract(text: string) {
   });
   if (!res.ok) throw new Error(`AI ${res.status}`);
   const j = await res.json();
-  try { return JSON.parse(j.choices[0].message.content).spots ?? []; } catch { return []; }
+  const out = j.output_text ?? (j.output ?? []).flatMap((o: any) => o.content ?? []).map((c: any) => c.text ?? "").join("");
+  try { return JSON.parse(out).spots ?? []; } catch { return []; }
 }
 
 Deno.serve(async (req) => {
