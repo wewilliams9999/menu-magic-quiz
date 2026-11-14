@@ -27,7 +27,7 @@ const Entrance = () => {
         />
 
         <h1 className="font-calligraphy neon-glow-text mt-6 text-4xl leading-tight sm:text-5xl">
-          Say the vibe.
+          Find your table.
         </h1>
         <p className="mt-3 max-w-xs text-sm text-muted-foreground sm:text-base">
           Nashville's best tables, the ones locals keep to themselves.

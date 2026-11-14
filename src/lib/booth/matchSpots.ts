@@ -12,6 +12,7 @@ export interface Intent {
 const HOODS: Record<string, string> = {
   "east nashville": "East Nashville", "east side": "East Nashville", "eastside": "East Nashville",
   germantown: "Germantown", midtown: "Midtown", gulch: "The Gulch", "12 south": "12 South", "twelve south": "12 South",
+  downtown: "Downtown", brentwood: "Brentwood", franklin: "Franklin", "leiper": "Leiper's Fork", "green hills": "Green Hills", "sylvan park": "Sylvan Park", nations: "The Nations", "wedgewood": "Wedgewood-Houston", hendersonville: "Hendersonville",
 };
 const TAG_WORDS: Record<string, string> = {
   dad: "family", mom: "family", parents: "family", family: "family", kids: "family",
