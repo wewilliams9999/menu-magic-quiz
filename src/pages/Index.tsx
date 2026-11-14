@@ -46,7 +46,7 @@ const Index = () => {
     });
   }, []);
 
-  useEffect(() => { document.title = "NashMenus | Say the vibe, find your Nashville table"; }, []);
+  useEffect(() => { document.title = "NashMenus | Find your Nashville table"; }, []);
 
   const runSearch = (text: string, source: "typed" | "voice" | "chip") => {
     const q = text.trim();
@@ -98,7 +98,7 @@ const Index = () => {
         <header className="flex flex-col items-center text-center">
           <img src={logo} alt="NashMenus logo" className="neon-flicker h-40 w-40 object-contain sm:h-48 sm:w-48" />
           <p className="mt-4 text-xs font-medium uppercase tracking-[0.3em] text-accent">Music City dining</p>
-          <h1 className="font-display mt-2 text-4xl font-bold leading-tight neon-glow-text sm:text-5xl">Say the vibe.<br />Find your table.</h1>
+          <h1 className="font-display mt-2 text-4xl font-bold leading-tight neon-glow-text sm:text-5xl">Find your table.</h1>
           <p className="mt-3 max-w-md text-muted-foreground">Tell us who you're with, where, and what matters. We'll match the room, the noise level, and the parking.</p>
         </header>
 
